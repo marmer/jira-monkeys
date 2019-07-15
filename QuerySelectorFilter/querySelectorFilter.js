@@ -1,3 +1,21 @@
+// ==UserScript==
+// @name         Filter by query selector
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       MarMer
+// @match        http*://*
+// @match        http*://*/*
+// @match        http*://*/*/*
+// @match        http*://*/*/*/*
+// @match        http*://*/*/*/*/*
+// @match        http*://*/*/*/*/*/*
+// @match        http*://*/*/*/*/*/*/*
+// @match        http*://*/*/*/*/*/*/*/*
+// @match        http*://*/*/*/*/*/*/*/*/*
+// @grant        none
+// ==/UserScript==
+
 // Insert everything of this file except the last line into your tamper monkey script
 const QUERY_SELECTOR_FILTER_CONTAINER_ID = 'querySelectorFilterContainer';
 const ELEMENT_SELECTOR_ID = 'elementSelector';
@@ -6,12 +24,12 @@ const FILTERABLE_ELEMENTS_CONTAINER_ID = "filterableElementsContainer";
 function addFilterables() {
     const elementSelector = document.getElementById(ELEMENT_SELECTOR_ID);
     const filterableElementsContainer = document.getElementById(FILTERABLE_ELEMENTS_CONTAINER_ID);
-        let querySelectorElements = document.querySelectorAll(elementSelector.value);
-        filterableElementsContainer.innerHTML = "";
-        for (const selectedElement in querySelectorElements) {
-            // TODO: marmer 14.07.2019 Some selection should be possible here
-            filterableElementsContainer.appendChild(querySelectorElements[selectedElement].cloneNode(true));
-        }
+    let querySelectorElements = document.querySelectorAll(elementSelector.value);
+    filterableElementsContainer.innerHTML = "";
+    for (const selectedElement in querySelectorElements) {
+        // TODO: marmer 14.07.2019 Some selection should be possible here
+        filterableElementsContainer.appendChild(querySelectorElements[selectedElement].cloneNode(true));
+    }
 }
 
 const addContainer = () => {
@@ -35,3 +53,8 @@ const tamperMonkeyScript = () => {
 
 
 document.addEventListener("readystatechange", tamperMonkeyScript);
+(function () {
+    'use strict';
+
+    tamperMonkeyScript();
+})();
