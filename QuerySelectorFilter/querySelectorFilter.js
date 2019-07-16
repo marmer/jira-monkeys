@@ -21,17 +21,35 @@
     'use strict';
     const QUERY_SELECTOR_FILTER_CONTAINER_ID = 'querySelectorFilterContainer';
     const ELEMENT_SELECTOR_ID = 'elementSelector';
-    const FILTERABLE_ELEMENTS_CONTAINER_ID = "filterableElementsContainer";
+    const SELECTED_ELEMENT_BOX_CLASS = "selectedBoxElement";
+
 
     const addFilterables = () => {
+        getAllNodes()
+            .forEach(removePreveousElementBoxSelection);
+
+        getFilterableNodes()
+            .forEach(addElementBoxSelection);
+    };
+
+    const getAllNodes = () => {
+        return document.querySelectorAll('*');
+    };
+
+    const getFilterableNodes = () => {
+        return document.querySelectorAll(getElementSelector());
+    };
+    const getElementSelector = () => {
         const elementSelector = document.getElementById(ELEMENT_SELECTOR_ID);
-        const filterableElementsContainer = document.getElementById(FILTERABLE_ELEMENTS_CONTAINER_ID);
-        let querySelectorElements = document.querySelectorAll(elementSelector.value);
-        filterableElementsContainer.innerHTML = "";
-        for (const selectedElement in querySelectorElements) {
-            // TODO: marmer 14.07.2019 Some selection should be possible here
-            filterableElementsContainer.appendChild(querySelectorElements[selectedElement].cloneNode(true));
-        }
+        return elementSelector.value;
+    };
+
+    const removePreveousElementBoxSelection = node => {
+        node.classList.remove(SELECTED_ELEMENT_BOX_CLASS);
+    };
+
+    const addElementBoxSelection = node => {
+        node.classList.add(SELECTED_ELEMENT_BOX_CLASS);
     };
 
     const newQuerySelector = () => {
@@ -46,18 +64,10 @@
         return labeledInput;
     };
 
-    const newFilterableElementsContainer = () => {
-        let container = document.createElement('div');
-        container.id = FILTERABLE_ELEMENTS_CONTAINER_ID;
-        container.append("someContent");
-        return container;
-    };
-
     const newPageBodyContainer = () => {
         const querySelectorFilterContainer = document.createElement('div');
         querySelectorFilterContainer.id = QUERY_SELECTOR_FILTER_CONTAINER_ID;
         querySelectorFilterContainer.append(newQuerySelector());
-        querySelectorFilterContainer.append(newFilterableElementsContainer());
         return querySelectorFilterContainer;
     };
 
