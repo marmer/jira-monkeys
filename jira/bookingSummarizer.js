@@ -9,20 +9,22 @@
 // ==/UserScript==
 
 (function () {
+    module.exports = {blubbaDeleteMe: blubbaDeleteMe}
+
+    function blubbaDeleteMe() {
+        return "whoooooot######";
+    }
+
     const tamperMonkeyScript = () => {
+        'use strict';
+        const issueTabContainer = document.getElementById("issue-tabs");
+        if (!issueTabContainer) return;
+        document.querySelectorAll("#issue-tabs>li").forEach(issueTab => console.log("####" + issueTab.id));
 
-        (function () {
-            'use strict';
-            const issueTabContainer = document.getElementById("issue-tabs");
-            document.querySelectorAll("#issue-tabs>li").forEach(issueTab => console.log("####" + issueTab.id));
-
-            let customElement = document.createElement("li");
-            customElement.classList.add("menu-item");
-            customElement.id = "summarizer-tab"
-            issueTabContainer.append(customElement);
-
-        })();
-
+        let customElement = document.createElement("li");
+        customElement.classList.add("menu-item");
+        customElement.id = "summarizer-tab";
+        issueTabContainer.append(customElement);
     };
 
     tamperMonkeyScript();
