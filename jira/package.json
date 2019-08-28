@@ -1,0 +1,15 @@
+{
+  "name": "jira-helper",
+  "version": "1.0.0",
+  "main": "bookingSummarizer.js",
+  "repository": "https://github.com/marmer/Tampermonkeys.git",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^24.9.0",
+    "jest": "^24.9.0"
+  },
+  "scripts": {
+    "test": "jest --verbose"
+  }
+}
