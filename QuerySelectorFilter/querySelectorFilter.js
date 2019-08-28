@@ -16,7 +16,6 @@
 // @grant        none
 // ==/UserScript==
 
-// Insert everything of this file except the last line into your tamper monkey script
 (function () {
     'use strict';
     const QUERY_SELECTOR_FILTER_CONTAINER_ID = 'querySelectorFilterContainer';
