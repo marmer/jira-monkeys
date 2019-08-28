@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Jira booking summarizer
 // @namespace    http://tampermonkey.net/
-// @version      0.2.0
+// @version      0.2.1
 // @description  try to take over the world!
 // @author       You
 // @match        https://jira.schuetze.ag/browse/*
@@ -21,7 +21,10 @@
     const tamperMonkeyScript = () => {
         'use strict';
         const issueTabContainer = document.getElementById("issue-tabs");
-        if (!issueTabContainer) return;
+        if (!issueTabContainer) {
+            console.error("No element found with id: issue-tabs");
+            return;
+        }
         document.querySelectorAll("#issue-tabs>li").forEach(issueTab => console.log("####" + issueTab.id));
 
         let customElement = document.createElement("li");
