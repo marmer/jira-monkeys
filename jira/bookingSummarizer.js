@@ -12,15 +12,28 @@
 // ==/UserScript==
 
 (function () {
-    module.exports = {blubbaDeleteMe: blubbaDeleteMe}
-
-    function blubbaDeleteMe() {
-        return "whoooooot######";
+    function performFancyFetch() {
+        fetch("https://domain.com/rest/api/2/issue/ISSUEKEY-123", {
+            "method": "GET"
+        })
+            .then(response => {
+                response.json().then(value => {
+                    console.log("############# " + value.key)
+                    console.log("############# " + value.fields.worklog.worklogs[0].timeSpentSeconds)
+                    console.log("############# " + value.fields.worklog.worklogs[0].author.displayName)
+                });
+            })
+            .catch(err => {
+                console.log("#### " + err);
+            });
     }
 
     const tamperMonkeyScript = () => {
         'use strict';
         const issueTabContainer = document.getElementById("issue-tabs");
+
+        performFancyFetch();
+
         if (!issueTabContainer) {
             console.error("No element found with id: issue-tabs");
             return;

@@ -1,4 +1,4 @@
-const {blubbaDeleteMe} = require("./bookingSummarizer.js")
+import "./bookingSummarizer.js"
 
 describe("Some simple example test", () => {
 
