@@ -23,7 +23,7 @@
     const SELECTED_ELEMENT_BOX_CLASS = "selectedBoxElement";
 
 
-    const addFilterables = () => {
+    const selectFilterables = () => {
         getAllNodes()
             .forEach(removePreveousElementBoxSelection);
 
@@ -51,28 +51,56 @@
         node.classList.add(SELECTED_ELEMENT_BOX_CLASS);
     };
 
-    const newQuerySelector = () => {
+    const newPageBodyContainer = () => {
+        const querySelectorFilterContainer = document.createElement('div');
+        querySelectorFilterContainer.id = QUERY_SELECTOR_FILTER_CONTAINER_ID;
+        querySelectorFilterContainer.append(newBoxQuerySelector());
+        querySelectorFilterContainer.append(newFilterElementSelector());
+        querySelectorFilterContainer.append(newFilterRegexSelector());
+        return querySelectorFilterContainer;
+    };
+
+    const newBoxQuerySelector = () => {
         const labeledInput = document.createElement('label');
-        labeledInput.append("Query selector:");
+        labeledInput.append("Box Querry Selector");
         const mainElementSelectorInput = document.createElement('input');
         mainElementSelectorInput.id = ELEMENT_SELECTOR_ID;
         mainElementSelectorInput.type = 'text';
         mainElementSelectorInput.placeholder = ".someCssClass";
-        mainElementSelectorInput.addEventListener("input", addFilterables);
+        mainElementSelectorInput.addEventListener("input", selectFilterables);
         labeledInput.append(mainElementSelectorInput);
         return labeledInput;
     };
 
-    const newPageBodyContainer = () => {
-        const querySelectorFilterContainer = document.createElement('div');
-        querySelectorFilterContainer.id = QUERY_SELECTOR_FILTER_CONTAINER_ID;
-        querySelectorFilterContainer.append(newQuerySelector());
-        return querySelectorFilterContainer;
+    const newFilterElementSelector = () => {
+        const labeledInput = document.createElement('label');
+        labeledInput.append("Filter Querry Selector");
+        const mainElementSelectorInput = document.createElement('input');
+        mainElementSelectorInput.id = ELEMENT_SELECTOR_ID;
+        mainElementSelectorInput.type = 'text';
+        mainElementSelectorInput.placeholder = ".someCssClass";
+
+        mainElementSelectorInput.addEventListener("input", selectFilterablePart);
+
+        labeledInput.append(mainElementSelectorInput);
+        return labeledInput;
+    };
+
+    const selectFilterablePart = () => {
+        getAllNodes()
+            .forEach(removePreveousElementBoxSelection);
+
+        getSelectablePartOfFilterableNodes()
+            .forEach(addElementBoxSelection);
+    };
+
+    const newFilterRegexSelector = () => {
+        // TODO: marmer 16.07.2019 Implement
+        return document.createElement('div');
     };
 
     const addContainerToPageBody = () => {
         const body = document.querySelector('body');
-
 
         body.prepend(newPageBodyContainer());
     };
