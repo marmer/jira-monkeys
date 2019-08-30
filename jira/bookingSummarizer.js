@@ -9,7 +9,18 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.16.0/polyfill.js
 // @updateURL    https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/bookingSummarizer.js
+// @downloadURL  https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/bookingSummarizer.js
 // ==/UserScript==
+
+class Worklog {
+    timeSpentInSeconds;
+    author;
+
+    constructor(timeSpentInSeconds, author) {
+        this.timeSpentInSeconds = timeSpentInSeconds;
+        this.author = author;
+    }
+}
 
 (function () {
     function performFancyFetch() {
