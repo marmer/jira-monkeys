@@ -6,6 +6,6 @@
 // @match       https://jira.schuetze.ag/browse/*
 // @namespace   http://tampermonkey.net/
 // @grant       none
-// @updateURL   https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/bookingSummarizer.js
-// @downloadURL https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/bookingSummarizer.js
+// @updateURL   https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/dist/bundle.user.js
+// @downloadURL https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/dist/bundle.user.js
 // ==/UserScript==
