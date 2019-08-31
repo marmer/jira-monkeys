@@ -13,9 +13,6 @@
 // ==/UserScript==
 
 class Worklog {
-    timeSpentInSeconds;
-    author;
-
     constructor(timeSpentInSeconds, author) {
         this.timeSpentInSeconds = timeSpentInSeconds;
         this.author = author;
@@ -24,13 +21,13 @@ class Worklog {
 
 (function () {
     function performFancyFetch() {
-        fetch("https://domain.com/rest/api/2/issue/ISSUEKEY-123", {
+        fetch("https://jira.schuetze.ag/rest/api/2/issue/ISBJWARTUNG-17512", {
             "method": "GET"
         })
             .then(response => {
                 response.json().then(value => {
-                    console.log("############# " + value.key)
-                    console.log("############# " + value.fields.worklog.worklogs[0].timeSpentSeconds)
+                    console.log("############# " + value.key);
+                    console.log("############# " + value.fields.worklog.worklogs[0].timeSpentSeconds);
                     console.log("############# " + value.fields.worklog.worklogs[0].author.displayName)
                 });
             })

@@ -1,15 +1,23 @@
 {
   "name": "jira-helper",
   "version": "1.0.0",
-  "main": "bookingSummarizer.js",
+  "main": "src/bookingSummarizer.js",
   "repository": "https://github.com/marmer/Tampermonkeys.git",
   "license": "MIT",
-  "dependencies": {},
+  "private": true,
+  "dependencies": {
+    "ts-loader": "^6.0.4"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.18",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "typescript": "^3.6.2",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7",
+    "webpack-userscript": "^2.3.1"
   },
   "scripts": {
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles",
+    "build": "webpack"
   }
 }
