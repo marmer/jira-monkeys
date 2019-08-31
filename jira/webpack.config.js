@@ -12,7 +12,7 @@ module.exports = {
     ],
     entry: './src/bookingSummarizer.js',
     optimization: {
-        minimize: false,
+        minimize: true,
 
     },
     module: {
