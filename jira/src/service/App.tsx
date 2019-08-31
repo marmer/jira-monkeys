@@ -1,3 +1,6 @@
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+
 export default class App {
     static whooop() {
         tamperMonkeyScript();
@@ -34,6 +37,15 @@ const tamperMonkeyScript = () => {
 
     let customElement = document.createElement("li");
     customElement.classList.add("menu-item");
+    customElement.classList.add("active-tab");
+    // TODO: marmer 01.09.2019 add focus, blur and clicklistener
+    // TODO: marmer 01.09.2019 find and add "hover" class/functionality
     customElement.id = "summarizer-tab";
     issueTabContainer.append(customElement);
+
+    ReactDOM.render(<SomeNiceReactContainer/>, customElement);
+};
+
+const SomeNiceReactContainer = () => {
+    return <a>Doc cakes</a>
 };
