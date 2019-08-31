@@ -4,7 +4,7 @@
 // @version      0.2.1
 // @description  try to take over the world!
 // @author       You
-// @match        https://jira.schuetze.ag/browse/*
+// @match        https://jira.*/browse/*
 // @grant        none
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.16.0/polyfill.js
@@ -21,7 +21,7 @@ class Worklog {
 
 (function () {
     function performFancyFetch() {
-        fetch("https://jira.schuetze.ag/rest/api/2/issue/ISBJWARTUNG-17512", {
+        fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""), {
             "method": "GET"
         })
             .then(response => {
