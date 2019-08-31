@@ -1,4 +1,4 @@
-import "./bookingSummarizer.js"
+import "./index.js"
 
 describe("Some simple example test", () => {
 

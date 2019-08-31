@@ -10,9 +10,9 @@ module.exports = {
             }
         )
     ],
-    entry: './src/bookingSummarizer.js',
+    entry: './src/index.js',
     optimization: {
-        minimize: true,
+        minimize: false,
 
     },
     module: {

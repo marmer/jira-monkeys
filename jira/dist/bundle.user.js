@@ -10,4 +10,199 @@
 // @downloadURL https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/bookingSummarizer.js
 // ==/UserScript==
 
-!function(e){var o={};function t(n){if(o[n])return o[n].exports;var r=o[n]={i:n,l:!1,exports:{}};return e[n].call(r.exports,r,r.exports,t),r.l=!0,r.exports}t.m=e,t.c=o,t.d=function(e,o,n){t.o(e,o)||Object.defineProperty(e,o,{enumerable:!0,get:n})},t.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},t.t=function(e,o){if(1&o&&(e=t(e)),8&o)return e;if(4&o&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(t.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&o&&"string"!=typeof e)for(var r in e)t.d(n,r,function(o){return e[o]}.bind(null,r));return n},t.n=function(e){var o=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(o,"a",o),o},t.o=function(e,o){return Object.prototype.hasOwnProperty.call(e,o)},t.p="",t(t.s=0)}([function(e,o){(()=>{"use strict";const e=document.getElementById("issue-tabs");if(fetch(window.location.origin+"/rest/api/2/issue/"+window.location.pathname.replace("/browse/",""),{method:"GET"}).then(e=>{e.json().then(e=>{console.log("############# "+e.key),console.log("############# "+e.fields.worklog.worklogs[0].timeSpentSeconds),console.log("############# "+e.fields.worklog.worklogs[0].author.displayName)})}).catch(e=>{console.log("#### "+e)}),!e)return void console.error("No element found with id: issue-tabs");document.querySelectorAll("#issue-tabs>li").forEach(e=>console.log("####"+e.id));let o=document.createElement("li");o.classList.add("menu-item"),o.id="summarizer-tab",e.append(o)})()}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// CONCATENATED MODULE: ./src/service/App.ts
+var App = /** @class */ (function () {
+    function App() {
+    }
+    App.whooop = function () {
+        tamperMonkeyScript();
+    };
+    return App;
+}());
+/* harmony default export */ var service_App = (App);
+var tamperMonkeyScript = function () {
+    function performFancyFetch() {
+        alert("2: " + window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""));
+        fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""), {
+            "method": "GET"
+        })
+            .then(function (response) {
+            response.json().then(function (value) {
+                console.log("############# " + value.key);
+                console.log("############# " + value.fields.worklog.worklogs[0].timeSpentSeconds);
+                console.log("############# " + value.fields.worklog.worklogs[0].author.displayName);
+            });
+        })
+            .catch(function (err) {
+            console.log("#### " + err);
+        });
+    }
+    var issueTabContainer = document.getElementById("issue-tabs");
+    performFancyFetch();
+    if (!issueTabContainer) {
+        console.error("No element found with id: issue-tabs");
+        return;
+    }
+    document.querySelectorAll("#issue-tabs>li").forEach(function (issueTab) { return console.log("####" + issueTab.id); });
+    var customElement = document.createElement("li");
+    customElement.classList.add("menu-item");
+    customElement.id = "summarizer-tab";
+    issueTabContainer.append(customElement);
+};
+
+// CONCATENATED MODULE: ./src/index.js
+// ==UserScript==
+// @name         Jira booking summarizer
+// @namespace    http://tampermonkey.net/
+// @version      0.2.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://jira.*/browse/*
+// @grant        none
+// @require      https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.16.0/polyfill.js
+// @updateURL    https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/bookingSummarizer.js
+// @downloadURL  https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/bookingSummarizer.js
+// ==/UserScript==
+
+// import {tamperMonkeyScript} from './service/PageHook'
+// const {tamperMonkeyScript} = require("./service/PageHook")
+
+
+
+(function () {
+    // alert("1: " + window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""))
+    // const tamperMonkeyScript = () => {
+    //     'use strict';
+    //
+    //     function performFancyFetch() {
+    //         fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""), {
+    //             "method": "GET"
+    //         })
+    //             .then(response => {
+    //                 response.json().then(value => {
+    //                     console.log("############# " + value.key);
+    //                     console.log("############# " + value.fields.worklog.worklogs[0].timeSpentSeconds);
+    //                     console.log("############# " + value.fields.worklog.worklogs[0].author.displayName)
+    //                 });
+    //             })
+    //             .catch(err => {
+    //                 console.log("#### " + err);
+    //             });
+    //     }
+    //
+    //     const issueTabContainer = document.getElementById("issue-tabs");
+    //
+    //     performFancyFetch();
+    //
+    //     if (!issueTabContainer) {
+    //         console.error("No element found with id: issue-tabs");
+    //         return;
+    //     }
+    //     document.querySelectorAll("#issue-tabs>li").forEach(issueTab => console.log("####" + issueTab.id));
+    //
+    //     let customElement = document.createElement("li");
+    //     customElement.classList.add("menu-item");
+    //     customElement.id = "summarizer-tab";
+    //     issueTabContainer.append(customElement);
+    // };
+
+    // tamperMonkeyScript();
+    service_App.whooop()
+})();
+
+/***/ })
+/******/ ]);
