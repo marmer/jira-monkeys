@@ -1,5 +1,5 @@
 import App from "./service/App";
 
 (function () {
-    App.whooop()
+    App.run()
 })();
