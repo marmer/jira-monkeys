@@ -2,16 +2,20 @@ import WorklogSummarizer from "./WorklogSummarizer";
 import App from "./App";
 
 describe("a running app", () => {
-    const summarizerRegisterMock = jest.fn();
-
+    let registerMock: jest.Mock<any, any>;
 
     beforeEach(cb => {
-        summarizerRegisterMock.mockClear();
-        WorklogSummarizer.prototype.register = summarizerRegisterMock;
+        registerMock = jest.fn().mockImplementationOnce(args => {
+            // TODO: marmer 02.09.2019 Get out why this is not called oO
+            console.log("why is this not called oO")
+        });
+        WorklogSummarizer.prototype.register = registerMock;
     });
 
     it('should register a worklog Summarizer', () => {
+        // expect(registerMock).toBeCalled();
         App.run();
-        expect(summarizerRegisterMock).toBeCalledTimes(1)
+        // expect(registerMock).toBeCalled();
+        expect(registerMock).toHaveBeenCalled();
     });
 });

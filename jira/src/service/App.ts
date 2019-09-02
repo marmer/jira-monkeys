@@ -5,6 +5,5 @@ export default class App {
         const worklogSummarizer = new WorklogSummarizer();
         const register = worklogSummarizer.register;
         register();
-
     }
 }
