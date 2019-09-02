@@ -619,7 +619,6 @@ var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
     }
     WorklogSummarizer.prototype.register = function () {
         // TODO: marmer 02.09.2019 Read /projects/ISBJRD/repos/isbj-redesign-frontend-components/browse/src/Modal/FocusCapture.ts for MutationCallbacks to get out whether my injected elements are gone
-        var _this = this;
         console.log("#Worklog Summerizer started to register");
         var issueTabContainer = document.getElementById("issue-tabs");
         performFancyFetch();
@@ -629,6 +628,8 @@ var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
         }
         document.querySelectorAll("#issue-tabs>li").forEach(function (issueTab) { return console.log("####" + issueTab.id); });
         var customElement = document.createElement("li");
+        customElement.id = "customContainer";
+        customElement.setAttribute("exists", "true");
         customElement.classList.add("menu-item");
         customElement.classList.add("active-tab");
         // TODO: marmer 01.09.2019 add focus, blur and clicklistener
@@ -637,29 +638,23 @@ var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
         issueTabContainer.append(customElement);
         new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
-                switch (mutation.type) {
-                }
-                console.log("---------------------------------------");
-                console.log("###Veränderung von target:" + mutation.target.id);
-                console.log("###Veränderung von type:" + mutation.type);
-                console.log("###Veränderung von oldValue:" + mutation.oldValue);
-                console.log("###Veränderung von removedNodes:" + _this.stringify(mutation.removedNodes));
-                mutation.removedNodes.forEach(function (node) {
-                    console.log("######entfernt von:" + _this.stringify(node));
-                });
-                console.log("###Veränderung von addedNodes:" + _this.stringify(mutation.addedNodes));
-                mutation.addedNodes.forEach(function (node) {
-                    console.log("######Hinzugefügt von:" + _this.stringify(node));
-                });
-                console.log("---------------------------------------");
+                console.log("####################################### ");
+                console.log("### type:" + mutation.type);
+                var id = mutation.target["id"];
+                console.log("### ElementID " + id);
+                var elementById = document.getElementById(id);
+                console.log("### Existiert1: " + elementById);
+                if (elementById)
+                    console.log("### Existiert2: " + elementById.getAttribute("exists"));
+                console.log("### Attribute Name: " + mutation.attributeName);
+                console.log("### Attribute oldValue: " + mutation.oldValue);
+                console.log("#######################################");
             });
-        }).observe(issueTabContainer, {
-            attributeOldValue: true,
+        }).observe(customElement, {
             attributes: true,
             characterData: true,
-            characterDataOldValue: true,
             childList: true,
-            subtree: true
+            subtree: false
         });
         react_dom["render"](react["createElement"](SomeNiceReactContainer, null), customElement);
     };

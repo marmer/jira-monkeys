@@ -18,6 +18,8 @@ export default class WorklogSummarizer {
         document.querySelectorAll("#issue-tabs>li").forEach(issueTab => console.log("####" + issueTab.id));
 
         let customElement = document.createElement("li");
+        customElement.id = "customContainer";
+        customElement.setAttribute("exists", "true")
         customElement.classList.add("menu-item");
         customElement.classList.add("active-tab");
         // TODO: marmer 01.09.2019 add focus, blur and clicklistener
@@ -27,31 +29,25 @@ export default class WorklogSummarizer {
 
         new MutationObserver(mutations => {
                 mutations.forEach(mutation => {
-                    switch (mutation.type) {
+                    console.log("####################################### ");
+                    console.log("### type:" + mutation.type);
+                    const id = (mutation.target as any)["id"];
+                    console.log("### ElementID " + id);
+                    const elementById = document.getElementById(id);
+                    console.log("### Existiert1: " + elementById);
+                    if (elementById)
+                        console.log("### Existiert2: " + elementById.getAttribute("exists"));
 
-                    }
-                    console.log("---------------------------------------");
-                    console.log("###Veränderung von target:" + (mutation.target as any).id);
-                    console.log("###Veränderung von type:" + mutation.type);
-                    console.log("###Veränderung von oldValue:" + mutation.oldValue);
-                    console.log("###Veränderung von removedNodes:" + this.stringify(mutation.removedNodes));
-                    mutation.removedNodes.forEach(node => {
-                        console.log("######entfernt von:" + this.stringify(node));
-                    });
-                    console.log("###Veränderung von addedNodes:" + this.stringify(mutation.addedNodes));
-                    mutation.addedNodes.forEach(node => {
-                        console.log("######Hinzugefügt von:" + this.stringify(node));
-                    });
-                    console.log("---------------------------------------");
+                    console.log("### Attribute Name: " + mutation.attributeName);
+                    console.log("### Attribute oldValue: " + mutation.oldValue);
+                    console.log("#######################################");
                 })
             }
-        ).observe(issueTabContainer, {
-            attributeOldValue: true,
+        ).observe(customElement, {
             attributes: true,
             characterData: true,
-            characterDataOldValue: true,
             childList: true,
-            subtree: true
+            subtree: false
         });
 
         ReactDOM.render(<SomeNiceReactContainer/>, customElement);
