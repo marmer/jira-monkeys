@@ -3,6 +3,8 @@ import * as React from "react";
 
 export default class WorklogSummarizer {
     register() {
+        // TODO: marmer 02.09.2019 Read /projects/ISBJRD/repos/isbj-redesign-frontend-components/browse/src/Modal/FocusCapture.ts for MutationCallbacks to get out whether my injected elements are gone
+
         console.log("#Worklog Summerizer started to register")
 
         const issueTabContainer = document.getElementById("issue-tabs");
@@ -23,12 +25,48 @@ export default class WorklogSummarizer {
         customElement.id = "summarizer-tab";
         issueTabContainer.append(customElement);
 
+        new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    switch (mutation.type) {
+
+                    }
+                    console.log("---------------------------------------");
+                    console.log("###Veränderung von target:" + (mutation.target as any).id);
+                    console.log("###Veränderung von type:" + mutation.type);
+                    console.log("###Veränderung von oldValue:" + mutation.oldValue);
+                    console.log("###Veränderung von removedNodes:" + this.stringify(mutation.removedNodes));
+                    mutation.removedNodes.forEach(node => {
+                        console.log("######entfernt von:" + this.stringify(node));
+                    });
+                    console.log("###Veränderung von addedNodes:" + this.stringify(mutation.addedNodes));
+                    mutation.addedNodes.forEach(node => {
+                        console.log("######Hinzugefügt von:" + this.stringify(node));
+                    });
+                    console.log("---------------------------------------");
+                })
+            }
+        ).observe(issueTabContainer, {
+            attributeOldValue: true,
+            attributes: true,
+            characterData: true,
+            characterDataOldValue: true,
+            childList: true,
+            subtree: true
+        });
+
         ReactDOM.render(<SomeNiceReactContainer/>, customElement);
+    }
+
+    private stringify(value: any) {
+        return "{" + Object.keys(value).map(value1 => value1 + ": " + value[value1]).join(",\n") + "}";
+        // return value && value.id ?
+        //     value.id :
+        //     JSON.stringify(Object.getOwnPropertyNames(value));
     }
 }
 
 const SomeNiceReactContainer = () => {
-    return <a>Doc cakes</a>
+    return <a id="my-observable-element">Doc cakes</a>
 };
 
 function performFancyFetch() {

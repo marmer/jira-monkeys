@@ -618,21 +618,9 @@ var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
     function WorklogSummarizer() {
     }
     WorklogSummarizer.prototype.register = function () {
-        function performFancyFetch() {
-            fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""), {
-                "method": "GET"
-            })
-                .then(function (response) {
-                response.json().then(function (value) {
-                    console.log("############# " + value.key);
-                    console.log("############# " + value.fields.worklog.worklogs[0].timeSpentSeconds);
-                    console.log("############# " + value.fields.worklog.worklogs[0].author.displayName);
-                });
-            })
-                .catch(function (err) {
-                console.log("#### " + err);
-            });
-        }
+        // TODO: marmer 02.09.2019 Read /projects/ISBJRD/repos/isbj-redesign-frontend-components/browse/src/Modal/FocusCapture.ts for MutationCallbacks to get out whether my injected elements are gone
+        var _this = this;
+        console.log("#Worklog Summerizer started to register");
         var issueTabContainer = document.getElementById("issue-tabs");
         performFancyFetch();
         if (!issueTabContainer) {
@@ -647,14 +635,61 @@ var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
         // TODO: marmer 01.09.2019 find and add "hover" class/functionality
         customElement.id = "summarizer-tab";
         issueTabContainer.append(customElement);
+        new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                switch (mutation.type) {
+                }
+                console.log("---------------------------------------");
+                console.log("###Veränderung von target:" + mutation.target.id);
+                console.log("###Veränderung von type:" + mutation.type);
+                console.log("###Veränderung von oldValue:" + mutation.oldValue);
+                console.log("###Veränderung von removedNodes:" + _this.stringify(mutation.removedNodes));
+                mutation.removedNodes.forEach(function (node) {
+                    console.log("######entfernt von:" + _this.stringify(node));
+                });
+                console.log("###Veränderung von addedNodes:" + _this.stringify(mutation.addedNodes));
+                mutation.addedNodes.forEach(function (node) {
+                    console.log("######Hinzugefügt von:" + _this.stringify(node));
+                });
+                console.log("---------------------------------------");
+            });
+        }).observe(issueTabContainer, {
+            attributeOldValue: true,
+            attributes: true,
+            characterData: true,
+            characterDataOldValue: true,
+            childList: true,
+            subtree: true
+        });
         react_dom["render"](react["createElement"](SomeNiceReactContainer, null), customElement);
+    };
+    WorklogSummarizer.prototype.stringify = function (value) {
+        return "{" + Object.keys(value).map(function (value1) { return value1 + ": " + value[value1]; }).join(",\n") + "}";
+        // return value && value.id ?
+        //     value.id :
+        //     JSON.stringify(Object.getOwnPropertyNames(value));
     };
     return WorklogSummarizer;
 }());
 /* harmony default export */ var service_WorklogSummarizer = (WorklogSummarizer_WorklogSummarizer);
 var SomeNiceReactContainer = function () {
-    return react["createElement"]("a", null, "Doc cakes");
+    return react["createElement"]("a", { id: "my-observable-element" }, "Doc cakes");
 };
+function performFancyFetch() {
+    fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""), {
+        "method": "GET"
+    })
+        .then(function (response) {
+        response.json().then(function (value) {
+            console.log("############# " + value.key);
+            console.log("############# " + value.fields.worklog.worklogs[0].timeSpentSeconds);
+            console.log("############# " + value.fields.worklog.worklogs[0].author.displayName);
+        });
+    })
+        .catch(function (err) {
+        console.log("#### " + err);
+    });
+}
 
 // CONCATENATED MODULE: ./src/service/App.ts
 
