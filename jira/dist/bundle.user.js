@@ -106,7 +106,8 @@ __webpack_require__.r(__webpack_exports__);
 // CONCATENATED MODULE: ./src/ui/core/WorklogService.ts
 class WorklogService {
     getSummedWorklogsByUser() {
-        return fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""), {
+        // FIXME: marmer load All worklogs instead of just a page of 20 to sum up
+        return fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", "") + "/worklog", {
             "method": "GET"
         })
             .then((response) => {
@@ -115,9 +116,7 @@ class WorklogService {
             }
             return response.json();
         })
-            .then(ticket => {
-            return ticket.fields.worklog.worklogs.map(this.toWorklog);
-        })
+            .then(responseJson => responseJson.worklogs.map(this.toWorklog))
             .then(this.groupedByDisplayName);
     }
     groupedByDisplayName(worklogs) {

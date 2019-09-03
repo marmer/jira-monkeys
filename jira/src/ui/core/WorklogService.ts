@@ -9,7 +9,7 @@ export default class WorklogService {
     getSummedWorklogsByUser(): Promise<Worklog[]> {
         // FIXME: marmer load All worklogs instead of just a page of 20 to sum up
 
-        return fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""), {
+        return fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", "") + "/worklog", {
             "method": "GET"
         })
             .then((response) => {
@@ -18,9 +18,7 @@ export default class WorklogService {
                 }
                 return response.json();
             })
-            .then(ticket => {
-                return ticket.fields.worklog.worklogs.map(this.toWorklog);
-            })
+            .then(responseJson => responseJson.worklogs.map(this.toWorklog))
             .then(this.groupedByDisplayName)
 
     }
