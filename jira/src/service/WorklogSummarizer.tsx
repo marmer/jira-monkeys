@@ -17,41 +17,51 @@ export default class WorklogSummarizer {
         }
         document.querySelectorAll("#issue-tabs>li").forEach(issueTab => console.log("####" + issueTab.id));
 
-        let customElement = document.createElement("li");
-        customElement.id = "customContainer";
-        customElement.setAttribute("exists", "true")
-        customElement.classList.add("menu-item");
-        customElement.classList.add("active-tab");
+        let customContainer = document.createElement("li");
+        customContainer.id = "customContainer";
+        customContainer.setAttribute("exists", "true")
+        customContainer.classList.add("menu-item");
+        customContainer.classList.add("active-tab");
         // TODO: marmer 01.09.2019 add focus, blur and clicklistener
         // TODO: marmer 01.09.2019 find and add "hover" class/functionality
-        customElement.id = "summarizer-tab";
+        customContainer.id = "summarizer-tab";
+
+        const realElementId: string = "my-observable-element";
+
+        issueTabContainer.append(customContainer);
 
         new MutationObserver(mutations => {
                 mutations.forEach(mutation => {
                     console.log("####################################### ");
-                    console.log("### type:" + mutation.type);
-                    const id = (mutation.target as any)["id"];
-                    console.log("### ElementID " + id);
-                    const elementById = document.getElementById(id);
-                    console.log("### Existiert1: " + elementById);
-                    if (elementById)
-                        console.log("### Existiert2: " + elementById.getAttribute("exists"));
+                    // console.log("### type:" + mutation.type);
+                    // const id = (mutation.target as any)["id"];
+                    // console.log("### ElementID " + id);
+                    // const elementById = document.getElementById(id);
+                    // console.log("### Existiert1: " + elementById);
+                    // if (elementById)
+                    //     console.log("### Existiert2: " + elementById.getAttribute("exists"));
+                    //
+                    // console.log("### Attribute Name: " + mutation.attributeName);
+                    // console.log("### Attribute oldValue: " + mutation.oldValue);
 
-                    console.log("### Attribute Name: " + mutation.attributeName);
-                    console.log("### Attribute oldValue: " + mutation.oldValue);
+                    mutation.removedNodes.forEach((removedNode: any) => {
+                        if (realElementId === removedNode.id) {
+                            console.log("yeah ... the element was removed :D")
+                        }
+                    });
+
                     console.log("#######################################");
                 })
             }
-        ).observe(customElement, {
+        ).observe(customContainer, {
             attributes: true,
             characterData: true,
             childList: true,
             subtree: false
         });
 
-        issueTabContainer.append(customElement);
 
-        ReactDOM.render(<SomeNiceReactContainer/>, customElement);
+        ReactDOM.render(<NiceRealElement id={realElementId}/>, customContainer);
     }
 
     private stringify(value: any) {
@@ -62,8 +72,8 @@ export default class WorklogSummarizer {
     }
 }
 
-const SomeNiceReactContainer = () => {
-    return <a id="my-observable-element">Doc cakes</a>
+const NiceRealElement = (props: { id: string }) => {
+    return <a id={props.id}>Doc cakes</a>
 };
 
 function performFancyFetch() {
