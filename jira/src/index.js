@@ -1,4 +1,4 @@
-import App from "./service/App";
+import App from "./ui/App";
 
 (function () {
     App.run()
