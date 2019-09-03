@@ -627,36 +627,33 @@ var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
             return;
         }
         document.querySelectorAll("#issue-tabs>li").forEach(function (issueTab) { return console.log("####" + issueTab.id); });
-        var customElement = document.createElement("li");
-        customElement.id = "customContainer";
-        customElement.setAttribute("exists", "true");
-        customElement.classList.add("menu-item");
-        customElement.classList.add("active-tab");
+        var customContainer = document.createElement("li");
+        customContainer.id = "customContainer";
+        customContainer.setAttribute("exists", "true");
+        customContainer.classList.add("menu-item");
+        customContainer.classList.add("active-tab");
         // TODO: marmer 01.09.2019 add focus, blur and clicklistener
         // TODO: marmer 01.09.2019 find and add "hover" class/functionality
-        customElement.id = "summarizer-tab";
+        customContainer.id = "summarizer-tab";
+        var realElementId = "my-observable-element";
+        issueTabContainer.append(customContainer);
         new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
                 console.log("####################################### ");
-                console.log("### type:" + mutation.type);
-                var id = mutation.target["id"];
-                console.log("### ElementID " + id);
-                var elementById = document.getElementById(id);
-                console.log("### Existiert1: " + elementById);
-                if (elementById)
-                    console.log("### Existiert2: " + elementById.getAttribute("exists"));
-                console.log("### Attribute Name: " + mutation.attributeName);
-                console.log("### Attribute oldValue: " + mutation.oldValue);
+                mutation.removedNodes.forEach(function (removedNode) {
+                    if (realElementId === removedNode.id) {
+                        console.log("yeah ... the element was removed :D");
+                    }
+                });
                 console.log("#######################################");
             });
-        }).observe(customElement, {
+        }).observe(customContainer, {
             attributes: true,
             characterData: true,
             childList: true,
             subtree: false
         });
-        issueTabContainer.append(customElement);
-        react_dom["render"](react["createElement"](SomeNiceReactContainer, null), customElement);
+        react_dom["render"](react["createElement"](NiceRealElement, {id: realElementId}), customContainer);
     };
     WorklogSummarizer.prototype.stringify = function (value) {
         return "{" + Object.keys(value).map(function (value1) { return value1 + ": " + value[value1]; }).join(",\n") + "}";
@@ -667,8 +664,8 @@ var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
     return WorklogSummarizer;
 }());
 /* harmony default export */ var service_WorklogSummarizer = (WorklogSummarizer_WorklogSummarizer);
-var SomeNiceReactContainer = function () {
-    return react["createElement"]("a", { id: "my-observable-element" }, "Doc cakes");
+        var NiceRealElement = function (props) {
+            return react["createElement"]("a", {id: props.id}, "Doc cakes");
 };
 function performFancyFetch() {
     fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""), {
