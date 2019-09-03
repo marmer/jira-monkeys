@@ -104,35 +104,53 @@
 __webpack_require__.r(__webpack_exports__);
 
 // CONCATENATED MODULE: ./src/ui/core/WorklogService.ts
-var WorklogService = /** @class */ (function () {
-    function WorklogService() {
+class WorklogService {
+    getSummedWorklogsByUser() {
+        return fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", ""), {
+            "method": "GET"
+        })
+            .then((response) => {
+            if (response.status !== 200) {
+                throw new Error("Bad status");
+            }
+            return response.json();
+        })
+            .then(ticket => {
+            return ticket.fields.worklog.worklogs.map(this.toWorklog);
+        })
+            .then(this.groupedByDisplayName);
     }
-    WorklogService.prototype.getSummedWorklogsByUser = function () {
-        return [{ author: { displayName: "me" }, timeSpendInMinutes: 42 },
-            { author: { displayName: "myself" }, timeSpendInMinutes: 546 },
-            { author: { displayName: "and I" }, timeSpendInMinutes: 1337 }];
-    };
-    return WorklogService;
-}());
-/* harmony default export */ var core_WorklogService = (WorklogService);
+    groupedByDisplayName(worklogs) {
+        // TODO: marmer 04.09.2019 implement me
+        return worklogs;
+    }
+    toWorklog(responseWorklog) {
+        const timeSpentInMinutes = Math.floor(responseWorklog.timeSpentSeconds / 60);
+        const author = responseWorklog.author;
+        return {
+            author,
+            timeSpentInMinutes
+        };
+    }
+}
 
 // CONCATENATED MODULE: ./src/ui/core/jiraFormat.ts
-var minute = { symbol: "m", factor: 1 };
-var hour = { symbol: "h", factor: 60 * minute.factor };
-var day = { symbol: "d", factor: 8 * hour.factor };
-var week = { symbol: "w", factor: 5 * day.factor };
-var weeksOf = function (timeSpentInMinutes) { return Math.floor(timeSpentInMinutes / week.factor); };
-var daysOf = function (timeSpentInMinutes) { return Math.floor((timeSpentInMinutes % week.factor) / day.factor); };
-var hoursOf = function (timeSpentInMinutes) { return Math.floor((timeSpentInMinutes % day.factor) / hour.factor); };
-var minutesOf = function (timeSpentInMinutes) { return Math.floor((timeSpentInMinutes % hour.factor) / minute.factor); };
-var minutePartOf = function (timeSpentInMinutes) { return unitStringFor(minutesOf(timeSpentInMinutes), minute); };
-var hourPartOf = function (timeSpentInMinutes) { return unitStringFor(hoursOf(timeSpentInMinutes), hour); };
-var dayPartOf = function (timeSpentInMinutes) { return unitStringFor(daysOf(timeSpentInMinutes), day); };
-var weekPartOf = function (timeSpentInMinutes) { return unitStringFor(weeksOf(timeSpentInMinutes), week); };
-var unitStringFor = function (result, unit) { return result == 0 ? "" : result + unit.symbol; };
-/* harmony default export */ var jiraFormat = (function (timeSpentInMinutes) {
-    var absoluteTimeSpendInMinutes = Math.abs(timeSpentInMinutes);
-    var resultString = (weekPartOf(absoluteTimeSpendInMinutes) + " " + dayPartOf(absoluteTimeSpendInMinutes) + " " + hourPartOf(absoluteTimeSpendInMinutes) + " " + minutePartOf(absoluteTimeSpendInMinutes))
+const minute = { symbol: "m", factor: 1 };
+const hour = { symbol: "h", factor: 60 * minute.factor };
+const day = { symbol: "d", factor: 8 * hour.factor };
+const week = { symbol: "w", factor: 5 * day.factor };
+const weeksOf = (timeSpentInMinutes) => Math.floor(timeSpentInMinutes / week.factor);
+const daysOf = (timeSpentInMinutes) => Math.floor((timeSpentInMinutes % week.factor) / day.factor);
+const hoursOf = (timeSpentInMinutes) => Math.floor((timeSpentInMinutes % day.factor) / hour.factor);
+const minutesOf = (timeSpentInMinutes) => Math.floor((timeSpentInMinutes % hour.factor) / minute.factor);
+const minutePartOf = (timeSpentInMinutes) => unitStringFor(minutesOf(timeSpentInMinutes), minute);
+const hourPartOf = (timeSpentInMinutes) => unitStringFor(hoursOf(timeSpentInMinutes), hour);
+const dayPartOf = (timeSpentInMinutes) => unitStringFor(daysOf(timeSpentInMinutes), day);
+const weekPartOf = (timeSpentInMinutes) => unitStringFor(weeksOf(timeSpentInMinutes), week);
+const unitStringFor = (result, unit) => result == 0 ? "" : result + unit.symbol;
+/* harmony default export */ var jiraFormat = ((timeSpentInMinutes) => {
+    const absoluteTimeSpendInMinutes = Math.abs(timeSpentInMinutes);
+    const resultString = `${weekPartOf(absoluteTimeSpendInMinutes)} ${dayPartOf(absoluteTimeSpendInMinutes)} ${hourPartOf(absoluteTimeSpendInMinutes)} ${minutePartOf(absoluteTimeSpendInMinutes)}`
         .replace(/\s+/, " ")
         .trim();
     return resultString === "" ?
@@ -143,23 +161,22 @@ var unitStringFor = function (result, unit) { return result == 0 ? "" : result +
 // CONCATENATED MODULE: ./src/ui/App.ts
 
 
-var App_App = /** @class */ (function () {
-    function App() {
-    }
-    App.run = function () {
+class App_App {
+    static run() {
         this.worklog.getSummedWorklogsByUser()
-            .forEach(function (worklog) { return console.log(worklog.author.displayName + ": " + jiraFormat(worklog.timeSpendInMinutes)); });
-    };
-    App.worklog = new core_WorklogService();
-    return App;
-}());
-/* harmony default export */ var ui_App = (App_App);
+            .then(worklogs => worklogs.forEach(this.logToConsole));
+    }
+    static logToConsole(worklog) {
+        console.log(worklog.author.displayName + ": " + jiraFormat(worklog.timeSpentInMinutes));
+    }
+}
+App_App.worklog = new WorklogService();
 
 // CONCATENATED MODULE: ./src/index.js
 
 
 (function () {
-    ui_App.run()
+    App_App.run()
 })();
 
 /***/ })
