@@ -1,7 +1,8 @@
 import * as ReactDOM from "react-dom";
 import * as React from "react";
 
-export default class WorklogSummarizer {
+// TODO: marmer 03.09.2019 remove if not needed anymore
+export default class JiraSpike {
     register() {
         // TODO: marmer 02.09.2019 Read /projects/ISBJRD/repos/isbj-redesign-frontend-components/browse/src/Modal/FocusCapture.ts for MutationCallbacks to get out whether my injected elements are gone
 

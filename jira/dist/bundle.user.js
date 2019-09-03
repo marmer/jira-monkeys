@@ -611,10 +611,7 @@ var react_dom = __webpack_require__(2);
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
 
-// CONCATENATED MODULE: ./src/service/WorklogSummarizer.tsx
-
-
-var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
+// CONCATENATED MODULE: ./src/service/JiraSpike.tsxorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
     function WorklogSummarizer() {
     }
     WorklogSummarizer.prototype.register = function () {

@@ -1,13 +1,13 @@
-import WorklogSummarizer from "./WorklogSummarizer";
+import JiraSpike from "./JiraSpike";
 import App from "./App";
 
 describe("a running app", () => {
     beforeEach(() => {
-        WorklogSummarizer.prototype.register = jest.fn();
+        JiraSpike.prototype.register = jest.fn();
     });
 
     it('should register a worklog Summarizer', () => {
         App.run();
-        expect(WorklogSummarizer.prototype.register).toHaveBeenCalled();
+        expect(JiraSpike.prototype.register).toHaveBeenCalled();
     });
 });

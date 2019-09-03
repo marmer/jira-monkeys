@@ -1,7 +1,7 @@
-import WorklogSummarizer from "./WorklogSummarizer";
+import JiraSpike from "./JiraSpike";
 
 export default class App {
     static run() {
-        new WorklogSummarizer().register();
+        new JiraSpike().register();
     }
 }
