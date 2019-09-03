@@ -25,7 +25,6 @@ export default class WorklogSummarizer {
         // TODO: marmer 01.09.2019 add focus, blur and clicklistener
         // TODO: marmer 01.09.2019 find and add "hover" class/functionality
         customElement.id = "summarizer-tab";
-        issueTabContainer.append(customElement);
 
         new MutationObserver(mutations => {
                 mutations.forEach(mutation => {
@@ -49,6 +48,8 @@ export default class WorklogSummarizer {
             childList: true,
             subtree: false
         });
+
+        issueTabContainer.append(customElement);
 
         ReactDOM.render(<SomeNiceReactContainer/>, customElement);
     }

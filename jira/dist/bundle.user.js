@@ -635,7 +635,6 @@ var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
         // TODO: marmer 01.09.2019 add focus, blur and clicklistener
         // TODO: marmer 01.09.2019 find and add "hover" class/functionality
         customElement.id = "summarizer-tab";
-        issueTabContainer.append(customElement);
         new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
                 console.log("####################################### ");
@@ -656,6 +655,7 @@ var WorklogSummarizer_WorklogSummarizer = /** @class */ (function () {
             childList: true,
             subtree: false
         });
+        issueTabContainer.append(customElement);
         react_dom["render"](react["createElement"](SomeNiceReactContainer, null), customElement);
     };
     WorklogSummarizer.prototype.stringify = function (value) {
