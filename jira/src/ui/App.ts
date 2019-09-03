@@ -1,11 +1,12 @@
-import WorklogSummarizerRegistry from "./worklogSummeration/WorklogSummarizerRegistry";
+import WorklogService from "./core/WorklogService";
+import jiraFormat from "./core/jiraFormat";
+
 
 export default class App {
-    static run() {
-        WorklogSummarizerRegistry.register();
+    private static worklog = new WorklogService();
 
-        // Element to register are created
-        // Element have to be registered (so that they stay even if Jira tries to remove it as long as the parent element is not gone)
-        // Element maintains state by itself!
+    static run() {
+        this.worklog.getSummedWorklogsByUser()
+            .forEach(worklog => console.log(worklog.author.displayName + ": " + jiraFormat(worklog.timeSpendInMinutes)))
     }
 }
