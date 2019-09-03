@@ -1,4 +1,4 @@
-import WorklogService from "./core/WorklogService";
+import WorklogService, {Worklog} from "./core/WorklogService";
 import jiraFormat from "./core/jiraFormat";
 
 
@@ -7,6 +7,10 @@ export default class App {
 
     static run() {
         this.worklog.getSummedWorklogsByUser()
-            .forEach(worklog => console.log(worklog.author.displayName + ": " + jiraFormat(worklog.timeSpendInMinutes)))
+            .then(worklogs => worklogs.forEach(this.logToConsole));
+    }
+
+    private static logToConsole(worklog: Worklog) {
+        console.log(worklog.author.displayName + ": " + jiraFormat(worklog.timeSpentInMinutes));
     }
 }
