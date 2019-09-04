@@ -6,6 +6,21 @@ export interface Worklog {
 }
 
 export default class WorklogService {
+    private static groupedByDisplayName(worklogs: Worklog[]): Worklog[] {
+
+        return worklogs;
+    }
+
+    private static toWorklog(responseWorklog: any): Worklog {
+        const timeSpentInMinutes = Math.floor(responseWorklog.timeSpentSeconds / 60);
+        const author = responseWorklog.author;
+
+        return {
+            author,
+            timeSpentInMinutes
+        }
+    }
+
     getSummedWorklogsByUser(): Promise<Worklog[]> {
         // FIXME: marmer load All worklogs instead of just a page of 20 to sum up
 
@@ -18,23 +33,8 @@ export default class WorklogService {
                 }
                 return response.json();
             })
-            .then(responseJson => responseJson.worklogs.map(this.toWorklog))
-            .then(this.groupedByDisplayName)
+            .then(responseJson => responseJson.worklogs.map(WorklogService.toWorklog))
+            .then(WorklogService.groupedByDisplayName)
 
-    }
-
-    private groupedByDisplayName(worklogs: Worklog[]): Worklog[] {
-        // TODO: marmer 04.09.2019 implement me
-        return worklogs;
-    }
-
-    private toWorklog(responseWorklog: any): Worklog {
-        const timeSpentInMinutes = Math.floor(responseWorklog.timeSpentSeconds / 60);
-        const author = responseWorklog.author;
-
-        return {
-            author,
-            timeSpentInMinutes
-        }
     }
 }
