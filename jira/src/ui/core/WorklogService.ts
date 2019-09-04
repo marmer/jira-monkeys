@@ -1,3 +1,5 @@
+import groupBy from "./groupBy";
+
 export interface Worklog {
     author: {
         displayName: string
@@ -24,9 +26,9 @@ export default class WorklogService {
     getSummedWorklogsByUser(): Promise<Worklog[]> {
         // FIXME: marmer load All worklogs instead of just a page of 20 to sum up
 
-        return fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", "") + "/worklog", {
-            "method": "GET"
-        })
+        const worklogsUrl = window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", "") + "/worklog";
+
+        return fetch(worklogsUrl, {"method": "GET"})
             .then((response) => {
                 if (response.status !== 200) {
                     throw new Error("Bad status")
@@ -34,7 +36,19 @@ export default class WorklogService {
                 return response.json();
             })
             .then(responseJson => responseJson.worklogs.map(WorklogService.toWorklog))
+            .then(this.sumUp)
             .then(WorklogService.groupedByDisplayName)
 
+    }
+
+    private sumUp(worklog: Worklog[]): Worklog[] {
+        const groupedByDisplayName = groupBy(worklog, w => w.author.displayName);
+
+        // TODO: marmer 04.09.2019 go on here
+        return groupedByDisplayName.map(tupel => tupel.values.reduce((previousValue, currentValue) => {
+            const newValue = {...previousValue};
+            newValue.timeSpentInMinutes += currentValue.timeSpentInMinutes;
+            return newValue;
+        }));
     }
 }
