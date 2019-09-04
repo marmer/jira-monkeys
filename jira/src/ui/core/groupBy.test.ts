@@ -55,6 +55,4 @@ describe('groupBy', () => {
         }]);
 
     });
-
-    // TODO: what about a groupBy and merge :)?
 });
