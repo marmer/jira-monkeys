@@ -24,8 +24,6 @@ export default class WorklogService {
     }
 
     getSummedWorklogsByUser(): Promise<Worklog[]> {
-        // FIXME: marmer load All worklogs instead of just a page of 20 to sum up
-
         const worklogsUrl = window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", "") + "/worklog";
 
         return fetch(worklogsUrl, {"method": "GET"})
