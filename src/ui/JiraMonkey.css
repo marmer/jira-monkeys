@@ -1,0 +1,11 @@
+#JiraMonkeyToggle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+#JiraMonkeyContainer {
+    position: relative;
+    left: 10px;
+}
