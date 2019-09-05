@@ -16,7 +16,7 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
 
     render(): React.ReactElement {
         return <div>
-
+            Some Summarizing Content :D
         </div>;
     }
 

@@ -1,5 +1,6 @@
 .idea/
 Tampermonkeys.iml
 node_modules/
+yarn-error.lock
 yarn-error.log
 coverage/

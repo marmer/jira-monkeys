@@ -5,6 +5,9 @@ import WorklogSummarizerView from "./WorklogSummarizerView";
 
 export default (): React.ReactElement => {
     return <div>
+        <div>
+            fancy Switch
+        </div>
         <WorklogSummarizerView/>
     </div>
 }
