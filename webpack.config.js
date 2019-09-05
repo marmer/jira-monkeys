@@ -15,6 +15,7 @@ const webpackUserScript = new WebpackUserScript(
 webpackUserScript.options.headers.authorversion = packageConfiguration.author.name;
 webpackUserScript.options.headers.version = devMode ? `[version]-build.[buildNo]` : `[version]`
 webpackUserScript.options.headers.name = packageConfiguration.name;
+webpackUserScript.options.headers.namespace = packageConfiguration.homepage;
 
 module.exports = {
     plugins: [

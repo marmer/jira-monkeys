@@ -1,8 +1,9 @@
 {
   "name": "jira-monkeys",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/index.tsx",
   "repository": "https://github.com/marmer/Tampermonkeys.git",
+  "homepage": "https://github.com/marmer/jira-monkeys",
   "license": "MIT",
   "private": true,
   "author": {
@@ -22,6 +23,7 @@
     "css-loader": "^3.2.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",
     "style-loader": "^1.0.0",
     "ts-jest": "^24.0.2",
