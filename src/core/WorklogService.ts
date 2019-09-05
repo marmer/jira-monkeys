@@ -20,13 +20,7 @@ export default class WorklogService {
             })
             .then(responseJson => responseJson.worklogs.map(WorklogService.toWorklog))
             .then(this.sumUp)
-            .then(WorklogService.groupedByDisplayName)
 
-    }
-
-    private static groupedByDisplayName(worklogs: Worklog[]): Worklog[] {
-
-        return worklogs;
     }
 
     private static toWorklog(responseWorklog: any): Worklog {
