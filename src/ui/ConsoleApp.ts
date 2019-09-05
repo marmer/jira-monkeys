@@ -1,5 +1,5 @@
-import WorklogService, {Worklog} from "./core/WorklogService";
-import jiraFormat from "./core/jiraFormat";
+import WorklogService, {Worklog} from "../core/WorklogService";
+import jiraFormat from "../core/jiraFormat";
 
 
 export default class ConsoleApp {
