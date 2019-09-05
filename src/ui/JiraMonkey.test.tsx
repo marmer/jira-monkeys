@@ -8,6 +8,10 @@ describe("JiraMonkey", () => {
 
     it('should render WorklogSummarizerView', () => {
         const jiraMonkey = shallow(<JiraMonkey/>);
+        let shallowWrapper = jiraMonkey.find("input[type=checkbox]");
+
+        // jiraMonkey.find("input").find({type:"checkbox"}).prop("checked")
+
         expect(jiraMonkey.contains(<WorklogSummarizerView/>)).toBe(true);
     });
 });
