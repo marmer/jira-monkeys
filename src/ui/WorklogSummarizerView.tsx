@@ -25,15 +25,21 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
     }
 
     render(): React.ReactElement {
-        return <div>
-            <h1>Worklogs summarized per User</h1>
-            {this.state.loadingState === "ERROR" && "Error"}
-            {this.state.loadingState === "LOADING" && "Loading"}
-            {this.state.loadingState === "DONE" && this.state.worklogs.map(worklog =>
-                <div key={worklog.author.displayName}>
-                    {worklog.author.displayName} => {jiraFormat(worklog.timeSpentInMinutes)}
-                </div>)}
-        </div>;
+        switch (this.state.loadingState) {
+            case "ERROR":
+                return <div>Error. You could try to reaload</div>;
+            case "LOADING":
+                return <div>Loading. Be patient</div>
+            case "DONE":
+                return <div>
+                    <h1>Worklogs summarized per User</h1>
+                    {this.state.loadingState === "DONE" && this.state.worklogs.map(worklog =>
+                        <div key={worklog.author.displayName}>
+                            {worklog.author.displayName} => {jiraFormat(worklog.timeSpentInMinutes)}
+                        </div>)}
+                </div>
+        }
+
     }
 
     private loadSummedBookings() {
