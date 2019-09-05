@@ -3,10 +3,9 @@ import jiraFormat from "../core/jiraFormat";
 
 
 export default class ConsoleApp {
-    private static worklog = new WorklogService();
 
     static run() {
-        this.worklog.getSummedWorklogsByUser()
+        WorklogService.getSummedWorklogsByUser()
             .then(worklogs => worklogs.forEach(this.logToConsole));
     }
 
