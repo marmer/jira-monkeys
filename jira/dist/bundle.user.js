@@ -683,10 +683,10 @@ const unitStringFor = (result, unit) => result == 0 ? "" : result + unit.symbol;
         resultString;
 });
 
-// CONCATENATED MODULE: ./src/ui/App.ts
+// CONCATENATED MODULE: ./src/ui/ConsoleApp.ts
 
 
-class App_App {
+class ConsoleApp_ConsoleApp {
     static run() {
         this.worklog.getSummedWorklogsByUser()
             .then(worklogs => worklogs.forEach(this.logToConsole));
@@ -695,24 +695,33 @@ class App_App {
         console.log(worklog.author.displayName + ": " + jiraFormat(worklog.timeSpentInMinutes));
     }
 }
-App_App.worklog = new WorklogService_WorklogService();
+ConsoleApp_ConsoleApp.worklog = new WorklogService_WorklogService();
 
 // EXTERNAL MODULE: ./node_modules/react-dom/index.js
 var react_dom = __webpack_require__(2);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
+var react_default = /*#__PURE__*/__webpack_require__.n(react);
+
+// CONCATENATED MODULE: ./src/ui/JiraMonkey.tsx
+
+/* harmony default export */ var JiraMonkey = (() => react_default.a.createElement("div", null,
+    "Curtent pate title is: ",
+    document.title));
 
 // CONCATENATED MODULE: ./src/index.tsx
 
 
 
+
 (function () {
-    App_App.run();
+    // TODO: marmer 05.09.2019 Remove as soon as it's not needer anymore
+    ConsoleApp_ConsoleApp.run();
     const body = document.querySelectorAll("body")[0];
     const appContainer = document.createElement("nav");
     body.prepend(appContainer);
-    react_dom["render"](react["createElement"]("div", null, "Foo bar"), appContainer);
+    react_dom["render"](react["createElement"](JiraMonkey, null), appContainer);
 })();
 
 
