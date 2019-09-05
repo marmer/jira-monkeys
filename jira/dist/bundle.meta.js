@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Jira booking summarizer
-// @version     0.2.1
+// @version     0.2.2
 // @author      MarMer
 // @description A script to help summarizing worklogs in Jira
 // @match       https://jira.schuetze.ag/browse/*
