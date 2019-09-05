@@ -6,7 +6,7 @@ import WorklogSummarizerView from "./WorklogSummarizerView";
 
 export default (): React.ReactElement => {
     const [state, setState] = useState({
-        toolsVisible: true
+        toolsVisible: false
     });
 
     return <div>
@@ -14,6 +14,6 @@ export default (): React.ReactElement => {
                checked={state.toolsVisible}
                onClick={() => setState({toolsVisible: !state.toolsVisible})}
                value="Jira-Monkeys"/>
-        {state.toolsVisible && [<WorklogSummarizerView/>]}
+        {state.toolsVisible && <WorklogSummarizerView/>}
     </div>
 }
