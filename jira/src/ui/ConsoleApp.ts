@@ -2,7 +2,7 @@ import WorklogService, {Worklog} from "./core/WorklogService";
 import jiraFormat from "./core/jiraFormat";
 
 
-export default class App {
+export default class ConsoleApp {
     private static worklog = new WorklogService();
 
     static run() {
