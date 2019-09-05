@@ -9,11 +9,16 @@ export default (): React.ReactElement => {
         toolsVisible: false
     });
 
-    return <div>
-        <input type="checkbox"
-               checked={state.toolsVisible}
-               onClick={() => setState({toolsVisible: !state.toolsVisible})}
-               value="Jira-Monkeys"/>
+    return <div className="aui-header aui-dropdown2-trigger-group">
+        <label>
+            <input type="checkbox"
+                   className="aui-button toggle-title"
+                   checked={state.toolsVisible}
+                   onClick={() => setState({toolsVisible: !state.toolsVisible})}
+                   title="Jira Monkeys"
+            />
+            <span className="toggle-title">Jira-Monkeys</span>
+        </label>
         {/*// TODO: marmer 05.09.2019 this should possibly be a more general container with the possible tools instead of the tools itself*/}
         {state.toolsVisible && <WorklogSummarizerView/>}
     </div>

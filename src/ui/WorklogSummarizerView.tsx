@@ -32,11 +32,22 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                 return <div>Loading. Be patient</div>
             case "DONE":
                 return <div>
-                    <h1>Worklogs summarized per User</h1>
-                    {this.state.loadingState === "DONE" && this.state.worklogs.map(worklog =>
-                        <div key={worklog.author.displayName}>
-                            {worklog.author.displayName} => {jiraFormat(worklog.timeSpentInMinutes)}
-                        </div>)}
+                    <h1 className="aui-nav-link aui-dropdown2-trigger aui-dropdown2-ajax">
+                        Worklogs summarized per User
+                    </h1>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>display name</th>
+                            <th>time spent</th>
+                        </tr>
+                        </thead>
+                        {this.state.worklogs.map(worklog =>
+                            <tr key={worklog.author.displayName}>
+                                <td>{worklog.author.displayName}</td>
+                                <td>{jiraFormat(worklog.timeSpentInMinutes)}</td>
+                            </tr>)}
+                    </table>
                 </div>
         }
 
