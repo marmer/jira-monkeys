@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name        Jira booking summarizer
+// @name        Jira Tools
 // @version     0.2.2
 // @author      MarMer
-// @description A script to help summarizing worklogs in Jira
+// @description A little script to help working with jira
 // @match       https://jira.schuetze.ag/browse/*
 // @namespace   http://tampermonkey.net/
 // @grant       none
