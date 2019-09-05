@@ -1,0 +1,13 @@
+{
+  "name": null,
+  "namespace": "http://marmer.github.io/",
+  "version": null,
+  "description": "A little script to help working with jira",
+  "author": "MarMer",
+  "match": "https://jira.schuetze.ag/browse/*",
+  "grant": [
+    "none"
+  ],
+  "updateURL": "https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/dist/jira-monkeys.user.js",
+  "downloadURL": "https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/dist/jira-monkeys.user.js"
+}
