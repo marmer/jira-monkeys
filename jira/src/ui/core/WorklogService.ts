@@ -42,13 +42,11 @@ export default class WorklogService {
     }
 
     private sumUp(worklog: Worklog[]): Worklog[] {
-        const groupedByDisplayName = groupBy(worklog, w => w.author.displayName);
-
-        // TODO: marmer 04.09.2019 go on here
-        return groupedByDisplayName.map(tupel => tupel.values.reduce((previousValue, currentValue) => {
+        return groupBy(worklog, w => w.author.displayName)
+            .map(tupel => tupel.values.reduce((previousValue, currentValue) => {
             const newValue = {...previousValue};
             newValue.timeSpentInMinutes += currentValue.timeSpentInMinutes;
             return newValue;
-        }));
+            })).sort((a, b,) => a.author.displayName < b.author.displayName ? -1 : 1);
     }
 }

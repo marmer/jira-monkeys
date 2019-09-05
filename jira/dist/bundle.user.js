@@ -103,33 +103,58 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
+// CONCATENATED MODULE: ./src/ui/core/groupBy.ts
+/* harmony default export */ var groupBy = ((values, keyExtractor) => {
+    const intermediateGroup = {};
+    values.forEach(value => {
+        const key = keyExtractor(value);
+        const indexKey = "" + key;
+        if (!intermediateGroup[indexKey]) {
+            intermediateGroup[indexKey] = { key: key, values: [] };
+        }
+        intermediateGroup[indexKey].values.push(value);
+    });
+    const result = [];
+    Object.keys(intermediateGroup)
+        .forEach(key => result.push(intermediateGroup[key]));
+    return result;
+});
+
 // CONCATENATED MODULE: ./src/ui/core/WorklogService.ts
-class WorklogService {
-    getSummedWorklogsByUser() {
-        // FIXME: marmer load All worklogs instead of just a page of 20 to sum up
-        return fetch(window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", "") + "/worklog", {
-            "method": "GET"
-        })
-            .then((response) => {
-            if (response.status !== 200) {
-                throw new Error("Bad status");
-            }
-            return response.json();
-        })
-            .then(responseJson => responseJson.worklogs.map(this.toWorklog))
-            .then(this.groupedByDisplayName);
-    }
-    groupedByDisplayName(worklogs) {
-        // TODO: marmer 04.09.2019 implement me
+
+class WorklogService_WorklogService {
+    static groupedByDisplayName(worklogs) {
         return worklogs;
     }
-    toWorklog(responseWorklog) {
+    static toWorklog(responseWorklog) {
         const timeSpentInMinutes = Math.floor(responseWorklog.timeSpentSeconds / 60);
         const author = responseWorklog.author;
         return {
             author,
             timeSpentInMinutes
         };
+    }
+    getSummedWorklogsByUser() {
+        // FIXME: marmer load All worklogs instead of just a page of 20 to sum up
+        const worklogsUrl = window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", "") + "/worklog";
+        return fetch(worklogsUrl, { "method": "GET" })
+            .then((response) => {
+            if (response.status !== 200) {
+                throw new Error("Bad status");
+            }
+            return response.json();
+        })
+            .then(responseJson => responseJson.worklogs.map(WorklogService_WorklogService.toWorklog))
+            .then(this.sumUp)
+            .then(WorklogService_WorklogService.groupedByDisplayName);
+    }
+    sumUp(worklog) {
+        return groupBy(worklog, w => w.author.displayName)
+            .map(tupel => tupel.values.reduce((previousValue, currentValue) => {
+            const newValue = Object.assign({}, previousValue);
+            newValue.timeSpentInMinutes += currentValue.timeSpentInMinutes;
+            return newValue;
+        })).sort((a, b) => a.author.displayName < b.author.displayName ? -1 : 1);
     }
 }
 
@@ -169,7 +194,7 @@ class App_App {
         console.log(worklog.author.displayName + ": " + jiraFormat(worklog.timeSpentInMinutes));
     }
 }
-App_App.worklog = new WorklogService();
+App_App.worklog = new WorklogService_WorklogService();
 
 // CONCATENATED MODULE: ./src/index.js
 
