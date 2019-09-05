@@ -34,12 +34,12 @@ module.exports = {
   ],
 
   // A list of reporter names that Jest uses when writing coverage reports
-  // coverageReporters: [
-  //   "json",
-  //   "text",
-  //   "lcov",
-  //   "clover"
-  // ],
+  coverageReporters: [
+    // "json",
+    // "text",
+    "lcov",
+    // "clover"
+  ],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: null,
@@ -134,7 +134,7 @@ module.exports = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ["./src/setupTests.ts"],
 
   // A list of paths to snapshot serializer modules Jest should use for snapshot testing
   // snapshotSerializers: [],

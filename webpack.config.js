@@ -30,6 +30,9 @@ module.exports = {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
                 exclude: /node_modules/
+            }, {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
             }
         ]
     },
@@ -37,7 +40,7 @@ module.exports = {
         contentBase: path.join(__dirname, 'dist')
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.jsx']
+        extensions: ['.tsx', '.ts', '.js', '.jsx', '.css']
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
