@@ -1,12 +1,13 @@
 import React from 'react'
 import JiraMonkey from "./JiraMonkey";
-import {configure, shallow} from "enzyme";
-import Adapter from 'enzyme-adapter-react-16';
+import {shallow} from "enzyme";
 import WorklogSummarizerView from "./WorklogSummarizerView";
+import setupTests from "../setupTests";
 
-configure({adapter: new Adapter()});
 
 describe("JiraMonkey", () => {
+
+    beforeEach(() => setupTests())
 
     it('should render WorklogSummarizerView', () => {
         const jiraMonkey = shallow(<JiraMonkey/>);
