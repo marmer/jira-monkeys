@@ -10,7 +10,7 @@ module.exports = {
             }
         )
     ],
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     optimization: {
         minimize: false,
 
