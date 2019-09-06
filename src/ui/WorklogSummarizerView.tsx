@@ -35,10 +35,10 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
             case "ERROR":
                 return <div>Error. Wanna try to reaload? ;)</div>;
             case "LOADING":
-                return <div>Loading. Be patient!</div>
+                return <div>Loading. Be patient!</div>;
             case "DONE":
                 return <div>
-                    <h1 className="aui-nav-link aui-dropdown2-trigger aui-dropdown2-ajax">
+                    <h1>
                         Worklogs summarized per User
                     </h1>
                     <table>
@@ -89,7 +89,7 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                 worklogs: worklogs
             }))
             .catch(reason => {
-                this.setState({loadingState: "ERROR"})
+                this.setState({loadingState: "ERROR"});
                 return console.error(reason);
             })
     }
