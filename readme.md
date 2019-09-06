@@ -14,6 +14,7 @@ Features
 - Summing up worklogs of an issue per user
 - Moving worklogs from one issue to another (not implemented yet)
 - Moving time-estimations from one ticket to another (not implemented yet)
+- Fix/Recalculate difference of estimated and remaining time ... a problem which occurs if the worklog summary once was bigger than the estimation (not implemented yet)
 - ... whatever is fun implementing it or helps to do the daily work in an easier way
 
 UI
