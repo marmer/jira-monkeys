@@ -17,6 +17,7 @@ export default (): React.ReactElement => {
 }
 
 
+// #### update ticket estimations
 // fetch("***/rest/api/2/issue/***", {
 //     "method": "PUT",
 //     "headers": {
@@ -32,9 +33,30 @@ export default (): React.ReactElement => {
 //         }
 //     }
 // })
-//     .then(response => {
-//         console.log(response);
-//     })
-//     .catch(err => {
-//         console.log(err);
-//     });
+
+// #### create a new worklog
+// fetch("https://jira.schuetze.ag/rest/api/2/issue/****/worklog", {
+//     "method": "POST",
+//     "headers": {
+//         "content-type": "application/json",
+//         "accept": "application/json"
+//     },
+//     "body": {
+//         "comment": "Somethign really new",
+//         "timeSpent": "2d 1h 10m"
+//     }
+// })
+
+
+// #### Update/delete worklog
+// fetch("https://jira.schuetze.ag/rest/api/2/issue/****/worklog/*****", {
+//     "method": "PUT",
+//     "headers": {
+//         "content-type": "application/json",
+//         "accept": "application/json",
+//     },
+//     "body": {
+//         "comment": "Möp with update",
+//         "timeSpent": "2d"
+//     }
+// })
