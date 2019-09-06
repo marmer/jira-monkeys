@@ -34,10 +34,10 @@ export default class JiraMonkey extends Component<JiraMonkeyProps, JiraMonkeySta
                         Worklog-summarizer
                     </button>
                     <button onClick={() => this.setCurrentView(<div>nothing to see here yet
-                        (Booking-shifter)</div>)}>Booking-shifter
+                        (Estimation-shifter)</div>)}>Estimation-shifter
                     </button>
                     <button onClick={() => this.setCurrentView(<div>nothing to see here yet
-                        (Estimation-shifter)</div>)}>Estimation-shifter
+                        (Booking-shifter)</div>)}>Booking-shifter
                     </button>
                     <button onClick={() => this.setCurrentView(<div>nothing to see here yet
                         (Estimation-fixer)</div>)}>Estimation-fixer

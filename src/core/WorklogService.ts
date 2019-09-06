@@ -1,4 +1,5 @@
 import groupBy from "./groupBy";
+import IssueSiteInfos from "./IssueSiteInfos";
 
 export interface Worklog {
     author: {
@@ -9,7 +10,7 @@ export interface Worklog {
 
 export default class WorklogService {
     public static getSummedWorklogsByUser(): Promise<Worklog[]> {
-        const issueKey = window.location.pathname.replace("/browse/", "");
+        const issueKey = IssueSiteInfos.getCurrentIssueKey();
         return this.getWorklogsPerUser(issueKey).then(this.sumUp)
 
     }
