@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import WorklogSummarizerView from "./WorklogSummarizerView";
 import "./JiraMonkey.css"
 import TabPannel from "./TabPannel";
+import WorklogSummarizerView from "./WorklogSummarizerView";
 // TODO: marmer 05.09.2019 make the component refresh/reload if the "site changes" (the site content gets replaced by jira)
 export default (): React.ReactElement => {
     const [state, setState] = useState({
@@ -13,19 +13,20 @@ export default (): React.ReactElement => {
                checked={state.toolsVisible}
                onClick={() => setState({toolsVisible: !state.toolsVisible})}
                title="Jira Monkeys"/>
-        {state.toolsVisible && <div id="JiraMonkeyContainer">
+        {state.toolsVisible &&
+        <div id="JiraMonkeyContainer">
             <TabPannel>
                 {{
-                    title: "First Fancy View",
-                    pane: <div> yeah ... the big first pane</div>
+                    title: "Summarized Worklogs",
+                    pane: <WorklogSummarizerView/>
                 }}
                 {{
-                    title: "Second Fancy View",
-                    pane: <div> yeah ... the big second pane</div>
+                    title: "Dummy Component",
+                    pane: <div>Just a Dummy</div>
                 }}
             </TabPannel>
-            <WorklogSummarizerView/>
-        </div>}
+        </div>
+        }
     </div>
 }
 
