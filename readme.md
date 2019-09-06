@@ -18,4 +18,4 @@ Features
 
 UI
 --
-Just as much as needed. This tool only has to work for me, not to look good ;)
+Just as much as needed. This tool only has to work for me and whoever wants to use it, not to look good ;)
