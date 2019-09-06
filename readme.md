@@ -14,7 +14,7 @@ Features
 - Summing up worklogs of an issue per user
 - Moving worklogs from one issue to another (not implemented yet)
 - Moving time-estimations from one ticket to another (not implemented yet)
-- ... whatever is fun
+- ... whatever is fun implementing it or helps to do the daily work in an easier way
 
 UI
 --
