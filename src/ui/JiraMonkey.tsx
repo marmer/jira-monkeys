@@ -15,3 +15,26 @@ export default (): React.ReactElement => {
         {state.toolsVisible && <div id="JiraMonkeyContainer"><WorklogSummarizerView/></div>}
     </div>
 }
+
+
+// fetch("***/rest/api/2/issue/***", {
+//     "method": "PUT",
+//     "headers": {
+//         "content-type": "application/json",
+//         "accept": "application/json"
+//     },
+//     "body": {
+//         "fields": {
+//             "timetracking": {
+//                 "originalEstimate": "2d",
+//                 "remainingEstimate": "3h"
+//             }
+//         }
+//     }
+// })
+//     .then(response => {
+//         console.log(response);
+//     })
+//     .catch(err => {
+//         console.log(err);
+//     });
