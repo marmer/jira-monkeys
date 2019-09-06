@@ -14,7 +14,15 @@ export default (): React.ReactElement => {
                title="Jira Monkeys"/>
         {state.toolsVisible &&
         <div id="JiraMonkeyContainer">
-            <WorklogSummarizerView/>
+            <div className="monkeyToggler">
+                <button>Worklog-summarizer</button>
+                <button>Booking-shifter</button>
+                <button>Estimation-shifter</button>
+                <button>Estimation-fFixer</button>
+            </div>
+            <div>
+                <WorklogSummarizerView/>
+            </div>
         </div>
         }
     </div>
