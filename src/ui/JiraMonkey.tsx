@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import "./JiraMonkey.css"
-import TabPannel from "./TabPannel";
 import WorklogSummarizerView from "./WorklogSummarizerView";
 // TODO: marmer 05.09.2019 make the component refresh/reload if the "site changes" (the site content gets replaced by jira)
 export default (): React.ReactElement => {
@@ -15,16 +14,7 @@ export default (): React.ReactElement => {
                title="Jira Monkeys"/>
         {state.toolsVisible &&
         <div id="JiraMonkeyContainer">
-            <TabPannel>
-                {{
-                    title: "Summarized Worklogs",
-                    pane: <WorklogSummarizerView/>
-                }}
-                {{
-                    title: "Dummy Component",
-                    pane: <div>Just a Dummy</div>
-                }}
-            </TabPannel>
+            <WorklogSummarizerView/>
         </div>
         }
     </div>
