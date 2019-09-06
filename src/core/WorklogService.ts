@@ -9,7 +9,13 @@ export interface Worklog {
 
 export default class WorklogService {
     public static getSummedWorklogsByUser(): Promise<Worklog[]> {
-        const worklogsUrl = window.location.origin + "/rest/api/2/issue/" + window.location.pathname.replace("/browse/", "") + "/worklog";
+        const issueKey = window.location.pathname.replace("/browse/", "");
+        return this.getWorklogsPerUser(issueKey).then(this.sumUp)
+
+    }
+
+    private static getWorklogsPerUser(issueKey: string) {
+        const worklogsUrl = window.location.origin + "/rest/api/2/issue/" + issueKey + "/worklog";
 
         return fetch(worklogsUrl, {"method": "GET"})
             .then((response) => {
@@ -18,9 +24,7 @@ export default class WorklogService {
                 }
                 return response.json();
             })
-            .then(responseJson => responseJson.worklogs.map(WorklogService.toWorklog))
-            .then(this.sumUp)
-
+            .then(responseJson => responseJson.worklogs.map(WorklogService.toWorklog));
     }
 
     private static toWorklog(responseWorklog: any): Worklog {
