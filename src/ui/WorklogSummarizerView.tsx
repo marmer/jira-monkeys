@@ -24,6 +24,9 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
             sortColumn: "DISPLAY_NAME"
         };
 
+    }
+
+    componentDidMount(): void {
         this.loadSummedBookings();
     }
 
@@ -47,11 +50,13 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                                 {this.state.sortColumn === "TIME_SPENT" && "*"}</th>
                         </tr>
                         </thead>
+                        <tbody>
                         {this.state.worklogs.map(worklog =>
                             <tr key={worklog.author.displayName}>
                                 <td className="displayNameColumn">{worklog.author.displayName}</td>
                                 <td className="timeSpentColumn">{jiraFormat(worklog.timeSpentInMinutes)}</td>
                             </tr>)}
+                        </tbody>
                     </table>
                 </div>
         }
