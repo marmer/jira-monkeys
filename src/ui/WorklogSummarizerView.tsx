@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import WorklogService, {Worklog} from "../core/WorklogService";
 import jiraFormat from "../core/jiraFormat";
+import "./WorklogSummarizerView.css";
 
 interface WorklogSummarizerViewState {
     loadingState: "LOADING" | "DONE" | "ERROR",
     worklogs: Worklog[]
+    sortColumn: "DISPLAY_NAME" | "TIME_SPENT"
 }
 
 
@@ -18,7 +20,8 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
         super(props);
         this.state = {
             loadingState: "LOADING",
-            worklogs: []
+            worklogs: [],
+            sortColumn: "DISPLAY_NAME"
         };
 
         this.loadSummedBookings();
@@ -27,9 +30,9 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
     render(): React.ReactElement {
         switch (this.state.loadingState) {
             case "ERROR":
-                return <div>Error. You could try to reaload</div>;
+                return <div>Error. Wanna try to reaload? ;)</div>;
             case "LOADING":
-                return <div>Loading. Be patient</div>
+                return <div>Loading. Be patient!</div>
             case "DONE":
                 return <div>
                     <h1 className="aui-nav-link aui-dropdown2-trigger aui-dropdown2-ajax">
@@ -38,20 +41,37 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                     <table>
                         <thead>
                         <tr>
-                            <th>display name</th>
-                            <th>time spent</th>
+                            <th onClick={() => this.sortByDisplayName()}>display name
+                                {this.state.sortColumn === "DISPLAY_NAME" && "*"}</th>
+                            <th onClick={() => this.sortByTime()}>time spent
+                                {this.state.sortColumn === "TIME_SPENT" && "*"}</th>
                         </tr>
                         </thead>
                         {this.state.worklogs.map(worklog =>
                             <tr key={worklog.author.displayName}>
-                                <td>{worklog.author.displayName}</td>
-                                <td>{jiraFormat(worklog.timeSpentInMinutes)}</td>
+                                <td className="displayNameColumn">{worklog.author.displayName}</td>
+                                <td className="timeSpentColumn">{jiraFormat(worklog.timeSpentInMinutes)}</td>
                             </tr>)}
                     </table>
                 </div>
         }
 
     }
+
+    private sortByTime() {
+        this.setState({
+            worklogs: this.state.worklogs.sort((wl1, wl2) => wl1.timeSpentInMinutes - wl2.timeSpentInMinutes),
+            sortColumn: "TIME_SPENT"
+        })
+    }
+
+    private sortByDisplayName() {
+        this.setState({
+            worklogs: this.state.worklogs.sort((wl1, wl2) => wl1.author.displayName < wl2.author.displayName ? -1 : 1),
+            sortColumn: "DISPLAY_NAME"
+        })
+    }
+
 
     private loadSummedBookings() {
         this.setState({
@@ -68,5 +88,4 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                 return console.error(reason);
             })
     }
-
 }
