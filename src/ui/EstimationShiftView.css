@@ -4,4 +4,6 @@
 
 .estimationView {
     margin-left: 1em;
+    display: flex;
+    flex-direction: column;
 }
