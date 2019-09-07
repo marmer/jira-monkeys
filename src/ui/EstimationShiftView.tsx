@@ -49,14 +49,17 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
 
 const EstimationView = (props: { estimation: Estimation }) => {
     return <div className="estimationView">
-        <h3>
-            {props.estimation.issueKey}
-        </h3>
         <label>
-            Original Estimate: <span>{props.estimation.originalEstimate}</span>
+            Ticket:
+            <input type="text" value={props.estimation.issueKey} disabled={true}></input>
         </label>
         <label>
-            Remaining Estimate: <span>{props.estimation.remainingEstimate}</span>
+            Original Estimate:
+            <input type="text" value={props.estimation.originalEstimate} disabled={true}></input>
+        </label>
+        <label>
+            Remaining Estimate:
+            <input type="text" value={props.estimation.remainingEstimate} disabled={true}></input>
         </label>
     </div>
 };
