@@ -1,5 +1,6 @@
 export interface Estimation {
     issueKey: string,
+    issueSummary: string
     originalEstimate: string
     originalEstimateInSeconds: number
     remainingEstimate: string
@@ -8,6 +9,7 @@ export interface Estimation {
 
 interface EstimationResponse {
     fields: {
+        summary: string
         timetracking: {
             originalEstimate: string,
             remainingEstimate: string
@@ -45,7 +47,8 @@ export default class EstimationService {
                     originalEstimate,
                     originalEstimateInSeconds: originalEstimateSeconds,
                     remainingEstimate,
-                    remainingEstimateInSeconds: remainingEstimateSeconds
+                    remainingEstimateInSeconds: remainingEstimateSeconds,
+                    issueSummary: estimationResponse.fields.summary
                 } as Estimation
             })
     }
