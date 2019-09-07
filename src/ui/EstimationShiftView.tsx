@@ -6,8 +6,8 @@ import IssueSiteInfos from "../core/IssueSiteInfos";
 interface EstimationShiftViewState {
     sourceIssueEstimation?: Estimation | null
     targetIssueEstimation?: Estimation | null
-    sourceIssueEstimationState?: "LOADING" | "ERROR" | "DONE" | null
-    targetIssueEstimationState?: "LOADING" | "ERROR" | "DONE" | null
+    sourceIssueEstimationState?: "LOADING" | "ERROR" | "DONE"
+    targetIssueEstimationState?: "LOADING" | "ERROR" | "DONE"
     targetIssueText: string
     timeToShiftText: string
 }
@@ -42,25 +42,20 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
                            placeholder="TICKET-123"
                            value={this.state.targetIssueText}
                            onChange={e => this.onDestinationIssueTextChange(e)}/></label>
+                {this.state.targetIssueEstimation &&
                 <label>
-                    {/*// TODO: marmer 07.09.2019 Show only when destination issue exists!*/}
                     Time to Shift:
                     <input type="text"
                            placeholder="1w 5d 7h 30m"
                            value={this.state.timeToShiftText}
-                           onChange={e => this.onTimeToShiftTextChange(e)}/></label>
-                {/*// TODO: marmer 07.09.2019 Show (and enable) only when destination issue exists and time to shift value is valid!*/}
-                <button type="button">send</button>
+                           onChange={e => this.onTimeToShiftTextChange(e)}/></label>}
+                {this.isEstimationShiftable() &&
+                <button type="button" onClick={() => console.log("Action on button performed")}>send</button>}
             </div>
-            {this.state.sourceIssueEstimationState === "DONE" &&
-            this.state.sourceIssueEstimation &&
-            <EstimationView estimation={this.state.sourceIssueEstimation} readonly={true}/>}
-            {this.state.targetIssueEstimationState === "DONE" &&
-            this.state.targetIssueEstimation &&
+            {this.state.targetIssueEstimation &&
             <EstimationView estimation={this.state.targetIssueEstimation} readonly={true}/>}
         </div>;
     }
-
     private loadEstimations(): void {
         this.loadSourceEstimations();
         this.loadDestinationEstimations();
@@ -68,7 +63,8 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
 
     private loadDestinationEstimations() {
         this.setState({
-            targetIssueEstimationState: "LOADING"
+            targetIssueEstimationState: "LOADING",
+            targetIssueEstimation: null
         });
         EstimationService.getEstimationsForIssue(this.state.targetIssueText)
             .then(estimation => this.setState({
@@ -80,7 +76,8 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
 
     private loadSourceEstimations() {
         this.setState({
-            sourceIssueEstimationState: "LOADING"
+            sourceIssueEstimationState: "LOADING",
+            sourceIssueEstimation: null
         });
         EstimationService.getEstimationsForIssue(IssueSiteInfos.getCurrentIssueKey())
             .then(estimation => this.setState({
@@ -101,15 +98,21 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
             timeToShiftText: event.target.value
         });
     }
+
+    private isEstimationShiftable(): boolean {
+        {/*// TODO: marmer 07.09.2019 Show only true when destination issue exists and time expression of shiftable time is  is valid*/
+        }
+        return !!this.state.targetIssueEstimation
+    }
 }
 
 const EstimationView = (props: { estimation: Estimation, readonly: boolean }): React.ReactElement => {
     return <div className="estimationShiftCardContainer"
                 title={props.estimation.issueKey + ": " + props.estimation.issueSummary}>
         <label>
-            Ticket: <input type="text"
-                           value={props.estimation.issueKey}
-                           disabled={props.readonly}/>
+            Issue: <input type="text"
+                          value={props.estimation.issueKey}
+                          disabled={props.readonly}/>
         </label>
         <label>
             Original Estimate: <input type="text"
