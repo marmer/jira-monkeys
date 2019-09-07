@@ -17,6 +17,7 @@ export interface EstimationShiftViewProps {
 }
 
 export default class EstimationShiftView extends Component<EstimationShiftViewProps, EstimationShiftViewState> {
+    private timer: any;
 
     constructor(props: Readonly<EstimationShiftViewProps>) {
         super(props);
@@ -28,7 +29,8 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
 
     getSnapshotBeforeUpdate(prevProps: Readonly<EstimationShiftViewProps>, prevState: Readonly<EstimationShiftViewState>): any | null {
         if (prevState.targetIssueText !== this.state.targetIssueText) {
-            this.loadEstimations();
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.loadEstimations(), 750);
         }
     }
 
