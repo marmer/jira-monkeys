@@ -40,9 +40,6 @@ export default class EstimationService {
             .then(response => response as EstimationResponse)
             .then(estimationResponse => {
                 const {originalEstimateSeconds, originalEstimate, remainingEstimate, remainingEstimateSeconds} = estimationResponse.fields.timetracking;
-
-
-                // TODO: marmer 06.09.2019 Work in Progress
                 return {
                     issueKey,
                     originalEstimate,

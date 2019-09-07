@@ -1,6 +1,7 @@
 import React, {Component, ReactNode} from 'react';
 import "./JiraMonkey.css"
 import WorklogSummarizerView from "./WorklogSummarizerView";
+import EstimationShiftView from "./EstimationShiftView";
 
 interface JiraMonkeyState {
     toolsVisible: boolean
@@ -16,8 +17,7 @@ export default class JiraMonkey extends Component<JiraMonkeyProps, JiraMonkeySta
     constructor(props: Readonly<JiraMonkeyProps>) {
         super(props);
         this.state = {
-            toolsVisible: false,
-            currentView: <WorklogSummarizerView/>
+            toolsVisible: false
         }
     }
 
@@ -33,8 +33,8 @@ export default class JiraMonkey extends Component<JiraMonkeyProps, JiraMonkeySta
                     <button onClick={() => this.setCurrentView(<WorklogSummarizerView/>)}>
                         Worklog-summarizer
                     </button>
-                    <button onClick={() => this.setCurrentView(<div>nothing to see here yet
-                        (Estimation-shifter)</div>)}>Estimation-shifter
+                    <button onClick={() => this.setCurrentView(<EstimationShiftView/>)}>
+                        Estimatino-shifter
                     </button>
                     <button onClick={() => this.setCurrentView(<div>nothing to see here yet
                         (Booking-shifter)</div>)}>Booking-shifter
