@@ -104,7 +104,8 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
 }
 
 const EstimationView = (props: { estimation: Estimation, readonly: boolean }): React.ReactElement => {
-    return <div className="estimationShiftCardContainer">
+    return <div className="estimationShiftCardContainer"
+                title={props.estimation.issueKey + ": " + props.estimation.issueSummary}>
         <label>
             Ticket: <input type="text"
                            value={props.estimation.issueKey}
