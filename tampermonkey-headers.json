@@ -8,6 +8,6 @@
   "grant": [
     "none"
   ],
-  "updateURL": "https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/dist/jira-monkeys.user.js",
-  "downloadURL": "https://raw.githubusercontent.com/marmer/Tampermonkeys/master/jira/dist/jira-monkeys.user.js"
+  "updateURL": "https://github.com/marmer/jira-monkeys/raw/master/dist/jira-monkeys.user.js",
+  "downloadURL": "https://github.com/marmer/jira-monkeys/raw/master/dist/jira-monkeys.user.js"
 }
