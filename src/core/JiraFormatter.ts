@@ -20,8 +20,7 @@ export default class JiraFormatter {
     };
 
     public static isValidJiraFormat(jiraString: string): boolean {
-// TODO: marmer 08.09.2019 implement this
-        return true;
+        return /^\s*\d+[mhdw](\s+\d+[mhdw])*?\s*$/.test(jiraString);
     };
 
     private static weeksOf(timeSpentInMinutes: number): number {
