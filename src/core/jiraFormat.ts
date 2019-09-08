@@ -20,7 +20,7 @@ const weekPartOf = (timeSpentInMinutes: number): string => unitStringFor(weeksOf
 
 const unitStringFor = (result: number, unit: Unit) => result == 0 ? "" : result + unit.symbol;
 
-export default (timeSpentInMinutes: number) => {
+export const toJiraFormat = (timeSpentInMinutes: number) => {
     const absoluteTimeSpendInMinutes = Math.abs(timeSpentInMinutes);
     const resultString = `${weekPartOf(absoluteTimeSpendInMinutes)} ${dayPartOf(absoluteTimeSpendInMinutes)} ${hourPartOf(absoluteTimeSpendInMinutes)} ${minutePartOf(absoluteTimeSpendInMinutes)}`
         .replace(/\s+/, " ")
@@ -28,4 +28,9 @@ export default (timeSpentInMinutes: number) => {
     return resultString === "" ?
         "0" + minute.symbol :
         resultString;
+};
+
+export const isValidJiraFormat = (jiraString: string): boolean => {
+// TODO: marmer 08.09.2019 implement this
+    return true;
 };
