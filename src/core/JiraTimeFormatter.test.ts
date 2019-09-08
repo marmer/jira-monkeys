@@ -1,7 +1,7 @@
-import jiraFormat from "./jiraFormat";
+import JiraTimeFormatter from "./JiraFormatter";
 
 describe("timeSpentInMinutes", () => {
-    const parameters = [
+    [
         {timeSpentInMinutes: 0, expectedJiraString: "0m"},
         {timeSpentInMinutes: 59, expectedJiraString: "59m"},
         {timeSpentInMinutes: 60, expectedJiraString: "1h"},
@@ -15,7 +15,7 @@ describe("timeSpentInMinutes", () => {
         {timeSpentInMinutes: -4799, expectedJiraString: "1w 4d 7h 59m"}
     ].forEach(parameter => {
         it('should split transform ' + parameter.timeSpentInMinutes + ' into the jira string "' + parameter.expectedJiraString + '"', () => {
-            expect(jiraFormat(parameter.timeSpentInMinutes)).toBe(parameter.expectedJiraString)
+            expect(JiraTimeFormatter.toJiraFormat(parameter.timeSpentInMinutes)).toBe(parameter.expectedJiraString)
         });
     })
 });
