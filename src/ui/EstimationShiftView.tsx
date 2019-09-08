@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import EstimationService, {Estimation} from "../core/EstimationService";
 import "./EstimationShiftView.css"
 import IssueSiteInfos from "../core/IssueSiteInfos";
-import {isValidJiraFormat} from "../core/jiraFormat";
+import JiraFormatter from "../core/JiraFormatter";
 
 interface EstimationShiftViewState {
     sourceIssueEstimation?: Estimation | null
@@ -105,7 +105,7 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
     private isEstimationShiftable(): boolean {
         {/*// TODO: marmer 07.09.2019 Show only true when destination issue exists and time expression of shiftable time is  is valid*/
         }
-        return !!this.state.targetIssueEstimation && !!this.state.timeToShiftText && isValidJiraFormat(this.state.timeToShiftText)
+        return !!this.state.targetIssueEstimation && !!this.state.timeToShiftText && JiraFormatter.isValidJiraFormat(this.state.timeToShiftText)
     }
 }
 
