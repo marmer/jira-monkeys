@@ -24,10 +24,19 @@ describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.toJiraFormat.name, () 
 describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.isValidJiraFormat.name, () => {
     [
         {input: "1m", isJiraFormat: true},
-        {input: "bla", isJiraFormat: false}
+        {input: "1h", isJiraFormat: true},
+        {input: "1d", isJiraFormat: true},
+        {input: "1w", isJiraFormat: true},
+        {input: " 1h 1m 1w 1d", isJiraFormat: true},
+        {input: "   1h \t 1m   1w   1d   ", isJiraFormat: true},
+        {input: "117", isJiraFormat: false},
+        {input: "bla", isJiraFormat: false},
+        {input: "bla", isJiraFormat: false},
+        {input: "8823m", isJiraFormat: true},
+        {input: " 1h 1mimimi 1w 1d", isJiraFormat: false},
+
     ].forEach(parameter => {
-        it('should ', () => {
-            // TODO: marmer 08.09.2019 Implement me ;)
+        it('should ' + parameter.input + ' be valid? ===' + parameter.isJiraFormat, () => {
             expect(JiraTimeFormatter.isValidJiraFormat(parameter.input))
                 .toBe(parameter.isJiraFormat);
         });
