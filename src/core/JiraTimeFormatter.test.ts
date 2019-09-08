@@ -1,6 +1,7 @@
 import JiraTimeFormatter from "./JiraFormatter";
 
-describe("timeSpentInMinutes", () => {
+
+describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.toJiraFormat.name, () => {
     [
         {timeSpentInMinutes: 0, expectedJiraString: "0m"},
         {timeSpentInMinutes: 59, expectedJiraString: "59m"},
@@ -16,6 +17,19 @@ describe("timeSpentInMinutes", () => {
     ].forEach(parameter => {
         it('should split transform ' + parameter.timeSpentInMinutes + ' into the jira string "' + parameter.expectedJiraString + '"', () => {
             expect(JiraTimeFormatter.toJiraFormat(parameter.timeSpentInMinutes)).toBe(parameter.expectedJiraString)
+        });
+    });
+});
+
+describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.isValidJiraFormat.name, () => {
+    [
+        {input: "1m", isJiraFormat: true},
+        {input: "bla", isJiraFormat: false}
+    ].forEach(parameter => {
+        it('should ', () => {
+            // TODO: marmer 08.09.2019 Implement me ;)
+            expect(JiraTimeFormatter.isValidJiraFormat(parameter.input))
+                .toBe(parameter.isJiraFormat);
         });
     })
 });
