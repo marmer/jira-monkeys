@@ -58,13 +58,7 @@ export default class EstimationService {
         //todo load source and target estimations once again
 
 
-        const resultPromise = this.getEstimationsForIssue(param.sourceIssueKey)
-            .then(sourceEstimation =>
-                this.getEstimationsForIssue(param.targetIssueKey)
-                    .then(targetEstimation => ({
-                        newSourceEstimation: sourceEstimation,
-                        newDestinationEstimation: targetEstimation
-                    })))
+        const resultPromise = this.loadSourceAndDestinationEsShiftSummaryFor(param)
             .then(currentStates => {
                 //todo recalculate new estimations
             })
@@ -91,6 +85,16 @@ export default class EstimationService {
         //     "body": JSON.stringify(estimationRequest)
         // })
 
+    }
+
+    private static loadSourceAndDestinationEsShiftSummaryFor(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSummary> {
+        return this.getEstimationsForIssue(param.sourceIssueKey)
+            .then(sourceEstimation =>
+                this.getEstimationsForIssue(param.targetIssueKey)
+                    .then(targetEstimation => ({
+                        newSourceEstimation: sourceEstimation,
+                        newDestinationEstimation: targetEstimation
+                    })));
     }
 }
 
