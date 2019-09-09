@@ -118,8 +118,8 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
             timeToShiftAsJiraString: this.state.timeToShiftText
         })
             .then(result => this.setState({
-                sourceIssueEstimation: result.newSourceEstimation,
-                targetIssueEstimation: result.newDestinationEstimation
+                sourceIssueEstimation: result.sourceEstimation,
+                targetIssueEstimation: result.targetEstimation
             }))
             // TODO: marmer 09.09.2019 care ;)
             .catch(reason => alert("Something went wrong. Please check your estimations manually!"))

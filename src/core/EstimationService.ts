@@ -2,9 +2,9 @@ export interface Estimation {
     issueKey: string,
     issueSummary: string
     originalEstimate: string
-    originalEstimateInSeconds: number
+    originalEstimateInMinutes: number
     remainingEstimate: string
-    remainingEstimateInSeconds: number
+    remainingEstimateInMinutes: number
 }
 
 interface EstimationResponse {
@@ -45,9 +45,9 @@ export default class EstimationService {
                 return {
                     issueKey,
                     originalEstimate,
-                    originalEstimateInSeconds: originalEstimateSeconds,
+                    originalEstimateInMinutes: Math.floor(originalEstimateSeconds / 60),
                     remainingEstimate,
-                    remainingEstimateInSeconds: remainingEstimateSeconds,
+                    remainingEstimateInMinutes: Math.floor(remainingEstimateSeconds / 60),
                     issueSummary: estimationResponse.fields.summary
                 } as Estimation
             })
@@ -90,18 +90,39 @@ export default class EstimationService {
             .then(sourceEstimation =>
                 this.getEstimationsForIssue(param.targetIssueKey)
                     .then(targetEstimation => ({
-                        newSourceEstimation: sourceEstimation,
-                        newDestinationEstimation: targetEstimation
+                        sourceEstimation: sourceEstimation,
+                        targetEstimation: targetEstimation
                     } as ShiftSummary)));
     }
 
     private static calculateEstimatinosAfterShift(currentStates: ShiftSummary, timeToShiftAsJiraString: string): ShiftSummary {
-        // TODO: marmer 09.09.2019 Implement!
-        return currentStates;
+        // TODO: marmer 09.09.2019 What about a little calculation ? ;)
+
+        const newSourceEstimation: Estimation = {
+            ...currentStates.sourceEstimation,
+            remainingEstimateInMinutes: currentStates.sourceEstimation.remainingEstimateInMinutes,
+            originalEstimateInMinutes: currentStates.sourceEstimation.originalEstimateInMinutes,
+            remainingEstimate: currentStates.sourceEstimation.remainingEstimate,
+            originalEstimate: currentStates.sourceEstimation.originalEstimate,
+        };
+        const newTargetEstimation: Estimation = {
+            ...currentStates.targetEstimation,
+            remainingEstimateInMinutes: currentStates.targetEstimation.remainingEstimateInMinutes,
+            originalEstimateInMinutes: currentStates.targetEstimation.originalEstimateInMinutes,
+            remainingEstimate: currentStates.targetEstimation.remainingEstimate,
+            originalEstimate: currentStates.targetEstimation.originalEstimate,
+
+        };
+        const newState: ShiftSummary = {
+            targetEstimation: newTargetEstimation,
+            sourceEstimation: newSourceEstimation
+        };
+
+        return newState;
     }
 }
 
 interface ShiftSummary {
-    newSourceEstimation: Estimation
-    newDestinationEstimation: Estimation
+    sourceEstimation: Estimation
+    targetEstimation: Estimation
 }
