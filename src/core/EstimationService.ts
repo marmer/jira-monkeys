@@ -52,4 +52,51 @@ export default class EstimationService {
                 } as Estimation
             })
     }
+
+    public static shiftEstimation(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<{ newSourceEstimation: Estimation, newDestinationEstimation: Estimation }> {
+        // TODO: marmer 09.09.2019 implkement me
+        //load source and target estimations
+        //recalculate new estimations
+        //set new estimations
+
+
+        // const estimationRequest: EstimationRequest = {
+        //     fields: {
+        //         timetracking: {
+        //             originalEstimate: "2d",
+        //             remainingEstimate: "3h"
+        //         }
+        //     }
+        // };
+        // return fetch("***/rest/api/2/issue/***", {
+        //     "method": "PUT",
+        //     "headers": {
+        //         "content-type": "application/json",
+        //         "accept": "application/json"
+        //     },
+        //     "body": JSON.stringify(estimationRequest)
+        // })
+
+        return Promise.resolve()
+            .then(value => {
+                return {
+                    newSourceEstimation: {
+                        issueKey: "TODO",
+                        issueSummary: "TODO",
+                        originalEstimate: "TODO",
+                        originalEstimateInSeconds: 42,
+                        remainingEstimate: "TODO",
+                        remainingEstimateInSeconds: 42,
+                    },
+                    newDestinationEstimation: {
+                        issueKey: "TODO",
+                        issueSummary: "TODO",
+                        originalEstimate: "TODO",
+                        originalEstimateInSeconds: 42,
+                        remainingEstimate: "TODO",
+                        remainingEstimateInSeconds: 42
+                    }
+                }
+            });
+    }
 }
