@@ -56,13 +56,8 @@ export default class EstimationService {
     }
 
     public static shiftEstimation(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSummary> {
-        // TODO: marmer 09.09.2019 implkement me
-        //todo load source and target estimations once again
-
-
-        // .then(statesToUpdate => {
-        //     todo send and set new estimations
-        // });
+        if (param.targetIssueKey.toLocaleLowerCase() === param.sourceIssueKey.toLocaleLowerCase())
+            return Promise.reject("Source and target issue must be different for estimation shiftings")
 
         return this.loadSourceAndDestinationEsShiftSummaryFor(param)
             .then(currentStates => this.calculateEstimatinosAfterShift(currentStates, param.timeToShiftAsJiraString))
@@ -80,25 +75,30 @@ export default class EstimationService {
     }
 
     private static calculateEstimatinosAfterShift(currentStates: ShiftSummary, timeToShiftAsJiraString: string): ShiftSummary {
-        // TODO: marmer 09.09.2019 Handle negative results!
-        const sourceRemainingEstimateInMinutes: number = currentStates.sourceEstimation.remainingEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+
         const sourceOriginalEstimateInMinutes: number = currentStates.sourceEstimation.originalEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
-        const targetRemainingEstimateInMinutes: number = currentStates.targetEstimation.remainingEstimateInMinutes + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+        if (sourceOriginalEstimateInMinutes < 0) {
+            throw "It is not possible to shift more estimation time than exists on " + currentStates.sourceEstimation.issueKey
+        }
+
+        const sourceRemainingEstimateInMinutes: number = currentStates.sourceEstimation.remainingEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+
         const targetOriginalEstimateInMinutes: number = currentStates.targetEstimation.originalEstimateInMinutes + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+        const targetRemainingEstimateInMinutes: number = currentStates.targetEstimation.remainingEstimateInMinutes + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
 
         return {
             sourceEstimation: {
                 ...currentStates.sourceEstimation,
-                remainingEstimateInMinutes: sourceRemainingEstimateInMinutes,
+                remainingEstimateInMinutes: sourceRemainingEstimateInMinutes < 0 ? 0 : sourceRemainingEstimateInMinutes,
                 originalEstimateInMinutes: sourceOriginalEstimateInMinutes,
-                remainingEstimate: JiraTimeService.minutesToJiraFormat(sourceRemainingEstimateInMinutes),
+                remainingEstimate: JiraTimeService.minutesToJiraFormat(sourceRemainingEstimateInMinutes < 0 ? 0 : sourceRemainingEstimateInMinutes),
                 originalEstimate: JiraTimeService.minutesToJiraFormat(sourceOriginalEstimateInMinutes),
             },
             targetEstimation: {
                 ...currentStates.targetEstimation,
-                remainingEstimateInMinutes: targetRemainingEstimateInMinutes,
+                remainingEstimateInMinutes: targetRemainingEstimateInMinutes < 0 ? 0 : targetRemainingEstimateInMinutes,
                 originalEstimateInMinutes: targetOriginalEstimateInMinutes,
-                remainingEstimate: JiraTimeService.minutesToJiraFormat(targetRemainingEstimateInMinutes),
+                remainingEstimate: JiraTimeService.minutesToJiraFormat(targetRemainingEstimateInMinutes < 0 ? 0 : targetRemainingEstimateInMinutes),
                 originalEstimate: JiraTimeService.minutesToJiraFormat(targetOriginalEstimateInMinutes),
 
             }
