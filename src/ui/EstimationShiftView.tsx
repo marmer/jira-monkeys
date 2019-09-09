@@ -36,7 +36,18 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
     }
 
     componentDidMount(): void {
+        this.setState({
+            targetIssueText: localStorage.getItem(EstimationShiftView.name + ".targetIssueText") || "",
+        });
         this.loadSourceEstimations();
+    }
+
+    setState<K extends keyof EstimationShiftViewState>(state: ((prevState: Readonly<EstimationShiftViewState>, props: Readonly<EstimationShiftViewProps>) => (Pick<EstimationShiftViewState, K> | EstimationShiftViewState | null)) | Pick<EstimationShiftViewState, K> | EstimationShiftViewState | null, callback?: () => void): void {
+        super.setState(state, () => {
+            if (callback) callback();
+
+            localStorage.setItem(EstimationShiftView.name + ".targetIssueText", this.state.targetIssueText)
+        })
     }
 
     render(): React.ReactElement {
@@ -53,7 +64,7 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
                            placeholder="TICKET-123"
                            autoFocus={true}
                            value={this.state.targetIssueText}
-                           onChange={e => this.onDestinationIssueTextChange(e)}/></label>
+                           onChange={e => this.onTargetIssueTextChange(e)}/></label>
                 {this.state.targetIssueEstimation &&
                 <label>
                     Time to Shift:
@@ -100,10 +111,11 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
             .catch(() => this.setState({sourceIssueEstimationState: "ERROR"}));
     }
 
-    private onDestinationIssueTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    private onTargetIssueTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        let targetIssueText = event.target.value;
         this.setState({
-            targetIssueText: event.target.value
-        });
+            targetIssueText
+        }, () => localStorage.setItem("targetIssue", targetIssueText));
     }
 
     private onTimeToShiftTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -132,6 +144,8 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
                 });
             })
             .catch(reason => alert("Something went wrong: " + reason))
+
+        // TODO: marmer 10.09.2019 reload page on success as soon as all the states have been remembered
     }
 }
 
