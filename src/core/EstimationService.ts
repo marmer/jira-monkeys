@@ -58,9 +58,8 @@ export default class EstimationService {
         //todo load source and target estimations once again
 
 
-        const resultPromise = this.loadSourceAndDestinationEsShiftSummaryFor(param);
-        // .then(currentStates => {
-        // })
+        const resultPromise = this.loadSourceAndDestinationEsShiftSummaryFor(param)
+            .then(currentStates => this.calculateEstimatinosAfterShift(currentStates, param.timeToShiftAsJiraString))
         // .then(statesToUpdate => {
         //     todo send and set new estimations
         // });
@@ -94,6 +93,11 @@ export default class EstimationService {
                         newSourceEstimation: sourceEstimation,
                         newDestinationEstimation: targetEstimation
                     } as ShiftSummary)));
+    }
+
+    private static calculateEstimatinosAfterShift(currentStates: ShiftSummary, timeToShiftAsJiraString: string): ShiftSummary {
+        // TODO: marmer 09.09.2019 Implement!
+        return currentStates;
     }
 }
 
