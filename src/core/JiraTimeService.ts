@@ -28,6 +28,24 @@ export default class JiraTimeService {
         return new RegExp("^\\s*\\d+[" + unitSymbols + "](\\s+\\d+[" + unitSymbols + "])*?\\s*$").test(jiraString);
     };
 
+    public static jiraFormatToMinutes(jiraString: string): number {
+        if (!this.isValidJiraFormat(jiraString)) {
+            throw "'" + jiraString + "' is not a valid jira String";
+        }
+
+
+        // [...("10m 17h 9m".matchAll(/(?<minutes>\d+)m/g))]
+        // (2) [Array(2), Array(2)]
+        // 0: (2) ["10m", "10", index: 0, input: "10m 17h 9m", groups: {…}]
+        // 1: (2) ["9m", "9", index: 8, input: "10m 17h 9m", groups: {…}]
+        // length: 2
+
+        return Object.keys(jiraSymbolFactorMap)
+        // TODO: marmer 09.09.2019 Mapping to unit groups ;)
+            .map(unit => 1)
+            .reduce((v1, v2) => v1 + v2);
+    }
+
     private static weeksOf(timeSpentInMinutes: number): number {
         return Math.floor(timeSpentInMinutes / week.factor)
     };

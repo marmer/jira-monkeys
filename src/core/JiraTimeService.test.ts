@@ -42,3 +42,22 @@ describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.isValidJiraFormat.name
         });
     })
 });
+
+describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.jiraFormatToMinutes.name, () => {
+    [
+        {jiraString: "0m", expectedTimeSpentInMinutes: 0},
+        {jiraString: "59m", expectedTimeSpentInMinutes: 59},
+        {jiraString: "1h", expectedTimeSpentInMinutes: 60},
+        {jiraString: "7h 59m", expectedTimeSpentInMinutes: 479},
+        {jiraString: "1d", expectedTimeSpentInMinutes: 480},
+        {jiraString: "4d 7h 59m", expectedTimeSpentInMinutes: 2399},
+        {jiraString: "1w", expectedTimeSpentInMinutes: 2400},
+        {jiraString: "1w 4d 7h 59m", expectedTimeSpentInMinutes: 4799},
+        {jiraString: "2w", expectedTimeSpentInMinutes: 4800},
+        {jiraString: "1w 59m", expectedTimeSpentInMinutes: 2459},
+    ].forEach(parameter => {
+        it('should transform the jira String' + parameter.jiraString + ' into its numeric value in minutes "' + parameter.jiraString + '"', () => {
+            expect(JiraTimeFormatter.jiraFormatToMinutes(parameter.jiraString)).toBe(parameter.expectedTimeSpentInMinutes)
+        });
+    });
+});

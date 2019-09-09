@@ -1,3 +1,5 @@
+import JiraTimeService from "./JiraTimeService";
+
 export interface Estimation {
     issueKey: string,
     issueSummary: string
@@ -58,13 +60,12 @@ export default class EstimationService {
         //todo load source and target estimations once again
 
 
-        const resultPromise = this.loadSourceAndDestinationEsShiftSummaryFor(param)
-            .then(currentStates => this.calculateEstimatinosAfterShift(currentStates, param.timeToShiftAsJiraString))
         // .then(statesToUpdate => {
         //     todo send and set new estimations
         // });
 
-        return resultPromise;
+        return this.loadSourceAndDestinationEsShiftSummaryFor(param)
+            .then(currentStates => this.calculateEstimatinosAfterShift(currentStates, param.timeToShiftAsJiraString));
 
         // const estimationRequest: EstimationRequest = {
         //     fields: {
@@ -96,29 +97,28 @@ export default class EstimationService {
     }
 
     private static calculateEstimatinosAfterShift(currentStates: ShiftSummary, timeToShiftAsJiraString: string): ShiftSummary {
-        // TODO: marmer 09.09.2019 What about a little calculation ? ;)
+        const sourceRemainingEstimateInMinutes: number = currentStates.sourceEstimation.remainingEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+        const sourceOriginalEstimateInMinutes: number = currentStates.sourceEstimation.originalEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+        const targetRemainingEstimateInMinutes: number = currentStates.targetEstimation.remainingEstimateInMinutes + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+        const targetOriginalEstimateInMinutes: number = currentStates.targetEstimation.originalEstimateInMinutes + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
 
-        const newSourceEstimation: Estimation = {
-            ...currentStates.sourceEstimation,
-            remainingEstimateInMinutes: currentStates.sourceEstimation.remainingEstimateInMinutes,
-            originalEstimateInMinutes: currentStates.sourceEstimation.originalEstimateInMinutes,
-            remainingEstimate: currentStates.sourceEstimation.remainingEstimate,
-            originalEstimate: currentStates.sourceEstimation.originalEstimate,
-        };
-        const newTargetEstimation: Estimation = {
-            ...currentStates.targetEstimation,
-            remainingEstimateInMinutes: currentStates.targetEstimation.remainingEstimateInMinutes,
-            originalEstimateInMinutes: currentStates.targetEstimation.originalEstimateInMinutes,
-            remainingEstimate: currentStates.targetEstimation.remainingEstimate,
-            originalEstimate: currentStates.targetEstimation.originalEstimate,
+        return {
+            sourceEstimation: {
+                ...currentStates.sourceEstimation,
+                remainingEstimateInMinutes: sourceRemainingEstimateInMinutes,
+                originalEstimateInMinutes: sourceOriginalEstimateInMinutes,
+                remainingEstimate: JiraTimeService.minutesToJiraFormat(sourceRemainingEstimateInMinutes),
+                originalEstimate: JiraTimeService.minutesToJiraFormat(sourceOriginalEstimateInMinutes),
+            },
+            targetEstimation: {
+                ...currentStates.targetEstimation,
+                remainingEstimateInMinutes: targetRemainingEstimateInMinutes,
+                originalEstimateInMinutes: targetOriginalEstimateInMinutes,
+                remainingEstimate: JiraTimeService.minutesToJiraFormat(targetRemainingEstimateInMinutes),
+                originalEstimate: JiraTimeService.minutesToJiraFormat(targetOriginalEstimateInMinutes),
 
+            }
         };
-        const newState: ShiftSummary = {
-            targetEstimation: newTargetEstimation,
-            sourceEstimation: newSourceEstimation
-        };
-
-        return newState;
     }
 }
 
