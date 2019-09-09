@@ -3,12 +3,22 @@ type Unit = {
     factor: number
 }
 
+
 const minute: Unit = {symbol: "m", factor: 1};
 const hour: Unit = {symbol: "h", factor: 60 * minute.factor};
 const day: Unit = {symbol: "d", factor: 8 * hour.factor};
 const week: Unit = {symbol: "w", factor: 5 * day.factor};
 
-export default class JiraFormatter {
+const jiraSymbolFactorMap: {
+    [symbol: string]: Unit;
+} = {};
+
+jiraSymbolFactorMap[minute.symbol] = minute;
+jiraSymbolFactorMap[hour.symbol] = hour;
+jiraSymbolFactorMap[day.symbol] = day;
+jiraSymbolFactorMap[week.symbol] = week;
+
+export default class JiraTimeService {
     public static toJiraFormat(timeSpentInMinutes: number) {
         const absoluteTimeSpendInMinutes = Math.abs(timeSpentInMinutes);
         const resultString = `${this.weekPartOf(absoluteTimeSpendInMinutes)} ${this.dayPartOf(absoluteTimeSpendInMinutes)} ${this.hourPartOf(absoluteTimeSpendInMinutes)} ${this.minutePartOf(absoluteTimeSpendInMinutes)}`
@@ -20,7 +30,8 @@ export default class JiraFormatter {
     };
 
     public static isValidJiraFormat(jiraString: string): boolean {
-        return /^\s*\d+[mhdw](\s+\d+[mhdw])*?\s*$/.test(jiraString);
+        const unitSymbols: string = Object.keys(jiraSymbolFactorMap).join();
+        return new RegExp("^\\s*\\d+[" + unitSymbols + "](\\s+\\d+[" + unitSymbols + "])*?\\s*$").test(jiraString);
     };
 
     private static weeksOf(timeSpentInMinutes: number): number {

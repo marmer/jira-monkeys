@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import EstimationService, {Estimation} from "../core/EstimationService";
 import "./EstimationShiftView.css"
 import IssueSiteInfos from "../core/IssueSiteInfos";
-import JiraFormatter from "../core/JiraFormatter";
+import JiraTimeService from "../core/JiraTimeService";
 
 interface EstimationShiftViewState {
     sourceIssueEstimation?: Estimation | null
@@ -108,7 +108,7 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
         return !!this.state.targetIssueEstimation &&
             !!this.state.sourceIssueEstimation &&
             !!this.state.timeToShiftText &&
-            JiraFormatter.isValidJiraFormat(this.state.timeToShiftText)
+            JiraTimeService.isValidJiraFormat(this.state.timeToShiftText)
     }
 
     private shiftEstimations() {
