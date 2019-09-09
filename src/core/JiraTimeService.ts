@@ -13,7 +13,7 @@ const day: Unit = jiraSymbolFactorMap["d"] = {symbol: "d", factor: 8 * hour.fact
 const week: Unit = jiraSymbolFactorMap["w"] = {symbol: "w", factor: 5 * day.factor};
 
 export default class JiraTimeService {
-    public static toJiraFormat(timeSpentInMinutes: number) {
+    public static minutesToJiraFormat(timeSpentInMinutes: number) {
         const absoluteTimeSpendInMinutes = Math.abs(timeSpentInMinutes);
         const resultString = `${this.weekPartOf(absoluteTimeSpendInMinutes)} ${this.dayPartOf(absoluteTimeSpendInMinutes)} ${this.hourPartOf(absoluteTimeSpendInMinutes)} ${this.minutePartOf(absoluteTimeSpendInMinutes)}`
             .replace(/\s+/, " ")
