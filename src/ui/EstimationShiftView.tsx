@@ -113,8 +113,6 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
     }
 
     private isEstimationShiftable(): boolean {
-        {/*// TODO: marmer 07.09.2019 Show only true when destination issue exists and time expression of shiftable time is  is valid*/
-        }
         return !!this.state.targetIssueEstimation &&
             !!this.state.sourceIssueEstimation &&
             !!this.state.timeToShiftText &&
