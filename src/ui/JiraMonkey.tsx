@@ -1,7 +1,7 @@
 import React, {Component, ReactNode} from 'react';
 import "./JiraMonkey.css"
 import WorklogSummarizerView from "./WorklogSummarizerView";
-import EstimationShiftView from "./EstimationShiftView";
+import EstimationShiftView, {EstimationShiftViewProps} from "./EstimationShiftView";
 
 interface JiraMonkeyState {
     toolsVisible: boolean
@@ -19,6 +19,20 @@ export default class JiraMonkey extends Component<JiraMonkeyProps, JiraMonkeySta
         this.state = {
             toolsVisible: false
         }
+    }
+
+    componentDidMount(): void {
+        this.setState({
+            toolsVisible: (localStorage.getItem(JiraMonkey.name + ".toolsVisible") || "false") === "true",
+        })
+    }
+
+    setState<K extends keyof JiraMonkeyState>(state: ((prevState: Readonly<JiraMonkeyState>, props: Readonly<EstimationShiftViewProps>) => (Pick<JiraMonkeyState, K> | JiraMonkeyState | null)) | Pick<JiraMonkeyState, K> | JiraMonkeyState | null, callback?: () => void): void {
+        super.setState(state, () => {
+            if (callback) callback();
+
+            localStorage.setItem(JiraMonkey.name + ".toolsVisible", "" + this.state.toolsVisible)
+        })
     }
 
     render(): React.ReactElement {
@@ -60,51 +74,3 @@ export default class JiraMonkey extends Component<JiraMonkeyProps, JiraMonkeySta
         });
     }
 }
-
-
-// TODO: marmer 05.09.2019 make the component refresh/reload if the "site changes" (the site content gets replaced by jira)
-
-
-// #### update ticket estimations
-// fetch("***/rest/api/2/issue/***", {
-//     "method": "PUT",
-//     "headers": {
-//         "content-type": "application/json",
-//         "accept": "application/json"
-//     },
-//     "body": {
-//         "fields": {
-//             "timetracking": {
-//                 "originalEstimate": "2d",
-//                 "remainingEstimate": "3h"
-//             }
-//         }
-//     }
-// })
-
-// #### create a new worklog
-// fetch("https://jira.schuetze.ag/rest/api/2/issue/****/worklog", {
-//     "method": "POST",
-//     "headers": {
-//         "content-type": "application/json",
-//         "accept": "application/json"
-//     },
-//     "body": {
-//         "comment": "Somethign really new",
-//         "timeSpent": "2d 1h 10m"
-//     }
-// })
-
-
-// #### Update/delete worklog
-// fetch("https://jira.schuetze.ag/rest/api/2/issue/****/worklog/*****", {
-//     "method": "PUT",
-//     "headers": {
-//         "content-type": "application/json",
-//         "accept": "application/json",
-//     },
-//     "body": {
-//         "comment": "Möp with update",
-//         "timeSpent": "2d"
-//     }
-// })

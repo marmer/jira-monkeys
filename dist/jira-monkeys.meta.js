@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          jira-monkeys
-// @version       1.2.0
+// @version       1.3.0
 // @author        MarMer
 // @description   A little script to help working with jira
 // @homepage      https://github.com/marmer/jira-monkeys
