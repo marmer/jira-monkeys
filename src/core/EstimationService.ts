@@ -58,13 +58,12 @@ export default class EstimationService {
         //todo load source and target estimations once again
 
 
-        const resultPromise = this.loadSourceAndDestinationEsShiftSummaryFor(param)
-            .then(currentStates => {
-                //todo recalculate new estimations
-            })
-            .then(statesToUpdate => {
-                //todo send and set new estimations
-            });
+        const resultPromise = this.loadSourceAndDestinationEsShiftSummaryFor(param);
+        // .then(currentStates => {
+        // })
+        // .then(statesToUpdate => {
+        //     todo send and set new estimations
+        // });
 
         return resultPromise;
 
@@ -94,11 +93,11 @@ export default class EstimationService {
                     .then(targetEstimation => ({
                         newSourceEstimation: sourceEstimation,
                         newDestinationEstimation: targetEstimation
-                    })));
+                    } as ShiftSummary)));
     }
 }
 
 interface ShiftSummary {
-    newSourceEstimation: Estimation,
+    newSourceEstimation: Estimation
     newDestinationEstimation: Estimation
-};
+}
