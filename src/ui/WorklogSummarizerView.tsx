@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import WorklogService, {Worklog} from "../core/WorklogService";
-import JiraFormatter from "../core/JiraFormatter";
+import JiraTimeService from "../core/JiraTimeService";
 import "./WorklogSummarizerView.css";
 
 interface WorklogSummarizerViewState {
@@ -54,7 +54,7 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                         {this.state.worklogs.map(worklog =>
                             <tr key={worklog.author.displayName}>
                                 <td className="displayNameColumn">{worklog.author.displayName}</td>
-                                <td className="timeSpentColumn">{JiraFormatter.toJiraFormat(worklog.timeSpentInMinutes)}</td>
+                                <td className="timeSpentColumn">{JiraTimeService.toJiraFormat(worklog.timeSpentInMinutes)}</td>
                             </tr>)}
                         </tbody>
                     </table>

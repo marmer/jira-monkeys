@@ -1,4 +1,4 @@
-import JiraTimeFormatter from "./JiraFormatter";
+import JiraTimeFormatter from "./JiraTimeService";
 
 
 describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.toJiraFormat.name, () => {
