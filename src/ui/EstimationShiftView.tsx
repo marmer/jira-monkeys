@@ -35,14 +35,23 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
         }
     }
 
+    componentDidMount(): void {
+        this.loadSourceEstimations();
+    }
+
     render(): React.ReactElement {
         return <div className={"estimationShiftContainer"}>
-            Work in Progress ... coming soon;)
+
+            {this.state.sourceIssueEstimation &&
+            <EstimationView estimation={this.state.sourceIssueEstimation} readonly={true}/>}
+
+            {this.state.sourceIssueEstimation &&
             <div className="estimationShiftCardContainer">
                 <label>
                     Issue key:
                     <input type="text"
                            placeholder="TICKET-123"
+                           autoFocus={true}
                            value={this.state.targetIssueText}
                            onChange={e => this.onDestinationIssueTextChange(e)}/></label>
                 {this.state.targetIssueEstimation &&
@@ -54,7 +63,8 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
                            onChange={e => this.onTimeToShiftTextChange(e)}/></label>}
                 {this.isEstimationShiftable() &&
                 <button type="button" onClick={() => this.shiftEstimations()}>send</button>}
-            </div>
+            </div>}
+
             {this.state.targetIssueEstimation &&
             <EstimationView estimation={this.state.targetIssueEstimation} readonly={true}/>}
         </div>;
@@ -117,12 +127,13 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
             targetIssueKey: this.state.targetIssueEstimation!.issueKey,
             timeToShiftAsJiraString: this.state.timeToShiftText
         })
-            .then(result => this.setState({
-                sourceIssueEstimation: result.sourceEstimation,
-                targetIssueEstimation: result.targetEstimation
-            }))
-            // TODO: marmer 09.09.2019 care ;)
-            .catch(reason => alert("Something went wrong. Please check your estimations manually!"))
+            .then(result => {
+                this.setState({
+                    sourceIssueEstimation: result.sourceEstimation,
+                    targetIssueEstimation: result.targetEstimation
+                });
+            })
+            .catch(reason => alert("Something went wrong: " + reason))
     }
 }
 
