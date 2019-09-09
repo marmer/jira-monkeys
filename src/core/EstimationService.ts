@@ -65,25 +65,8 @@ export default class EstimationService {
         // });
 
         return this.loadSourceAndDestinationEsShiftSummaryFor(param)
-            .then(currentStates => this.calculateEstimatinosAfterShift(currentStates, param.timeToShiftAsJiraString));
-
-        // const estimationRequest: EstimationRequest = {
-        //     fields: {
-        //         timetracking: {
-        //             originalEstimate: "2d",
-        //             remainingEstimate: "3h"
-        //         }
-        //     }
-        // };
-        // return fetch("***/rest/api/2/issue/***", {
-        //     "method": "PUT",
-        //     "headers": {
-        //         "content-type": "application/json",
-        //         "accept": "application/json"
-        //     },
-        //     "body": JSON.stringify(estimationRequest)
-        // })
-
+            .then(currentStates => this.calculateEstimatinosAfterShift(currentStates, param.timeToShiftAsJiraString))
+            .then(this.updateEstimations);
     }
 
     private static loadSourceAndDestinationEsShiftSummaryFor(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSummary> {
@@ -119,6 +102,26 @@ export default class EstimationService {
 
             }
         };
+    }
+
+    private static updateEstimations(): Promise<ShiftSummary> {
+        // TODO: marmer 09.09.2019 implement me ;)
+// const estimationRequest: EstimationRequest = {
+        //     fields: {
+        //         timetracking: {
+        //             originalEstimate: "2d",
+        //             remainingEstimate: "3h"
+        //         }
+        //     }
+        // };
+        // return fetch("***/rest/api/2/issue/***", {
+        //     "method": "PUT",
+        //     "headers": {
+        //         "content-type": "application/json",
+        //         "accept": "application/json"
+        //     },
+        //     "body": JSON.stringify(estimationRequest)
+        // })
     }
 }
 
