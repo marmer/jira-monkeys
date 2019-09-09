@@ -33,16 +33,20 @@ export default class JiraTimeService {
             throw "'" + jiraString + "' is not a valid jira String";
         }
 
-
-        // [...("10m 17h 9m".matchAll(/(?<minutes>\d+)m/g))]
-        // (2) [Array(2), Array(2)]
-        // 0: (2) ["10m", "10", index: 0, input: "10m 17h 9m", groups: {…}]
-        // 1: (2) ["9m", "9", index: 8, input: "10m 17h 9m", groups: {…}]
-        // length: 2
-
         return Object.keys(jiraSymbolFactorMap)
-        // TODO: marmer 09.09.2019 Mapping to unit groups ;)
-            .map(unit => 1)
+            .map(key => jiraSymbolFactorMap[key])
+            .map(unit => {
+                const match: RegExpMatchArray | null = jiraString.match(new RegExp("(\\d+)" + unit.symbol, "g"));
+                if (!match) {
+                    return 0
+                }
+                return match.map(m => m.match(/\d+/g)!
+                    .map(Number.parseInt)
+                    .reduce((r1, r2) => r1 + r2) * unit.factor
+                )
+                    .reduce((r1, r2) => r1 + r2);
+            })
+            // .map(unit => 1)
             .reduce((v1, v2) => v1 + v2);
     }
 
