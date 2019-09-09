@@ -60,7 +60,7 @@ export default class EstimationService {
             return Promise.reject("Source and target issue must be different for estimation shiftings")
 
         return this.loadSourceAndDestinationEsShiftSummaryFor(param)
-            .then(currentStates => this.calculateEstimatinosAfterShift(currentStates, param.timeToShiftAsJiraString))
+            .then(currentStates => this.calculateEstimationsAfterShift(currentStates, param.timeToShiftAsJiraString))
             .then(this.updateEstimations);
     }
 
@@ -74,7 +74,7 @@ export default class EstimationService {
                     } as ShiftSummary)));
     }
 
-    private static calculateEstimatinosAfterShift(currentStates: ShiftSummary, timeToShiftAsJiraString: string): ShiftSummary {
+    private static calculateEstimationsAfterShift(currentStates: ShiftSummary, timeToShiftAsJiraString: string): ShiftSummary {
 
         const sourceOriginalEstimateInMinutes: number = currentStates.sourceEstimation.originalEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
         if (sourceOriginalEstimateInMinutes < 0) {
