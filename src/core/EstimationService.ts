@@ -53,12 +53,29 @@ export default class EstimationService {
             })
     }
 
-    public static shiftEstimation(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<{ newSourceEstimation: Estimation, newDestinationEstimation: Estimation }> {
+    public static shiftEstimation(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSummary> {
         // TODO: marmer 09.09.2019 implkement me
-        //load source and target estimations
-        //recalculate new estimations
-        //set new estimations
+        //todo load source and target estimations once again
 
+
+        const resultPromise = this.getEstimationsForIssue(param.sourceIssueKey)
+            .then(sourceEstimation => {
+                return this.getEstimationsForIssue(param.targetIssueKey)
+                    .then(targetEstimation => {
+                        return {
+                            newSourceEstimation: sourceEstimation,
+                            newDestinationEstimation: targetEstimation
+                        }
+                    })
+            })
+            .then(currentStates => {
+                //todo recalculate new estimations
+            })
+            .then(statesToUpdate => {
+                //todo send and set new estimations
+            });
+
+        return resultPromise;
 
         // const estimationRequest: EstimationRequest = {
         //     fields: {
@@ -77,26 +94,10 @@ export default class EstimationService {
         //     "body": JSON.stringify(estimationRequest)
         // })
 
-        return Promise.resolve()
-            .then(value => {
-                return {
-                    newSourceEstimation: {
-                        issueKey: "TODO",
-                        issueSummary: "TODO",
-                        originalEstimate: "TODO",
-                        originalEstimateInSeconds: 42,
-                        remainingEstimate: "TODO",
-                        remainingEstimateInSeconds: 42,
-                    },
-                    newDestinationEstimation: {
-                        issueKey: "TODO",
-                        issueSummary: "TODO",
-                        originalEstimate: "TODO",
-                        originalEstimateInSeconds: 42,
-                        remainingEstimate: "TODO",
-                        remainingEstimateInSeconds: 42
-                    }
-                }
-            });
     }
 }
+
+interface ShiftSummary {
+    newSourceEstimation: Estimation,
+    newDestinationEstimation: Estimation
+};
