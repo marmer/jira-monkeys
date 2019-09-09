@@ -45,9 +45,9 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                         <thead>
                         <tr>
                             <th onClick={() => this.sortByDisplayName()}>display name
-                                {this.state.sortColumn === "DISPLAY_NAME" && "*"}</th>
+                                {this.state.sortColumn === "DISPLAY_NAME" && "^"}</th>
                             <th onClick={() => this.sortByTime()}>time spent
-                                {this.state.sortColumn === "TIME_SPENT" && "*"}</th>
+                                {this.state.sortColumn === "TIME_SPENT" && "^"}</th>
                         </tr>
                         </thead>
                         <tbody>
