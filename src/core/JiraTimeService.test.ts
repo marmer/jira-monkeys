@@ -56,7 +56,7 @@ describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.jiraFormatToMinutes.na
         {jiraString: "2w", expectedTimeSpentInMinutes: 4800},
         {jiraString: "1w 59m", expectedTimeSpentInMinutes: 2459},
     ].forEach(parameter => {
-        it('should transform the jira String' + parameter.jiraString + ' into its numeric value in minutes "' + parameter.jiraString + '"', () => {
+        it('should transform the jira String "' + parameter.jiraString + '" into its numeric value in minutes "' + parameter.expectedTimeSpentInMinutes + '"', () => {
             expect(JiraTimeFormatter.jiraFormatToMinutes(parameter.jiraString)).toBe(parameter.expectedTimeSpentInMinutes)
         });
     });
