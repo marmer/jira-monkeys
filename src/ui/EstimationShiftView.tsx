@@ -53,7 +53,7 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
                            value={this.state.timeToShiftText}
                            onChange={e => this.onTimeToShiftTextChange(e)}/></label>}
                 {this.isEstimationShiftable() &&
-                <button type="button" onClick={() => console.log("Action on button performed")}>send</button>}
+                <button type="button" onClick={() => this.shiftEstimations()}>send</button>}
             </div>
             {this.state.targetIssueEstimation &&
             <EstimationView estimation={this.state.targetIssueEstimation} readonly={true}/>}
@@ -106,8 +106,23 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
         {/*// TODO: marmer 07.09.2019 Show only true when destination issue exists and time expression of shiftable time is  is valid*/
         }
         return !!this.state.targetIssueEstimation &&
+            !!this.state.sourceIssueEstimation &&
             !!this.state.timeToShiftText &&
             JiraFormatter.isValidJiraFormat(this.state.timeToShiftText)
+    }
+
+    private shiftEstimations() {
+        EstimationService.shiftEstimation({
+            sourceIssueKey: this.state.sourceIssueEstimation!.issueKey,
+            targetIssueKey: this.state.targetIssueEstimation!.issueKey,
+            timeToShiftAsJiraString: this.state.timeToShiftText
+        })
+            .then(result => this.setState({
+                sourceIssueEstimation: result.newSourceEstimation,
+                targetIssueEstimation: result.newDestinationEstimation
+            }))
+            // TODO: marmer 09.09.2019 care ;)
+            .catch(reason => alert("Something went wrong. Please check your estimations manually!"))
     }
 }
 
