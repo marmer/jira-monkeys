@@ -80,6 +80,7 @@ export default class EstimationService {
     }
 
     private static calculateEstimatinosAfterShift(currentStates: ShiftSummary, timeToShiftAsJiraString: string): ShiftSummary {
+        // TODO: marmer 09.09.2019 Handle negative results!
         const sourceRemainingEstimateInMinutes: number = currentStates.sourceEstimation.remainingEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
         const sourceOriginalEstimateInMinutes: number = currentStates.sourceEstimation.originalEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
         const targetRemainingEstimateInMinutes: number = currentStates.targetEstimation.remainingEstimateInMinutes + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
@@ -104,24 +105,50 @@ export default class EstimationService {
         };
     }
 
-    private static updateEstimations(): Promise<ShiftSummary> {
-        // TODO: marmer 09.09.2019 implement me ;)
-// const estimationRequest: EstimationRequest = {
-        //     fields: {
-        //         timetracking: {
-        //             originalEstimate: "2d",
-        //             remainingEstimate: "3h"
-        //         }
-        //     }
-        // };
-        // return fetch("***/rest/api/2/issue/***", {
-        //     "method": "PUT",
-        //     "headers": {
-        //         "content-type": "application/json",
-        //         "accept": "application/json"
-        //     },
-        //     "body": JSON.stringify(estimationRequest)
-        // })
+    private static updateEstimations(updateStates: ShiftSummary): Promise<ShiftSummary> {
+        return fetch(window.location.origin + "/rest/api/2/issue/" + updateStates.targetEstimation.issueKey,
+            {
+                "method": "PUT",
+                "headers": {
+                    "content-type": "application/json",
+                    "accept": "application/json"
+                },
+                "body": JSON.stringify({
+                    fields: {
+                        timetracking: {
+                            originalEstimate: updateStates.targetEstimation.originalEstimate,
+                            remainingEstimate: updateStates.targetEstimation.remainingEstimate
+                        }
+                    }
+                })
+            }
+        )
+            .then(result => {
+                if (result.status != 204) {
+                    throw "Error on updating destination ticket. Nothing was updated yet"
+                }
+                return fetch(window.location.origin + "/rest/api/2/issue/" + updateStates.sourceEstimation.issueKey, {
+                    "method": "PUT",
+                    "headers": {
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    },
+                    "body": JSON.stringify({
+                        fields: {
+                            timetracking: {
+                                originalEstimate: updateStates.sourceEstimation.originalEstimate,
+                                remainingEstimate: updateStates.sourceEstimation.remainingEstimate
+                            }
+                        }
+                    })
+                })
+                    .then(result => {
+                        if (result.status != 204) {
+                            throw "Error on updating source ticket while target is allready updated. Please fix source estimation manually."
+                        }
+                        return updateStates
+                    })
+            })
     }
 }
 
