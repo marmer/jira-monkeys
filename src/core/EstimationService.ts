@@ -59,15 +59,12 @@ export default class EstimationService {
 
 
         const resultPromise = this.getEstimationsForIssue(param.sourceIssueKey)
-            .then(sourceEstimation => {
-                return this.getEstimationsForIssue(param.targetIssueKey)
-                    .then(targetEstimation => {
-                        return {
-                            newSourceEstimation: sourceEstimation,
-                            newDestinationEstimation: targetEstimation
-                        }
-                    })
-            })
+            .then(sourceEstimation =>
+                this.getEstimationsForIssue(param.targetIssueKey)
+                    .then(targetEstimation => ({
+                        newSourceEstimation: sourceEstimation,
+                        newDestinationEstimation: targetEstimation
+                    })))
             .then(currentStates => {
                 //todo recalculate new estimations
             })
