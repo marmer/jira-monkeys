@@ -3,20 +3,14 @@ type Unit = {
     factor: number
 }
 
-
-const minute: Unit = {symbol: "m", factor: 1};
-const hour: Unit = {symbol: "h", factor: 60 * minute.factor};
-const day: Unit = {symbol: "d", factor: 8 * hour.factor};
-const week: Unit = {symbol: "w", factor: 5 * day.factor};
-
 const jiraSymbolFactorMap: {
     [symbol: string]: Unit;
 } = {};
 
-jiraSymbolFactorMap[minute.symbol] = minute;
-jiraSymbolFactorMap[hour.symbol] = hour;
-jiraSymbolFactorMap[day.symbol] = day;
-jiraSymbolFactorMap[week.symbol] = week;
+const minute: Unit = jiraSymbolFactorMap["m"] = {symbol: "m", factor: 1};
+const hour: Unit = jiraSymbolFactorMap["h"] = {symbol: "h", factor: 60 * minute.factor};
+const day: Unit = jiraSymbolFactorMap["d"] = {symbol: "d", factor: 8 * hour.factor};
+const week: Unit = jiraSymbolFactorMap["w"] = {symbol: "w", factor: 5 * day.factor};
 
 export default class JiraTimeService {
     public static toJiraFormat(timeSpentInMinutes: number) {
