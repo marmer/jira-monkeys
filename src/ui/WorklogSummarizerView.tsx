@@ -54,7 +54,7 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                         {this.state.worklogs.map(worklog =>
                             <tr key={worklog.author.displayName}>
                                 <td className="displayNameColumn">{worklog.author.displayName}</td>
-                                <td className="timeSpentColumn">{JiraTimeService.toJiraFormat(worklog.timeSpentInMinutes)}</td>
+                                <td className="timeSpentColumn">{JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes)}</td>
                             </tr>)}
                         </tbody>
                     </table>
