@@ -5,6 +5,13 @@ Jira Monkeys is a tool to provide some additional Functionality to jira which ma
 
 Of course it would be possible to create (or maybe buy) some jira Plugins with the same ability, but this project is used es a playground for me.
 
+Getting started
+---------------
+First you have to install the Tampermonkey to yuor browser. The Jira Monkeys are developed (and tested only) with chrome but may work with Firefox as well.
+You can find details on how to install Tampermonkey at: [https://www.tampermonkey.net/](https://www.tampermonkey.net/)
+
+Second you have to install the Jira Monkeys. If Tampermonkey is already installed a simple click [here](https://github.com/marmer/jira-monkeys/raw/master/dist/jira-monkeys.user.js) and an additional click on install should be enough. If this is not enough, you can install it manually. The just mentioned Tampermonkey documentation should be your friend.   
+
 Usage
 -----
 If you've installed the Plugin already open up any of your issues. You should see an inconspicuous checkbox without any text on the top left corner of the menu bar. If you click it, you will see all the currently implemented features.
