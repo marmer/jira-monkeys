@@ -6,5 +6,9 @@ cache:
   yarn: true
   directories:
     - node_modules
+install:
+  - yarn install
 script:
+  - yarn test
+after_script:
   - sonar-scanner
