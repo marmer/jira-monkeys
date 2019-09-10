@@ -8,5 +8,3 @@ cache:
     - node_modules
 script:
   - sonar-scanner
-install:
-  - yarn install
