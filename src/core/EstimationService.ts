@@ -32,9 +32,7 @@ interface EstimationRequest {
 
 export default class EstimationService {
     public static getEstimationsForIssue(issueKey: string): Promise<Estimation> {
-        const worklogsUrl = window.location.origin + "/rest/api/2/issue/" + issueKey;
-
-        return fetch(worklogsUrl, {"method": "GET"})
+        return fetch(window.location.origin + "/rest/api/2/issue/" + issueKey, {"method": "GET"})
             .then((response) => {
                 if (response.status !== 200) {
                     throw new Error("Bad status")
