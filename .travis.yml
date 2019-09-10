@@ -1,0 +1,12 @@
+language: node
+addons:
+  sonarcloud:
+    organization: "marmer-github"
+cache:
+  yarn: true
+  directories:
+    - node_modules
+script:
+  - sonar-scanner
+install:
+  - yarn install
