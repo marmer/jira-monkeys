@@ -1,7 +1,7 @@
 import JiraTimeFormatter from "./JiraTimeService";
 
 
-describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.minutesToJiraFormat.name, () => {
+describe("JiraTimeFormatter.minutesToJiraFormat", () => {
     [
         {timeSpentInMinutes: 0, expectedJiraString: "0m"},
         {timeSpentInMinutes: 59, expectedJiraString: "59m"},
@@ -21,7 +21,7 @@ describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.minutesToJiraFormat.na
     });
 });
 
-describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.isValidJiraFormat.name, () => {
+describe("JiraTimeFormatter.isValidJiraFormat()", () => {
     [
         {input: "1m", isJiraFormat: true},
         {input: "1h", isJiraFormat: true},
@@ -43,7 +43,7 @@ describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.isValidJiraFormat.name
     })
 });
 
-describe(JiraTimeFormatter.name + "." + JiraTimeFormatter.jiraFormatToMinutes.name, () => {
+describe("JiraTimeFormatter.jiraFormatToMinutes()", () => {
     [
         {jiraString: "0m", expectedTimeSpentInMinutes: 0},
         {jiraString: "59m", expectedTimeSpentInMinutes: 59},

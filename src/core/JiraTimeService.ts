@@ -46,7 +46,6 @@ export default class JiraTimeService {
                 )
                     .reduce((r1, r2) => r1 + r2);
             })
-            // .map(unit => 1)
             .reduce((v1, v2) => v1 + v2);
     }
 
