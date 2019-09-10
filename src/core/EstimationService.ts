@@ -32,10 +32,11 @@ interface EstimationRequest {
 
 export default class EstimationService {
     public static getEstimationsForIssue(issueKey: string): Promise<Estimation> {
-        return fetch(window.location.origin + "/rest/api/2/issue/" + issueKey, {"method": "GET"})
+        const requestUrl = window.location.origin + "/rest/api/2/issue/" + issueKey;
+        return fetch(requestUrl, {"method": "GET"})
             .then((response) => {
                 if (response.status !== 200) {
-                    throw new Error("Bad status")
+                    throw new Error("Unexpected request status: " + response.status)
                 }
                 return response.json()
             })
