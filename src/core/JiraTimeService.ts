@@ -25,7 +25,7 @@ export default class JiraTimeService {
 
     public static isValidJiraFormat(jiraString: string): boolean {
         const unitSymbols: string = Object.keys(jiraSymbolFactorMap).join();
-        return new RegExp("^\\s*\\d+[" + unitSymbols + "](\\s+\\d+[" + unitSymbols + "])*?\\s*$").test(jiraString);
+        return new RegExp("^\\s*((\\d+[" + unitSymbols + "](\\s+\\d+[" + unitSymbols + "])*?)|(0+))?\\s*$").test(jiraString);
     };
 
     public static jiraFormatToMinutes(jiraString: string): number {

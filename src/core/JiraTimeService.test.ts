@@ -23,6 +23,10 @@ describe("JiraTimeFormatter.minutesToJiraFormat", () => {
 
 describe("JiraTimeFormatter.isValidJiraFormat()", () => {
     [
+        {input: "  \t ", isJiraFormat: true},
+        {input: " ", isJiraFormat: true},
+        {input: "0", isJiraFormat: true},
+        {input: "0000", isJiraFormat: true},
         {input: "1m", isJiraFormat: true},
         {input: "1h", isJiraFormat: true},
         {input: "1d", isJiraFormat: true},
@@ -45,8 +49,14 @@ describe("JiraTimeFormatter.isValidJiraFormat()", () => {
 
 describe("JiraTimeFormatter.jiraFormatToMinutes()", () => {
     [
+        {jiraString: "", expectedTimeSpentInMinutes: 0},
+        {jiraString: "    ", expectedTimeSpentInMinutes: 0},
+        {jiraString: "0", expectedTimeSpentInMinutes: 0},
+        {jiraString: "0000", expectedTimeSpentInMinutes: 0},
+        {jiraString: "   0000   ", expectedTimeSpentInMinutes: 0},
         {jiraString: "0m", expectedTimeSpentInMinutes: 0},
         {jiraString: "59m", expectedTimeSpentInMinutes: 59},
+        {jiraString: "   59m   ", expectedTimeSpentInMinutes: 59},
         {jiraString: "1h", expectedTimeSpentInMinutes: 60},
         {jiraString: "7h 59m", expectedTimeSpentInMinutes: 479},
         {jiraString: "1d", expectedTimeSpentInMinutes: 480},
