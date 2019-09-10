@@ -58,6 +58,7 @@ describe("JiraTimeFormatter", () => {
             {jiraString: "59m", expectedTimeSpentInMinutes: 59},
             {jiraString: "   59m   ", expectedTimeSpentInMinutes: 59},
             {jiraString: "1h", expectedTimeSpentInMinutes: 60},
+            {jiraString: "1h 5m 2h", expectedTimeSpentInMinutes: 185},
             {jiraString: "7h 59m", expectedTimeSpentInMinutes: 479},
             {jiraString: "1d", expectedTimeSpentInMinutes: 480},
             {jiraString: "4d 7h 59m", expectedTimeSpentInMinutes: 2399},

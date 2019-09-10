@@ -40,10 +40,7 @@ export default class JiraTimeService {
                 if (!match) {
                     return 0
                 }
-                return match.map(m => m.match(/\d+/g)!
-                    .map(Number.parseInt)
-                    .reduce((r1, r2) => r1 + r2) * unit.factor
-                )
+                return match.map(m => Number.parseInt(m.match(/\d+/g)![0]) * unit.factor)
                     .reduce((r1, r2) => r1 + r2);
             })
             .reduce((v1, v2) => v1 + v2);
