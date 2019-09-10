@@ -44,9 +44,9 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                     <table>
                         <thead>
                         <tr>
-                            <th onClick={() => this.sortByDisplayName()}>display name
+                            <th onClick={() => this.sortWorklogsByDisplayName()}>display name
                                 {this.state.sortColumn === "DISPLAY_NAME" && "^"}</th>
-                            <th onClick={() => this.sortByTime()}>time spent
+                            <th onClick={() => this.sortWorklogsByTime()}>time spent
                                 {this.state.sortColumn === "TIME_SPENT" && "^"}</th>
                         </tr>
                         </thead>
@@ -63,16 +63,22 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
 
     }
 
-    private sortByTime() {
+    private sortWorklogsByTime() {
         this.setState({
-            worklogs: this.state.worklogs.sort((wl1, wl2) => wl1.timeSpentInMinutes - wl2.timeSpentInMinutes),
+            worklogs: this.getAsSortedByComparator(this.state.worklogs, (wl1: Worklog, wl2: Worklog) => wl1.timeSpentInMinutes - wl2.timeSpentInMinutes),
             sortColumn: "TIME_SPENT"
         })
     }
 
-    private sortByDisplayName() {
+    private getAsSortedByComparator(worklogs: Worklog[], comparator: (wl1: Worklog, wl2: Worklog) => number) {
+        const result = [...worklogs];
+        result.sort(comparator);
+        return result;
+    }
+
+    private sortWorklogsByDisplayName() {
         this.setState({
-            worklogs: this.state.worklogs.sort((wl1, wl2) => wl1.author.displayName < wl2.author.displayName ? -1 : 1),
+            worklogs: this.getAsSortedByComparator(this.state.worklogs, (wl1: Worklog, wl2: Worklog) => wl1.author.displayName < wl2.author.displayName ? -1 : 1),
             sortColumn: "DISPLAY_NAME"
         })
     }
