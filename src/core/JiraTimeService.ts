@@ -37,13 +37,12 @@ export default class JiraTimeService {
             .map(key => jiraSymbolFactorMap[key])
             .map(unit => {
                 const match: RegExpMatchArray | null = jiraString.match(new RegExp("(\\d+)" + unit.symbol, "g"));
-                if (!match) {
-                    return 0
-                }
-                return match.map(m => Number.parseInt(m.match(/\d+/g)![0]) * unit.factor)
-                    .reduce((r1, r2) => r1 + r2);
+                return !match ?
+                    0 :
+                    match.map(m => Number.parseInt(m.replace(unit.symbol, "")) * unit.factor)
+                        .reduce(this.sum);
             })
-            .reduce((v1, v2) => v1 + v2);
+            .reduce(this.sum);
     }
 
     private static weeksOf(timeSpentInMinutes: number): number {
@@ -81,6 +80,10 @@ export default class JiraTimeService {
     private static unitStringFor(result: number, unit: Unit): string {
         return result == 0 ? "" : result + unit.symbol
     };
+
+    private static sum(v1: number, v2: number): number {
+        return v1 + v2;
+    }
 }
 
 
