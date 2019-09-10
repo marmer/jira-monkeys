@@ -1,4 +1,5 @@
 import JiraTimeFormatter from "./JiraTimeService";
+import JiraTimeService from "./JiraTimeService";
 
 describe("JiraTimeFormatter", () => {
     describe("minutesToJiraFormat", () => {
@@ -70,6 +71,10 @@ describe("JiraTimeFormatter", () => {
             it('should transform the jira String "' + parameter.jiraString + '" into its numeric value in minutes "' + parameter.expectedTimeSpentInMinutes + '"', () => {
                 expect(JiraTimeFormatter.jiraFormatToMinutes(parameter.jiraString)).toBe(parameter.expectedTimeSpentInMinutes)
             });
+        });
+
+        it('should throw an appropriate error when the jira format to convert is not valid', () => {
+            expect(() => JiraTimeService.jiraFormatToMinutes("25blubba")).toThrowError("'25blubba' is not a valid jira String");
         });
     });
 });
