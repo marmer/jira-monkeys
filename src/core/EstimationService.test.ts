@@ -7,7 +7,7 @@ describe("EstimationService", () => {
     beforeEach(() => {
         fetchMock.restore()
     });
-    describe("getEstimationsForIssue", () => {
+    describe("getEstimationsForIssue()", () => {
 
         it('should serve an appropriate errormessage on a bad status', () => {
             fetchMock.mock('http://localhost/rest/api/2/issue/issue-200', {
@@ -63,5 +63,10 @@ describe("EstimationService", () => {
                     ))
                 .catch(reason => fail(reason))
         });
+    });
+
+    describe("shiftEstimation()", () => {
+
+        // TODO: marmer 10.09.2019 go on here!
     });
 });
