@@ -59,6 +59,13 @@ describe("WorklogService", () => {
                             timeSpent: "1w 3d",
                             timeSpentSeconds: 230400,
                         },
+                        {
+                            author: {
+                                displayName: "Jery Mouse",
+                            },
+                            timeSpent: "7h",
+                            timeSpentSeconds: 25200,
+                        },
                     ],
                 }),
             });
@@ -70,7 +77,7 @@ describe("WorklogService", () => {
                             author: {
                                 displayName: "Jery Mouse",
                             },
-                            timeSpentInMinutes: 420,
+                            timeSpentInMinutes: 840,
                         },
                         {
                             author: {
