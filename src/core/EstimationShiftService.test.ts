@@ -104,6 +104,48 @@ describe("EstimationShiftService", () => {
                 });
             });
         });
+        it("should set remaining estimations at the source to 0 if shifting is possible but the shift value is bigger than remaining", () => {
+            EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
+                (ik) => {
+                    expect(ik).toMatch(/((sourceIssue-1234)|(targetIssue-42))/);
+                    return Promise.resolve({
+                        ...someEstimation,
+                        issueKey: ik,
+                        originalEstimateInMinutes: 60,
+                        remainingEstimateInMinutes: 30,
+                        originalEstimate: "1h",
+                        remainingEstimate: "30m",
+                    } as Estimation);
+                });
+
+            EstimationCrudService.updateEstimation = jest.fn()
+                .mockReturnValue(Promise.resolve());
+
+            return underTest.shiftEstimation({
+                timeToShiftAsJiraString: "45m",
+                targetIssueKey: "targetIssue-42",
+                sourceIssueKey: "sourceIssue-1234",
+            }).then(result => {
+                expect(result).toStrictEqual({
+                    sourceEstimation: {
+                        ...someEstimation,
+                        issueKey: "sourceIssue-1234",
+                        originalEstimateInMinutes: 15,
+                        remainingEstimateInMinutes: 0,
+                        originalEstimate: "15m",
+                        remainingEstimate: "0m",
+                    },
+                    targetEstimation: {
+                        ...someEstimation,
+                        issueKey: "targetIssue-42",
+                        originalEstimateInMinutes: 105,
+                        remainingEstimateInMinutes: 75,
+                        originalEstimate: "1h 45m",
+                        remainingEstimate: "1h 15m",
+                    },
+                });
+            });
+        });
 
         it("should simply return the issues if they are equal even in different cases", () => {
             EstimationCrudService.getEstimationsForIssueKey = (ik) => {
@@ -121,4 +163,10 @@ describe("EstimationShiftService", () => {
             });
         });
     });
+
+    // TODO: marmer 11.09.2019 target shifting fails
+    // TODO: marmer 11.09.2019 source shifting fails
+    // TODO: marmer 11.09.2019 budget not set on target
+    // TODO: marmer 11.09.2019 budget not set on source
+    // TODO: marmer 11.09.2019 not enough budget left on source
 });
