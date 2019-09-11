@@ -273,7 +273,7 @@ describe("EstimationShiftService", () => {
             );
         });
 
-        it("should throw an appropriate error and not update anything if it was not possible to update the target", () => {
+        it("should throw an appropriate error and not update anything if it was not possible to update the target issue", () => {
             EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
                 (ik) => {
                     expect(ik).toMatch(/((sourceIssue-1234)|(targetIssue-42))/);
@@ -301,6 +301,34 @@ describe("EstimationShiftService", () => {
                 expect(reason).toEqual(new Error("Error on updating destination issue. Nothing was updated yet"));
             });
         });
+        it("should throw an appropriate error if it was not possible to update the source issue", () => {
+            EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
+                (ik) => {
+                    expect(ik).toMatch(/((sourceIssue-1234)|(targetIssue-42))/);
+                    return Promise.resolve({
+                        ...someEstimation,
+                        issueKey: ik,
+                        originalEstimateInMinutes: 60,
+                        remainingEstimateInMinutes: 30,
+                        originalEstimate: "1h",
+                        remainingEstimate: "30m",
+                    } as Estimation);
+                });
+
+            EstimationCrudService.updateEstimation = jest.fn()
+                .mockImplementation(param => {
+                    return param.issueKey === "targetIssue-42" ?
+                        Promise.resolve()
+                        : Promise.reject("something went wrong at the update");
+                });
+
+            return underTest.shiftEstimation({
+                timeToShiftAsJiraString: "15m",
+                targetIssueKey: "targetIssue-42",
+                sourceIssueKey: "sourceIssue-1234",
+            }).catch(reason => {
+                expect(reason).toEqual(new Error("Error on updating source issue while target is already updated. Please fix source estimation manually."));
+            });
+        });
     });
-    // TODO: marmer 11.09.2019 source shifting fails
 });
