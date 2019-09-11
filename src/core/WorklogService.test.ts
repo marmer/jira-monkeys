@@ -54,6 +54,13 @@ describe("WorklogService", () => {
                         },
                         {
                             author: {
+                                displayName: "Pet Owner",
+                            },
+                            timeSpent: "1m",
+                            timeSpentSeconds: 60,
+                        },
+                        {
+                            author: {
                                 displayName: "Tom Tomcat",
                             },
                             timeSpent: "1w 3d",
@@ -78,6 +85,12 @@ describe("WorklogService", () => {
                                 displayName: "Jery Mouse",
                             },
                             timeSpentInMinutes: 840,
+                        },
+                        {
+                            author: {
+                                displayName: "Pet Owner",
+                            },
+                            timeSpentInMinutes: 1,
                         },
                         {
                             author: {
