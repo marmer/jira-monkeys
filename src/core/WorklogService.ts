@@ -16,12 +16,10 @@ export default class WorklogService {
     }
 
     private static getWorklogsPerUser(issueKey: string) {
-        const worklogsUrl = window.location.origin + "/rest/api/2/issue/" + issueKey + "/worklog";
-
-        return fetch(worklogsUrl, {method: "GET"})
+        return fetch(IssueSiteInfos.getWorklogUrlForIssueKey(issueKey), {method: "GET"})
             .then((response) => {
                 if (response.status !== 200) {
-                    throw new Error("Bad status");
+                    throw new Error("Unexpected request status: " + response.status);
                 }
                 return response.json();
             })
