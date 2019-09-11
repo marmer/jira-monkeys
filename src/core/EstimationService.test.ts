@@ -26,10 +26,8 @@ describe("EstimationService", () => {
                 status: 500,
             });
 
-            EstimationService.getEstimationsForIssue("issue-200")
-                .then((result) =>
-                    fail("No result should be served if no success status is served but was: " + JSON.stringify(result)))
-                .catch((error) => expect(error).toBe("Unexpected request status: 500"));
+            return EstimationService.getEstimationsForIssue("issue-200")
+                .catch((error) => expect(error).toEqual(Error("Unexpected request status: 500")));
         });
         it("should return the estimations for from the rest api", () => {
 
@@ -49,7 +47,7 @@ describe("EstimationService", () => {
                 status: 200,
             });
 
-            EstimationService.getEstimationsForIssue("issue-200")
+            return EstimationService.getEstimationsForIssue("issue-200")
                 .then((result) =>
                     deepEqual(result,
                         {
@@ -61,12 +59,6 @@ describe("EstimationService", () => {
                             remainingEstimateInMinutes: 24,
                         },
                     ))
-                .catch((reason) => fail(reason));
         });
-    });
-
-    describe("shiftEstimation()", () => {
-
-        // TODO: marmer 10.09.2019 go on here!
     });
 });

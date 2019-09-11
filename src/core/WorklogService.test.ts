@@ -8,6 +8,23 @@ describe("WorklogService", () => {
     });
 
     describe("getSummedWorklogsByUser", () => {
+        it("should throw an appropriate error witht he status code on an unexpected status code", () => {
+            IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue("isskey-1");
+            IssueSiteInfos.getWorklogUrlForIssueKey = jest.fn().mockImplementation(issueKey => {
+                if (issueKey !== "isskey-1") {
+                    fail("Request for wrong issue key");
+                }
+                return "worklogUrl";
+            });
+            const unexpectedStatusCode = 404;
+            fetchMock.get("worklogUrl", {
+                status: unexpectedStatusCode,
+            });
+
+            return WorklogService.getSummedWorklogsByUser()
+                .catch(reason => expect(reason).toEqual(new Error("Unexpected request status: " + unexpectedStatusCode)));
+        });
+
         it("should return and summed list of worklogs gruped by authors displayname and sorted by display name", () => {
             IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue("isskey-1");
             IssueSiteInfos.getWorklogUrlForIssueKey = jest.fn().mockImplementation(issueKey => {
@@ -26,27 +43,27 @@ describe("WorklogService", () => {
                                 displayName: "Tom Tomcat",
                             },
                             timeSpent: "1d",
-                            timeSpentSeconds: 480,
+                            timeSpentSeconds: 28800,
                         },
                         {
                             author: {
                                 displayName: "Jery Mouse",
                             },
                             timeSpent: "7h",
-                            timeSpentSeconds: 420,
+                            timeSpentSeconds: 25200,
                         },
                         {
                             author: {
                                 displayName: "Tom Tomcat",
                             },
                             timeSpent: "1w 3d",
-                            timeSpentSeconds: 3840,
+                            timeSpentSeconds: 230400,
                         },
                     ],
                 }),
             });
 
-            WorklogService.getSummedWorklogsByUser()
+            return WorklogService.getSummedWorklogsByUser()
                 .then(result => {
                     const expectedResult: Worklog[] = [
                         {
@@ -63,8 +80,7 @@ describe("WorklogService", () => {
                         },
                     ];
                     expect(result).toStrictEqual(expectedResult);
-                })
-                .catch(reason => fail(reason));
+                });
         });
     });
 });
