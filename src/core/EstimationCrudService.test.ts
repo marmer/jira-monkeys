@@ -8,7 +8,6 @@ describe("EstimationCrudService", () => {
         fetchMock.restore();
     });
     describe("getEstimationsForIssue()", () => {
-
         it("should serve an appropriate errormessage on a bad status", () => {
             fetchMock.mock("http://localhost/rest/api/2/issue/issue-200", {
                 body: JSON.stringify({
@@ -26,11 +25,11 @@ describe("EstimationCrudService", () => {
                 status: 500,
             });
 
-            return EstimationCrudService.getEstimationsForIssue("issue-200")
+            return EstimationCrudService.getEstimationsForIssueKey("issue-200")
                 .catch((error) => expect(error).toEqual(Error("Unexpected request status: 500")));
         });
-        it("should return the estimations for from the rest api", () => {
 
+        it("should return the estimations for from the rest api", () => {
             fetchMock.mock("http://localhost/rest/api/2/issue/issue-200", {
                 body: JSON.stringify({
                         fields: {
@@ -47,7 +46,7 @@ describe("EstimationCrudService", () => {
                 status: 200,
             });
 
-            return EstimationCrudService.getEstimationsForIssue("issue-200")
+            return EstimationCrudService.getEstimationsForIssueKey("issue-200")
                 .then((result) =>
                     deepEqual(result,
                         {
