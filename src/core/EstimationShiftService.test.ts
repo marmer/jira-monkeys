@@ -104,6 +104,7 @@ describe("EstimationShiftService", () => {
                 });
             });
         });
+
         it("should set remaining estimations at the source to 0 if shifting is possible but the shift value is bigger than remaining", () => {
             EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
                 (ik) => {
@@ -144,6 +145,37 @@ describe("EstimationShiftService", () => {
                         remainingEstimate: "1h 15m",
                     },
                 });
+            });
+        });
+        it("should raise an error without updating anything when not enough estimation time is left on the source issue", () => {
+            EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
+                (ik) => {
+                    expect(ik).toMatch(/((sourceIssue-1234)|(targetIssue-42))/);
+                    return Promise.resolve(ik === "sourceIssue-1234" ?
+                        {
+                            ...someEstimation,
+                            issueKey: ik,
+                            originalEstimateInMinutes: 15,
+                            originalEstimate: "15m",
+                        } as Estimation :
+                        {
+                            ...someEstimation,
+                            issueKey: ik,
+                        } as Estimation);
+                });
+
+            const updateEstimationMock = jest.fn()
+                .mockReturnValue(Promise.resolve());
+            EstimationCrudService.updateEstimation = updateEstimationMock;
+
+            return underTest.shiftEstimation({
+                timeToShiftAsJiraString: "30m",
+                targetIssueKey: "targetIssue-42",
+                sourceIssueKey: "sourceIssue-1234",
+            }).catch(reason => {
+                expect(reason).toStrictEqual(new Error("It is not possible to shift more estimation time than exists on sourceIssue-1234"));
+                expect(updateEstimationMock.mock.calls).toHaveLength(0);
+
             });
         });
 
