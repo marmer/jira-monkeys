@@ -145,8 +145,6 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 this.loadEstimations();
                 return alert("Something went wrong: " + reason);
             });
-
-        // TODO: marmer 10.09.2019 reload page on success as soon as all the states have been remembered
     }
 }
 
