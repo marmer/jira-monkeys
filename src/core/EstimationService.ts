@@ -139,23 +139,26 @@ export default class EstimationService {
                 },
                 method: "PUT",
             },
-        );
+        ).then(response => {
+            if (response.status !== 204) {
+                throw new Error("Unexpected request status: " + response.status);
+            }
+            return response;
+        });
     }
 
     private static updateEstimations(updateStates: ShiftSummary): Promise<ShiftSummary> {
         return EstimationService.fetchEstimationUpdate(updateStates.targetEstimation)
-            .then(targetResult => {
-                if (targetResult.status !== 204) {
-                    throw new Error("Error on updating destination ticket. Nothing was updated yet");
-                }
-                return EstimationService.fetchEstimationUpdate(updateStates.sourceEstimation)
-                    .then((sourceResult) => {
-                        if (sourceResult.status !== 204) {
+            .then(targetResult =>
+                    EstimationService.fetchEstimationUpdate(updateStates.sourceEstimation)
+                        .catch((sourceResult) => {
                             throw new Error("Error on updating source ticket while target is allready updated. Please fix source estimation manually.");
-                        }
-                        return updateStates;
-                    });
-            });
+                        }),
+                reason => {
+                    throw new Error("Error on updating destination ticket. Nothing was updated yet");
+                },
+            )
+            .then(() => updateStates);
     }
 }
 
