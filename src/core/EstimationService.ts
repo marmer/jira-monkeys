@@ -72,12 +72,27 @@ export default class EstimationService {
                     .then((targetEstimation) => ({
                         sourceEstimation,
                         targetEstimation,
-                    } as ShiftSummary)));
+                    } as ShiftSummary))
+                    .then(summary => {
+                        summary.sourceEstimation = {
+                            ...summary.sourceEstimation,
+                            originalEstimate: JiraTimeService.minutesToJiraFormat(!summary.sourceEstimation.originalEstimateInMinutes ? 0 : summary.sourceEstimation.originalEstimateInMinutes),
+                            originalEstimateInMinutes: !summary.sourceEstimation.originalEstimateInMinutes ? 0 : summary.sourceEstimation.originalEstimateInMinutes,
+                            remainingEstimate: JiraTimeService.minutesToJiraFormat(!summary.sourceEstimation.remainingEstimateInMinutes ? 0 : summary.sourceEstimation.remainingEstimateInMinutes),
+                            remainingEstimateInMinutes: !summary.sourceEstimation.remainingEstimateInMinutes ? 0 : summary.sourceEstimation.remainingEstimateInMinutes,
+                        };
+                        summary.targetEstimation = {
+                            ...summary.targetEstimation,
+                            originalEstimate: JiraTimeService.minutesToJiraFormat(!summary.targetEstimation.originalEstimateInMinutes ? 0 : summary.targetEstimation.originalEstimateInMinutes),
+                            originalEstimateInMinutes: !summary.targetEstimation.originalEstimateInMinutes ? 0 : summary.targetEstimation.originalEstimateInMinutes,
+                            remainingEstimate: JiraTimeService.minutesToJiraFormat(!summary.targetEstimation.remainingEstimateInMinutes ? 0 : summary.targetEstimation.remainingEstimateInMinutes),
+                            remainingEstimateInMinutes: !summary.targetEstimation.remainingEstimateInMinutes ? 0 : summary.targetEstimation.remainingEstimateInMinutes,
+                        };
+                        return summary;
+                    }));
     }
 
     private static calculateEstimationsAfterShift(currentStates: ShiftSummary, timeToShiftAsJiraString: string): ShiftSummary {
-        // TODO: marmer 11.09.2019 it is possible that the target ticket has no estimation at all. This should be handled like 0
-
         const sourceOriginalEstimateInMinutes: number = currentStates.sourceEstimation.originalEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
         if (sourceOriginalEstimateInMinutes < 0) {
             throw new Error("It is not possible to shift more estimation time than exists on " + currentStates.sourceEstimation.issueKey);
