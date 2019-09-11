@@ -1,5 +1,13 @@
+import WindowService from "./WindowService";
+
 export default class IssueSiteInfos {
     public static getCurrentIssueKey(): string {
-        return window.location.pathname.replace("/browse/", "")
+        const windowLocationPathname = WindowService.getWindowLocationPathname();
+
+        return !windowLocationPathname.startsWith("/browse/") ?
+            "" :
+            windowLocationPathname
+                .replace("/browse/", "")
+                .replace(/\/.*/, "");
     }
 }
