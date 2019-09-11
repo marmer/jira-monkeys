@@ -151,14 +151,14 @@ export default class EstimationService {
         return EstimationService.fetchEstimationUpdate(updateStates.targetEstimation)
             .then(targetResult =>
                     EstimationService.fetchEstimationUpdate(updateStates.sourceEstimation)
-                        .catch((sourceResult) => {
-                            throw new Error("Error on updating source ticket while target is allready updated. Please fix source estimation manually.");
-                        }),
+                        .then(() => updateStates,
+                            reason => {
+                                throw new Error("Error on updating source issue while target is already updated. Please fix source estimation manually.");
+                            }),
                 reason => {
-                    throw new Error("Error on updating destination ticket. Nothing was updated yet");
+                    throw new Error("Error on updating destination issue. Nothing was updated yet");
                 },
-            )
-            .then(() => updateStates);
+            );
     }
 }
 
