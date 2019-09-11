@@ -1,28 +1,37 @@
 import deepEqual from "deep-equal";
 
 import fetchMock from "fetch-mock";
-import EstimationCrudService, {Estimation} from "./EstimationCrudService";
+import EstimationCrudService from "./EstimationCrudService";
 import IssueSiteInfos from "./IssueSiteInfos";
 
 describe("EstimationCrudService", () => {
     beforeEach(() => {
         fetchMock.reset();
-        fetchMock.resetHistory();
-        fetchMock.resetBehavior();
+        jest.resetAllMocks();
     });
     describe("updateEstimation", () => {
-        it("should update the estimation and return succesfully on the right status code", () => {
+        it("should fail with an appropriate error when the server responds with an unexpected status", () => {
             const issueKey = "issueKey-1234";
-            const updateUrl = "updateUrl";
-            const updateEstimation: Estimation = {
+            const updateUrl = "http://fancy.com/updateUrl";
+            IssueSiteInfos.getIssueUrlForIssueKey = jest.fn().mockImplementation(ik => {
+                expect(ik).toEqual(issueKey);
+                return updateUrl;
+            });
+
+            fetchMock.put(updateUrl, 500);
+            return EstimationCrudService.updateEstimation({
                 issueKey,
                 issueSummary: "issueSummary",
-                originalEstimate: "originalEstimate",
+                originalEstimate: "originalEstimateValue",
                 originalEstimateInMinutes: 42,
-                remainingEstimate: "remainingEstimate",
+                remainingEstimate: "remainingEstimateValue",
                 remainingEstimateInMinutes: 24,
-            };
+            }).catch(result => expect(result).toEqual(new Error("Unexpected request status: 500")));
+        });
 
+        it("should update the estimation and return succesfully on the right status code", () => {
+            const issueKey = "issueKey-1234";
+            const updateUrl = "http://fancy.com/updateUrl";
             IssueSiteInfos.getIssueUrlForIssueKey = jest.fn().mockImplementation(ik => {
                 expect(ik).toEqual(issueKey);
                 return updateUrl;
@@ -30,20 +39,41 @@ describe("EstimationCrudService", () => {
 
             fetchMock.put(updateUrl, 204);
 
-            // TODO: marmer 11.09.2019 go on here
-
-            return EstimationCrudService.updateEstimation(updateEstimation)
+            return EstimationCrudService.updateEstimation({
+                issueKey,
+                issueSummary: "issueSummary",
+                originalEstimate: "originalEstimateValue",
+                originalEstimateInMinutes: 42,
+                remainingEstimate: "remainingEstimateValue",
+                remainingEstimateInMinutes: 24,
+            })
                 .then(() => {
-                    const lastCall = fetchMock.lastCall((url, opts) => url === updateUrl && deepEqual(opts.body, JSON.stringify(updateEstimation)));
-                    expect(lastCall).toBeTruthy();
+                    const called = fetchMock.called((url, opts) => {
+                        return url === updateUrl &&
+                            opts.body === JSON.stringify({
+                                    fields: {
+                                        timetracking: {
+                                            originalEstimate: "originalEstimateValue",
+                                            remainingEstimate: "remainingEstimateValue",
+                                        },
+                                    },
+                                },
+                            );
+                    });
+                    expect(called).toBeTruthy();
                 });
-
         });
     });
 
     describe("getEstimationsForIssue()", () => {
         it("should serve an appropriate errormessage on a bad status", () => {
-            fetchMock.mock("http://localhost/rest/api/2/issue/issue-200", {
+            const issueKey = "issue-200";
+            const updateUrl = "http://fancy.com/updateUrl";
+            IssueSiteInfos.getIssueUrlForIssueKey = jest.fn().mockImplementation(ik => {
+                expect(ik).toEqual(issueKey);
+                return updateUrl;
+            });
+            fetchMock.mock(updateUrl, {
                 body: JSON.stringify({
                         fields: {
                             summary: "issueSummary",
@@ -59,12 +89,18 @@ describe("EstimationCrudService", () => {
                 status: 500,
             });
 
-            return EstimationCrudService.getEstimationsForIssueKey("issue-200")
+            return EstimationCrudService.getEstimationsForIssueKey(issueKey)
                 .catch((error) => expect(error).toEqual(Error("Unexpected request status: 500")));
         });
 
         it("should return the estimations for from the rest api", () => {
-            fetchMock.mock("http://localhost/rest/api/2/issue/issue-200", {
+            const issueKey = "issue-200";
+            const updateUrl = "http://fancy.com/updateUrl";
+            IssueSiteInfos.getIssueUrlForIssueKey = jest.fn().mockImplementation(ik => {
+                expect(ik).toEqual(issueKey);
+                return updateUrl;
+            });
+            fetchMock.mock(updateUrl, {
                 body: JSON.stringify({
                         fields: {
                             summary: "issueSummary",
@@ -80,7 +116,7 @@ describe("EstimationCrudService", () => {
                 status: 200,
             });
 
-            return EstimationCrudService.getEstimationsForIssueKey("issue-200")
+            return EstimationCrudService.getEstimationsForIssueKey(issueKey)
                 .then((result) =>
                     deepEqual(result,
                         {
