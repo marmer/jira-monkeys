@@ -1,9 +1,9 @@
 import deepEqual from "deep-equal";
 
 import fetchMock from "fetch-mock";
-import EstimationService from "./EstimationService";
+import EstimationCrudService from "./EstimationCrudService";
 
-describe("EstimationService", () => {
+describe("EstimationCrudService", () => {
     beforeEach(() => {
         fetchMock.restore();
     });
@@ -26,7 +26,7 @@ describe("EstimationService", () => {
                 status: 500,
             });
 
-            return EstimationService.getEstimationsForIssue("issue-200")
+            return EstimationCrudService.getEstimationsForIssue("issue-200")
                 .catch((error) => expect(error).toEqual(Error("Unexpected request status: 500")));
         });
         it("should return the estimations for from the rest api", () => {
@@ -47,7 +47,7 @@ describe("EstimationService", () => {
                 status: 200,
             });
 
-            return EstimationService.getEstimationsForIssue("issue-200")
+            return EstimationCrudService.getEstimationsForIssue("issue-200")
                 .then((result) =>
                     deepEqual(result,
                         {

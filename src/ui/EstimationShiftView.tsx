@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import EstimationService, {Estimation} from "../core/EstimationService";
+import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
+import EstimationShiftService from "../core/EstimationShiftService";
 import IssueSiteInfos from "../core/IssueSiteInfos";
 import JiraTimeService from "../core/JiraTimeService";
 import "./EstimationShiftView.css";
@@ -88,7 +89,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
             targetIssueEstimation: null,
             targetIssueEstimationState: "LOADING",
         });
-        EstimationService.getEstimationsForIssue(this.state.targetIssueText)
+        EstimationCrudService.getEstimationsForIssueKey(this.state.targetIssueText)
             .then(estimation => this.setState({
                 targetIssueEstimation: estimation,
                 targetIssueEstimationState: "DONE",
@@ -101,7 +102,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
             sourceIssueEstimation: null,
             sourceIssueEstimationState: "LOADING",
         });
-        EstimationService.getEstimationsForIssue(IssueSiteInfos.getCurrentIssueKey())
+        EstimationCrudService.getEstimationsForIssueKey(IssueSiteInfos.getCurrentIssueKey())
             .then(estimation => this.setState({
                 sourceIssueEstimation: estimation,
                 sourceIssueEstimationState: "DONE",
@@ -130,7 +131,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
     }
 
     private shiftEstimations() {
-        EstimationService.shiftEstimation({
+        EstimationShiftService.shiftEstimation({
             sourceIssueKey: this.state.sourceIssueEstimation!.issueKey,
             targetIssueKey: this.state.targetIssueEstimation!.issueKey,
             timeToShiftAsJiraString: this.state.timeToShiftText,
