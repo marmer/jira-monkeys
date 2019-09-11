@@ -10,4 +10,12 @@ export default class IssueSiteInfos {
                 .replace("/browse/", "")
                 .replace(/\/.*/, "");
     }
+
+    public static getWorklogUrlForIssueKey(issueKey: string) {
+        return WindowService.getWindowLocationOrigin() + "/rest/api/2/issue/" + issueKey + "/worklog";
+    }
+
+    public static getIssueUrlForIssueKey(issueKey: string): string {
+        return WindowService.getWindowLocationOrigin() + "/rest/api/2/issue/" + issueKey;
+    }
 }

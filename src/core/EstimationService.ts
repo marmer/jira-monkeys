@@ -1,3 +1,4 @@
+import IssueSiteInfos from "./IssueSiteInfos";
 import JiraTimeService from "./JiraTimeService";
 
 export interface Estimation {
@@ -32,7 +33,7 @@ interface EstimationRequest {
 
 export default class EstimationService {
     public static getEstimationsForIssue(issueKey: string): Promise<Estimation> {
-        const requestUrl = window.location.origin + "/rest/api/2/issue/" + issueKey;
+        const requestUrl = IssueSiteInfos.getIssueUrlForIssueKey(issueKey);
         return fetch(requestUrl, {method: "GET"})
             .then((response) => {
                 if (response.status !== 200) {
@@ -75,6 +76,7 @@ export default class EstimationService {
     }
 
     private static calculateEstimationsAfterShift(currentStates: ShiftSummary, timeToShiftAsJiraString: string): ShiftSummary {
+        // TODO: marmer 11.09.2019 it is possible that the target ticket has no estimation at all. This should be handled like 0
 
         const sourceOriginalEstimateInMinutes: number = currentStates.sourceEstimation.originalEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
         if (sourceOriginalEstimateInMinutes < 0) {
@@ -106,7 +108,7 @@ export default class EstimationService {
     }
 
     private static updateEstimations(updateStates: ShiftSummary): Promise<ShiftSummary> {
-        return fetch(window.location.origin + "/rest/api/2/issue/" + updateStates.targetEstimation.issueKey,
+        return fetch(IssueSiteInfos.getIssueUrlForIssueKey(updateStates.targetEstimation.issueKey),
             {
                 body: JSON.stringify({
                     fields: {
@@ -127,7 +129,7 @@ export default class EstimationService {
                 if (targetResult.status !== 204) {
                     throw new Error("Error on updating destination ticket. Nothing was updated yet");
                 }
-                return fetch(window.location.origin + "/rest/api/2/issue/" + updateStates.sourceEstimation.issueKey, {
+                return fetch(IssueSiteInfos.getIssueUrlForIssueKey(updateStates.sourceEstimation.issueKey), {
                     body: JSON.stringify({
                         fields: {
                             timetracking: {
