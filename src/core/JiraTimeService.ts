@@ -28,7 +28,6 @@ export default class JiraTimeService {
         return new RegExp("^\\s*((\\d+[" + unitSymbols + "](\\s+\\d+[" + unitSymbols + "])*?)|(0+))?\\s*$").test(jiraString);
     }
 
-    // TODO: marmer 11.09.2019 what about floating point strings like 1.5d?
     public static jiraFormatToMinutes(jiraString: string): number {
         if (!this.isValidJiraFormat(jiraString)) {
             throw new Error("'" + jiraString + "' is not a valid jira String");
