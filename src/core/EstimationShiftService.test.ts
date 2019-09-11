@@ -18,7 +18,7 @@ describe("EstimationShiftService", () => {
             originalEstimateInMinutes: 42,
             issueSummary: "what a nice issue",
         };
-        it("should be possible to shift estimation time from one ticket to another if there is enough budget on the source ticket", () => {
+        it("should be possible to shift estimation time from one issue to another if there is enough budget on the source issue", () => {
             EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
                 (ik) => {
                     expect(ik).toMatch(/((sourceIssue-1234)|(targetIssue-42))/);
@@ -223,9 +223,56 @@ describe("EstimationShiftService", () => {
                 expect(result.targetEstimation).toStrictEqual(someEstimation);
             });
         });
-    });
 
+        it("should be to shift time to an issue without any budget", () => {
+            EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
+                (ik) => {
+                    expect(ik).toMatch(/((sourceIssue-1234)|(targetIssue-42))/);
+                    return Promise.resolve(ik === "sourceIssue-1234" ?
+                        {
+                            ...someEstimation,
+                            issueKey: ik,
+                            originalEstimateInMinutes: 60,
+                            remainingEstimateInMinutes: 30,
+                            originalEstimate: "1h",
+                            remainingEstimate: "30m",
+                        } as Estimation :
+                        {
+                            issueKey: ik,
+                            issueSummary: "what a nice issue",
+                        } as Estimation);
+                });
+
+            const estimationUpdateMock = jest.fn()
+                .mockReturnValue(Promise.resolve());
+            EstimationCrudService.updateEstimation = estimationUpdateMock;
+
+            return underTest.shiftEstimation({
+                timeToShiftAsJiraString: "15m",
+                targetIssueKey: "targetIssue-42",
+                sourceIssueKey: "sourceIssue-1234",
+            }).then(
+                () => {
+                    expect(estimationUpdateMock.mock.calls[0][0]).toStrictEqual({
+                        ...someEstimation,
+                        issueKey: "targetIssue-42",
+                        originalEstimateInMinutes: 15,
+                        remainingEstimateInMinutes: 15,
+                        originalEstimate: "15m",
+                        remainingEstimate: "15m",
+                    });
+                    expect(estimationUpdateMock.mock.calls[1][0]).toStrictEqual({
+                        ...someEstimation,
+                        issueKey: "sourceIssue-1234",
+                        originalEstimateInMinutes: 45,
+                        remainingEstimateInMinutes: 15,
+                        originalEstimate: "45m",
+                        remainingEstimate: "15m",
+                    });
+                },
+            );
+        });
+    });
     // TODO: marmer 11.09.2019 target shifting fails
     // TODO: marmer 11.09.2019 source shifting fails
-    // TODO: marmer 11.09.2019 budget not set on target
 });
