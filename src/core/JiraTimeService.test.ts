@@ -14,10 +14,10 @@ describe("JiraTimeFormatter", () => {
             {timeSpentInMinutes: 4799, expectedJiraString: "1w 4d 7h 59m"},
             {timeSpentInMinutes: 4800, expectedJiraString: "2w"},
             {timeSpentInMinutes: 2459, expectedJiraString: "1w 59m"},
-            {timeSpentInMinutes: -4799, expectedJiraString: "1w 4d 7h 59m"}
+            {timeSpentInMinutes: -4799, expectedJiraString: "1w 4d 7h 59m"},
         ].forEach(parameter => {
-            it('should split transform ' + parameter.timeSpentInMinutes + ' into the jira string "' + parameter.expectedJiraString + '"', () => {
-                expect(JiraTimeFormatter.minutesToJiraFormat(parameter.timeSpentInMinutes)).toBe(parameter.expectedJiraString)
+            it("should split transform " + parameter.timeSpentInMinutes + ' into the jira string "' + parameter.expectedJiraString + '"', () => {
+                expect(JiraTimeFormatter.minutesToJiraFormat(parameter.timeSpentInMinutes)).toBe(parameter.expectedJiraString);
             });
         });
     });
@@ -41,11 +41,11 @@ describe("JiraTimeFormatter", () => {
             {input: " 1h 1mimimi 1w 1d", isJiraFormat: false},
 
         ].forEach(parameter => {
-            it('should ' + parameter.input + ' be valid? ===' + parameter.isJiraFormat, () => {
+            it("should " + parameter.input + " be valid? ===" + parameter.isJiraFormat, () => {
                 expect(JiraTimeFormatter.isValidJiraFormat(parameter.input))
                     .toBe(parameter.isJiraFormat);
             });
-        })
+        });
     });
 
     describe("jiraFormatToMinutes()", () => {
@@ -69,11 +69,11 @@ describe("JiraTimeFormatter", () => {
             {jiraString: "1w 59m", expectedTimeSpentInMinutes: 2459},
         ].forEach(parameter => {
             it('should transform the jira String "' + parameter.jiraString + '" into its numeric value in minutes "' + parameter.expectedTimeSpentInMinutes + '"', () => {
-                expect(JiraTimeFormatter.jiraFormatToMinutes(parameter.jiraString)).toBe(parameter.expectedTimeSpentInMinutes)
+                expect(JiraTimeFormatter.jiraFormatToMinutes(parameter.jiraString)).toBe(parameter.expectedTimeSpentInMinutes);
             });
         });
 
-        it('should throw an appropriate error when the jira format to convert is not valid', () => {
+        it("should throw an appropriate error when the jira format to convert is not valid", () => {
             expect(() => JiraTimeService.jiraFormatToMinutes("25blubba")).toThrowError("'25blubba' is not a valid jira String");
         });
     });

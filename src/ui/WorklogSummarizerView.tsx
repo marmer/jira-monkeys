@@ -1,36 +1,31 @@
-import React, {Component} from 'react';
-import WorklogService, {Worklog} from "../core/WorklogService";
+import React, {Component} from "react";
 import JiraTimeService from "../core/JiraTimeService";
+import WorklogService, {Worklog} from "../core/WorklogService";
 import "./WorklogSummarizerView.css";
 
 interface WorklogSummarizerViewState {
-    loadingState: "LOADING" | "DONE" | "ERROR",
-    worklogs: Worklog[]
-    sortColumn: "DISPLAY_NAME" | "TIME_SPENT"
+    loadingState: "LOADING" | "DONE" | "ERROR";
+    worklogs: Worklog[];
+    sortColumn: "DISPLAY_NAME" | "TIME_SPENT";
 }
 
+export default class WorklogSummarizerView extends Component<{}, WorklogSummarizerViewState> {
 
-export interface WorklogSummarizerViewProps {
-
-}
-
-export default class WorklogSummarizerView extends Component<WorklogSummarizerViewProps, WorklogSummarizerViewState> {
-
-    constructor(props: Readonly<WorklogSummarizerViewProps>) {
+    constructor(props: Readonly<{}>) {
         super(props);
         this.state = {
             loadingState: "LOADING",
+            sortColumn: "DISPLAY_NAME",
             worklogs: [],
-            sortColumn: "DISPLAY_NAME"
         };
 
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         this.loadSummedBookings();
     }
 
-    render(): React.ReactElement {
+    public render(): React.ReactElement {
         switch (this.state.loadingState) {
             case "ERROR":
                 return <div>Error. Wanna try to reaload? ;)</div>;
@@ -58,16 +53,16 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
                             </tr>)}
                         </tbody>
                     </table>
-                </div>
+                </div>;
         }
 
     }
 
     private sortWorklogsByTime() {
         this.setState({
+            sortColumn: "TIME_SPENT",
             worklogs: this.getAsSortedByComparator(this.state.worklogs, (wl1: Worklog, wl2: Worklog) => wl1.timeSpentInMinutes - wl2.timeSpentInMinutes),
-            sortColumn: "TIME_SPENT"
-        })
+        });
     }
 
     private getAsSortedByComparator(worklogs: Worklog[], comparator: (wl1: Worklog, wl2: Worklog) => number) {
@@ -78,25 +73,24 @@ export default class WorklogSummarizerView extends Component<WorklogSummarizerVi
 
     private sortWorklogsByDisplayName() {
         this.setState({
+            sortColumn: "DISPLAY_NAME",
             worklogs: this.getAsSortedByComparator(this.state.worklogs, (wl1: Worklog, wl2: Worklog) => wl1.author.displayName < wl2.author.displayName ? -1 : 1),
-            sortColumn: "DISPLAY_NAME"
-        })
+        });
     }
-
 
     private loadSummedBookings() {
         this.setState({
             loadingState: "LOADING",
-            worklogs: []
+            worklogs: [],
         });
         WorklogService.getSummedWorklogsByUser()
             .then(worklogs => this.setState({
                 loadingState: "DONE",
-                worklogs: worklogs
+                worklogs,
             }))
             .catch(reason => {
                 this.setState({loadingState: "ERROR"});
                 return console.error(reason);
-            })
+            });
     }
 }

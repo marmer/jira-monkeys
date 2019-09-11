@@ -1,30 +1,30 @@
 import groupBy from "./groupBy";
 
-describe('groupBy', () => {
-    it('should group multiple and single elements together by the key extractor', () => {
-        type ComplexType = {
+describe("groupBy", () => {
+    it("should group multiple and single elements together by the key extractor", () => {
+        interface ComplexType {
             innerType: {
-                keyField: string
-            }
+                keyField: string,
+            };
 
             someOtherValue: number;
         }
 
-        const inputValues: Array<ComplexType> = [{
+        const inputValues: ComplexType[] = [{
             innerType: {
-                keyField: "a"
+                keyField: "a",
             },
-            someOtherValue: 1
+            someOtherValue: 1,
         }, {
             innerType: {
-                keyField: "b"
+                keyField: "b",
             },
-            someOtherValue: 2
+            someOtherValue: 2,
         }, {
             innerType: {
-                keyField: "a"
+                keyField: "a",
             },
-            someOtherValue: 3
+            someOtherValue: 3,
         }];
 
         const group = groupBy(inputValues, (k: ComplexType) => k.innerType.keyField);
@@ -34,24 +34,24 @@ describe('groupBy', () => {
             values: [
                 {
                     innerType: {
-                        keyField: "a"
+                        keyField: "a",
                     },
-                    someOtherValue: 1
+                    someOtherValue: 1,
                 }, {
                     innerType: {
-                        keyField: "a"
+                        keyField: "a",
                     },
-                    someOtherValue: 3
-                }]
+                    someOtherValue: 3,
+                }],
         }, {
             key: "b",
             values: [
                 {
                     innerType: {
-                        keyField: "b"
+                        keyField: "b",
                     },
-                    someOtherValue: 2
-                }]
+                    someOtherValue: 2,
+                }],
         }]);
 
     });

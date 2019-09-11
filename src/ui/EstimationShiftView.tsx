@@ -1,56 +1,54 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import EstimationService, {Estimation} from "../core/EstimationService";
-import "./EstimationShiftView.css"
 import IssueSiteInfos from "../core/IssueSiteInfos";
 import JiraTimeService from "../core/JiraTimeService";
+import "./EstimationShiftView.css";
 
 interface EstimationShiftViewState {
-    sourceIssueEstimation?: Estimation | null
-    targetIssueEstimation?: Estimation | null
-    sourceIssueEstimationState?: "LOADING" | "ERROR" | "DONE"
-    targetIssueEstimationState?: "LOADING" | "ERROR" | "DONE"
-    targetIssueText: string
-    timeToShiftText: string
+    sourceIssueEstimation?: Estimation | null;
+    targetIssueEstimation?: Estimation | null;
+    sourceIssueEstimationState?: "LOADING" | "ERROR" | "DONE";
+    targetIssueEstimationState?: "LOADING" | "ERROR" | "DONE";
+    targetIssueText: string;
+    timeToShiftText: string;
 }
 
-export interface EstimationShiftViewProps {
-
-}
-
-export default class EstimationShiftView extends Component<EstimationShiftViewProps, EstimationShiftViewState> {
+export default class EstimationShiftView extends Component<{}, EstimationShiftViewState> {
     private timer: any;
 
-    constructor(props: Readonly<EstimationShiftViewProps>) {
+    constructor(props: Readonly<{}>) {
         super(props);
         this.state = {
             targetIssueText: "",
-            timeToShiftText: ""
-        }
+            timeToShiftText: "",
+        };
     }
 
-    getSnapshotBeforeUpdate(prevProps: Readonly<EstimationShiftViewProps>, prevState: Readonly<EstimationShiftViewState>): any | null {
+    public getSnapshotBeforeUpdate(prevProps: Readonly<{}>, prevState: Readonly<EstimationShiftViewState>): any | null {
         if (prevState.targetIssueText !== this.state.targetIssueText) {
             clearTimeout(this.timer);
             this.timer = setTimeout(() => this.loadEstimations(), 750);
         }
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         this.setState({
             targetIssueText: localStorage.getItem(EstimationShiftView.name + ".targetIssueText") || "",
         });
         this.loadSourceEstimations();
     }
 
-    setState<K extends keyof EstimationShiftViewState>(state: ((prevState: Readonly<EstimationShiftViewState>, props: Readonly<EstimationShiftViewProps>) => (Pick<EstimationShiftViewState, K> | EstimationShiftViewState | null)) | Pick<EstimationShiftViewState, K> | EstimationShiftViewState | null, callback?: () => void): void {
+    public setState<K extends keyof EstimationShiftViewState>(state: ((prevState: Readonly<EstimationShiftViewState>, props: Readonly<{}>) => (Pick<EstimationShiftViewState, K> | EstimationShiftViewState | null)) | Pick<EstimationShiftViewState, K> | EstimationShiftViewState | null, callback?: () => void): void {
         super.setState(state, () => {
-            if (callback) callback();
+            if (callback) {
+                callback();
+            }
 
-            localStorage.setItem(EstimationShiftView.name + ".targetIssueText", this.state.targetIssueText)
-        })
+            localStorage.setItem(EstimationShiftView.name + ".targetIssueText", this.state.targetIssueText);
+        });
     }
 
-    render(): React.ReactElement {
+    public render(): React.ReactElement {
         return <div className={"estimationShiftContainer"}>
 
             {this.state.sourceIssueEstimation &&
@@ -87,40 +85,40 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
 
     private loadDestinationEstimations() {
         this.setState({
+            targetIssueEstimation: null,
             targetIssueEstimationState: "LOADING",
-            targetIssueEstimation: null
         });
         EstimationService.getEstimationsForIssue(this.state.targetIssueText)
             .then(estimation => this.setState({
                 targetIssueEstimation: estimation,
-                targetIssueEstimationState: "DONE"
+                targetIssueEstimationState: "DONE",
             }))
             .catch(() => this.setState({targetIssueEstimationState: "ERROR"}));
     }
 
     private loadSourceEstimations() {
         this.setState({
+            sourceIssueEstimation: null,
             sourceIssueEstimationState: "LOADING",
-            sourceIssueEstimation: null
         });
         EstimationService.getEstimationsForIssue(IssueSiteInfos.getCurrentIssueKey())
             .then(estimation => this.setState({
                 sourceIssueEstimation: estimation,
-                sourceIssueEstimationState: "DONE"
+                sourceIssueEstimationState: "DONE",
             }))
             .catch(() => this.setState({sourceIssueEstimationState: "ERROR"}));
     }
 
     private onTargetIssueTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-        let targetIssueText = event.target.value;
+        const targetIssueText = event.target.value;
         this.setState({
-            targetIssueText
+            targetIssueText,
         }, () => localStorage.setItem("targetIssue", targetIssueText));
     }
 
     private onTimeToShiftTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         this.setState({
-            timeToShiftText: event.target.value
+            timeToShiftText: event.target.value,
         });
     }
 
@@ -128,22 +126,22 @@ export default class EstimationShiftView extends Component<EstimationShiftViewPr
         return !!this.state.targetIssueEstimation &&
             !!this.state.sourceIssueEstimation &&
             !!this.state.timeToShiftText &&
-            JiraTimeService.isValidJiraFormat(this.state.timeToShiftText)
+            JiraTimeService.isValidJiraFormat(this.state.timeToShiftText);
     }
 
     private shiftEstimations() {
         EstimationService.shiftEstimation({
             sourceIssueKey: this.state.sourceIssueEstimation!.issueKey,
             targetIssueKey: this.state.targetIssueEstimation!.issueKey,
-            timeToShiftAsJiraString: this.state.timeToShiftText
+            timeToShiftAsJiraString: this.state.timeToShiftText,
         })
             .then(result => {
                 this.setState({
                     sourceIssueEstimation: result.sourceEstimation,
-                    targetIssueEstimation: result.targetEstimation
+                    targetIssueEstimation: result.targetEstimation,
                 });
             })
-            .catch(reason => alert("Something went wrong: " + reason))
+            .catch(reason => alert("Something went wrong: " + reason));
 
         // TODO: marmer 10.09.2019 reload page on success as soon as all the states have been remembered
     }
@@ -167,5 +165,5 @@ const EstimationView = (props: { estimation: Estimation, readonly: boolean }): R
                                        value={props.estimation.remainingEstimate}
                                        disabled={props.readonly}/>
         </label>
-    </div>
+    </div>;
 };
