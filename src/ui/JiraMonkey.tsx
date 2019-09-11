@@ -1,41 +1,39 @@
-import React, {Component, ReactNode} from 'react';
-import "./JiraMonkey.css"
+import React, {Component, ReactNode} from "react";
+import EstimationShiftView from "./EstimationShiftView";
+import "./JiraMonkey.css";
 import WorklogSummarizerView from "./WorklogSummarizerView";
-import EstimationShiftView, {EstimationShiftViewProps} from "./EstimationShiftView";
 
 interface JiraMonkeyState {
-    toolsVisible: boolean
-    currentView?: ReactNode
+    toolsVisible: boolean;
+    currentView?: ReactNode;
 }
 
-export interface JiraMonkeyProps {
+export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
 
-}
-
-export default class JiraMonkey extends Component<JiraMonkeyProps, JiraMonkeyState> {
-
-    constructor(props: Readonly<JiraMonkeyProps>) {
+    constructor(props: Readonly<{}>) {
         super(props);
         this.state = {
-            toolsVisible: false
-        }
+            toolsVisible: false,
+        };
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         this.setState({
             toolsVisible: (localStorage.getItem(JiraMonkey.name + ".toolsVisible") || "false") === "true",
-        })
+        });
     }
 
-    setState<K extends keyof JiraMonkeyState>(state: ((prevState: Readonly<JiraMonkeyState>, props: Readonly<EstimationShiftViewProps>) => (Pick<JiraMonkeyState, K> | JiraMonkeyState | null)) | Pick<JiraMonkeyState, K> | JiraMonkeyState | null, callback?: () => void): void {
+    public setState<K extends keyof JiraMonkeyState>(state: ((prevState: Readonly<JiraMonkeyState>, props: Readonly<{}>) => (Pick<JiraMonkeyState, K> | JiraMonkeyState | null)) | Pick<JiraMonkeyState, K> | JiraMonkeyState | null, callback?: () => void): void {
         super.setState(state, () => {
-            if (callback) callback();
+            if (callback) {
+                callback();
+            }
 
-            localStorage.setItem(JiraMonkey.name + ".toolsVisible", "" + this.state.toolsVisible)
-        })
+            localStorage.setItem(JiraMonkey.name + ".toolsVisible", "" + this.state.toolsVisible);
+        });
     }
 
-    render(): React.ReactElement {
+    public render(): React.ReactElement {
         return <div>
             <input id="JiraMonkeyToggle" type="checkbox"
                    checked={this.state.toolsVisible}
@@ -62,15 +60,15 @@ export default class JiraMonkey extends Component<JiraMonkeyProps, JiraMonkeySta
                 </div>
             </div>
             }
-        </div>
+        </div>;
     }
 
     private setCurrentView(view: ReactNode) {
         this.setState({
-            currentView: null
+            currentView: null,
         });
         this.setState({
-            currentView: view
+            currentView: view,
         });
     }
 }
