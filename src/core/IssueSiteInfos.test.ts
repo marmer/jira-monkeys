@@ -32,4 +32,16 @@ describe("IssueSiteInfos", () => {
             expect(IssueSiteInfos.getCurrentIssueKey()).toBe("ISSUE-4321");
         });
     });
+
+    describe("getWorklogUrlForIssueKey()", () => {
+        WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("http://some.domain");
+
+        expect(IssueSiteInfos.getWorklogUrlForIssueKey("issue-key")).toEqual("http://some.domain/rest/api/2/issue/issue-key/worklog");
+    });
+
+    describe("getIssueUrlForIssueKey()", () => {
+        WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("http://some.domain");
+
+        expect(IssueSiteInfos.getIssueUrlForIssueKey("issue-key")).toEqual("http://some.domain/rest/api/2/issue/issue-key");
+    });
 });
