@@ -1,3 +1,13 @@
+[![Build Status](https://travis-ci.org/marmer/jira-monkeys.svg?branch=master)](https://travis-ci.org/marmer/sworhm)
+ 
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=alert_status)](https://sonarcloud.io/dashboard?id=io.github.marmer.utils.jira-monkeys:jira-monkeys)
+[![Code Coverage](https://sonarcloud.io/api/project_badges/measure?project=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=coverage)](https://sonarcloud.io/component_measures?id=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=Coverage)
+[![Technical Dept](https://sonarcloud.io/api/project_badges/measure?project=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=sqale_index)](https://sonarcloud.io/project/issues?facetMode=effort&id=io.github.marmer.utils.jira-monkeys:jira-monkeys&resolved=false&types=CODE_SMELL)
+
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=security_rating)](https://sonarcloud.io/component_measures?id=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=Security)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=sqale_rating)](https://sonarcloud.io/component_measures?id=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=Maintainability)
+[![Reliability](https://sonarcloud.io/api/project_badges/measure?project=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=reliability_rating)](https://sonarcloud.io/component_measures?id=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=Reliability)
+
 Jira Monkeys
 ============
 
