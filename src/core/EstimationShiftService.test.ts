@@ -19,6 +19,15 @@ describe("EstimationShiftService", () => {
             issueSummary: "what a nice issue",
         };
 
+        it("should be possible to shift time from one ticket to another if there is enough budget on the source ticket", () => {
+            EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
+                (ik) => {
+                    expect(ik).toMatch(/ISSUE-123/i);
+                    return Promise.resolve(someEstimation);
+                });
+
+        });
+
         it("should simply return the issues if they are equal even in different cases", () => {
             EstimationCrudService.getEstimationsForIssueKey = (ik) => {
                 expect(ik).toMatch(/ISSUE-123/i);

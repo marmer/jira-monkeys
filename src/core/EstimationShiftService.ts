@@ -4,17 +4,21 @@ import JiraTimeService from "./JiraTimeService";
 export default class EstimationShiftService {
     public static shiftEstimation(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSum> {
         if (param.targetIssueKey.toLocaleLowerCase() === param.sourceIssueKey.toLocaleLowerCase()) {
-            return EstimationCrudService.getEstimationsForIssueKey(param.sourceIssueKey)
-                .then(result =>
-                    ({
-                        targetEstimation: result,
-                        sourceEstimation: result,
-                    } as ShiftSum));
+            return this.getShiftSumForSingleIssueByIssueKey(param.sourceIssueKey);
         }
 
         return this.loadSourceAndTargetEstimationShiftSummaryFor(param)
             .then((currentStates) => this.calculateEstimationsAfterShift(currentStates, param.timeToShiftAsJiraString))
             .then(this.updateEstimations);
+    }
+
+    private static getShiftSumForSingleIssueByIssueKey(issueKey: string): Promise<ShiftSum> {
+        return EstimationCrudService.getEstimationsForIssueKey(issueKey)
+            .then(result =>
+                ({
+                    targetEstimation: result,
+                    sourceEstimation: result,
+                } as ShiftSum));
     }
 
     private static toFixedShiftSum(summary: ShiftSum): ShiftSum {
