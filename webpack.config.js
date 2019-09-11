@@ -3,12 +3,12 @@ const WebpackUserScript = require('webpack-userscript');
 const tampermonkeyHeaders = require('./tampermonkey-headers')
 const packageConfiguration = require('./package')
 
-const devMode = process.env.NODE_ENV === "dev";
+const devMode = process.env.NODE_ENV === "development";
 
 const webpackUserScript = new WebpackUserScript(
     {
         headers: tampermonkeyHeaders,
-        pretty: true
+        pretty: devMode
     }
 );
 
