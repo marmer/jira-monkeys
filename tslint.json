@@ -9,7 +9,12 @@
         "interface-name": false,
         "max-line-length": false,
         "arrow-parens": false,
-        "no-console": false
+        "no-console": false,
+        "object-literal-sort-keys": {
+            "options": [
+                "match-declaration-order"
+            ]
+        }
     },
     "rulesDirectory": []
 }
