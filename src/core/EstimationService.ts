@@ -122,14 +122,14 @@ export default class EstimationService {
         };
     }
 
-    private static updateEstimations(updateStates: ShiftSummary): Promise<ShiftSummary> {
-        return fetch(IssueSiteInfos.getIssueUrlForIssueKey(updateStates.targetEstimation.issueKey),
+    private static fetchEstimationUpdate(estimation: Estimation): Promise<Response> {
+        return fetch(IssueSiteInfos.getIssueUrlForIssueKey(estimation.issueKey),
             {
                 body: JSON.stringify({
                     fields: {
                         timetracking: {
-                            originalEstimate: updateStates.targetEstimation.originalEstimate,
-                            remainingEstimate: updateStates.targetEstimation.remainingEstimate,
+                            originalEstimate: estimation.originalEstimate,
+                            remainingEstimate: estimation.remainingEstimate,
                         },
                     },
                 }),
@@ -139,26 +139,16 @@ export default class EstimationService {
                 },
                 method: "PUT",
             },
-        )
+        );
+    }
+
+    private static updateEstimations(updateStates: ShiftSummary): Promise<ShiftSummary> {
+        return EstimationService.fetchEstimationUpdate(updateStates.targetEstimation)
             .then(targetResult => {
                 if (targetResult.status !== 204) {
                     throw new Error("Error on updating destination ticket. Nothing was updated yet");
                 }
-                return fetch(IssueSiteInfos.getIssueUrlForIssueKey(updateStates.sourceEstimation.issueKey), {
-                    body: JSON.stringify({
-                        fields: {
-                            timetracking: {
-                                originalEstimate: updateStates.sourceEstimation.originalEstimate,
-                                remainingEstimate: updateStates.sourceEstimation.remainingEstimate,
-                            },
-                        },
-                    }),
-                    headers: {
-                        "accept": "application/json",
-                        "content-type": "application/json",
-                    },
-                    method: "PUT",
-                })
+                return EstimationService.fetchEstimationUpdate(updateStates.sourceEstimation)
                     .then((sourceResult) => {
                         if (sourceResult.status !== 204) {
                             throw new Error("Error on updating source ticket while target is allready updated. Please fix source estimation manually.");
