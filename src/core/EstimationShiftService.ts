@@ -51,15 +51,15 @@ export default class EstimationShiftService {
     }
 
     private static calculateEstimationsAfterShift(currentStates: ShiftSum, timeToShiftAsJiraString: string): ShiftSum {
-        const sourceOriginalEstimateInMinutes: number = currentStates.sourceEstimation.originalEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+        const sourceOriginalEstimateInMinutes: number = currentStates.sourceEstimation.originalEstimateInMinutes! - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
         if (sourceOriginalEstimateInMinutes < 0) {
             throw new Error("It is not possible to shift more estimation time than exists on " + currentStates.sourceEstimation.issueKey);
         }
 
-        const sourceRemainingEstimateInMinutes: number = currentStates.sourceEstimation.remainingEstimateInMinutes - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+        const sourceRemainingEstimateInMinutes: number = currentStates.sourceEstimation.remainingEstimateInMinutes! - JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
 
-        const targetOriginalEstimateInMinutes: number = currentStates.targetEstimation.originalEstimateInMinutes + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
-        const targetRemainingEstimateInMinutes: number = currentStates.targetEstimation.remainingEstimateInMinutes + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+        const targetOriginalEstimateInMinutes: number = currentStates.targetEstimation.originalEstimateInMinutes! + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
+        const targetRemainingEstimateInMinutes: number = currentStates.targetEstimation.remainingEstimateInMinutes! + JiraTimeService.jiraFormatToMinutes(timeToShiftAsJiraString);
 
         return {
             sourceEstimation: {

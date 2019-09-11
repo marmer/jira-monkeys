@@ -3,10 +3,10 @@ import IssueSiteInfos from "./IssueSiteInfos";
 export interface Estimation {
     issueKey: string;
     issueSummary: string;
-    originalEstimate: string;
-    originalEstimateInMinutes: number;
-    remainingEstimate: string;
-    remainingEstimateInMinutes: number;
+    originalEstimate?: string;
+    originalEstimateInMinutes?: number;
+    remainingEstimate?: string;
+    remainingEstimateInMinutes?: number;
 }
 
 interface EstimationResponse {

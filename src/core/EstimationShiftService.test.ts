@@ -178,6 +178,35 @@ describe("EstimationShiftService", () => {
 
             });
         });
+        it("should raise an error without updating anything when not enough estimation time is left on the source issue", () => {
+            EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
+                (ik) => {
+                    expect(ik).toMatch(/((sourceIssue-1234)|(targetIssue-42))/);
+                    return Promise.resolve(ik === "sourceIssue-1234" ?
+                        {
+                            issueKey: ik,
+                            issueSummary: "what a nice issue",
+                        } as Estimation :
+                        {
+                            ...someEstimation,
+                            issueKey: ik,
+                        } as Estimation);
+                });
+
+            const updateEstimationMock = jest.fn()
+                .mockReturnValue(Promise.resolve());
+            EstimationCrudService.updateEstimation = updateEstimationMock;
+
+            return underTest.shiftEstimation({
+                timeToShiftAsJiraString: "30m",
+                targetIssueKey: "targetIssue-42",
+                sourceIssueKey: "sourceIssue-1234",
+            }).catch(reason => {
+                expect(reason).toStrictEqual(new Error("It is not possible to shift more estimation time than exists on sourceIssue-1234"));
+                expect(updateEstimationMock.mock.calls).toHaveLength(0);
+
+            });
+        });
 
         it("should simply return the issues if they are equal even in different cases", () => {
             EstimationCrudService.getEstimationsForIssueKey = (ik) => {
@@ -199,6 +228,4 @@ describe("EstimationShiftService", () => {
     // TODO: marmer 11.09.2019 target shifting fails
     // TODO: marmer 11.09.2019 source shifting fails
     // TODO: marmer 11.09.2019 budget not set on target
-    // TODO: marmer 11.09.2019 budget not set on source
-    // TODO: marmer 11.09.2019 not enough budget left on source
 });
