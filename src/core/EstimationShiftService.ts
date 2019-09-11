@@ -73,7 +73,7 @@ export default class EstimationShiftService {
 
     private static updateEstimations(updateStates: ShiftSum): Promise<ShiftSum> {
         return EstimationCrudService.updateEstimation(updateStates.targetEstimation)
-            .then(targetResult =>
+            .then(() =>
                     EstimationCrudService.updateEstimation(updateStates.sourceEstimation)
                         .then(() => updateStates,
                             reason => {
