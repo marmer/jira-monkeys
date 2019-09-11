@@ -4,7 +4,12 @@ import JiraTimeService from "./JiraTimeService";
 export default class EstimationShiftService {
     public static shiftEstimation(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSum> {
         if (param.targetIssueKey.toLocaleLowerCase() === param.sourceIssueKey.toLocaleLowerCase()) {
-            return Promise.reject("Source and target issue must be different for estimation shiftings");
+            return EstimationCrudService.getEstimationsForIssueKey(param.sourceIssueKey)
+                .then(result =>
+                    ({
+                        targetEstimation: result,
+                        sourceEstimation: result,
+                    } as ShiftSum));
         }
 
         return this.loadSourceAndTargetEstimationShiftSummaryFor(param)
@@ -73,13 +78,14 @@ export default class EstimationShiftService {
 
     private static updateEstimations(updateStates: ShiftSum): Promise<ShiftSum> {
         return EstimationCrudService.updateEstimation(updateStates.targetEstimation)
-            .then(() =>
-                    EstimationCrudService.updateEstimation(updateStates.sourceEstimation)
-                        .then(() => updateStates,
-                            reason => {
+            .then(
+                () => EstimationCrudService.updateEstimation(updateStates.sourceEstimation)
+                    .then(
+                        () => updateStates,
+                        () => {
                                 throw new Error("Error on updating source issue while target is already updated. Please fix source estimation manually.");
                             }),
-                reason => {
+                () => {
                     throw new Error("Error on updating destination issue. Nothing was updated yet");
                 },
             );
