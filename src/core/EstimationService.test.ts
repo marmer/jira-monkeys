@@ -58,7 +58,7 @@ describe("EstimationService", () => {
                             remainingEstimate: "remainingEstimate",
                             remainingEstimateInMinutes: 24,
                         },
-                    ))
+                    ));
         });
     });
 });
