@@ -60,12 +60,12 @@ export default class EstimationService {
             return Promise.reject("Source and target issue must be different for estimation shiftings");
         }
 
-        return this.loadSourceAndDestinationEsShiftSummaryFor(param)
+        return this.loadSourceAndTargetEstimationShiftSummaryFor(param)
             .then((currentStates) => this.calculateEstimationsAfterShift(currentStates, param.timeToShiftAsJiraString))
             .then(this.updateEstimations);
     }
 
-    private static loadSourceAndDestinationEsShiftSummaryFor(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSummary> {
+    private static loadSourceAndTargetEstimationShiftSummaryFor(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSummary> {
         return this.getEstimationsForIssue(param.sourceIssueKey)
             .then((sourceEstimation) =>
                 this.getEstimationsForIssue(param.targetIssueKey)
