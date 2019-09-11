@@ -54,7 +54,7 @@ export default class EstimationCrudService {
             });
     }
 
-    public static updateEstimation(estimation: Estimation): Promise<Response> {
+    public static updateEstimation(estimation: Estimation): Promise<void> {
         return fetch(IssueSiteInfos.getIssueUrlForIssueKey(estimation.issueKey),
             {
                 body: JSON.stringify({
@@ -75,7 +75,6 @@ export default class EstimationCrudService {
             if (response.status !== 204) {
                 throw new Error("Unexpected request status: " + response.status);
             }
-            return response;
         });
     }
 }
