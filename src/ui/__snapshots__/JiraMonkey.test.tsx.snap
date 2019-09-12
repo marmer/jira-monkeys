@@ -1,50 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JiraMonkey should be possible to show and hide the Jira-Monkeys: initial state 1`] = `
-<div>
-  <div>
-    <input
-      id="JiraMonkeyToggle"
-      title="Jira Monkeys"
-      type="checkbox"
-    />
-  </div>
-</div>
-`;
-
-exports[`JiraMonkey should be possible to show and hide the Jira-Monkeys: on activated toolbar 1`] = `
-<div>
-  <div>
-    <input
-      id="JiraMonkeyToggle"
-      title="Jira Monkeys"
-      type="checkbox"
-    />
-    <header
-      id="JiraMonkeyContainer"
-    >
-      <div
-        class="monkeyToggler"
-      >
-        <button>
-          Worklog-summarizer
-        </button>
-        <button>
-          Estimation-shifter
-        </button>
-        <button>
-          Booking-shifter
-        </button>
-        <button>
-          Estimation-fixer
-        </button>
-      </div>
-      <main />
-    </header>
-  </div>
-</div>
-`;
-
 exports[`JiraMonkey should be possible to show and hide the different jira monkeys as well as the whole monkey selection: initial state 1`] = `
 <div>
   <div>
