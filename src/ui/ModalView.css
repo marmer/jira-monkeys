@@ -1,11 +1,12 @@
 .modalView {
+    padding: 0.7em;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 20em;
     height: 13.3em;
-    background-color: #0074D9;
+    background-color: #e8f8ff;
     z-index: 2100;
     box-shadow: 0.5em 0.5em 1.5em rgba(125, 125, 125, 125);
 }
@@ -25,6 +26,6 @@ button.close {
     box-shadow: 0.5em 0.5em 1.5em rgba(125, 125, 125, 125);
     position: fixed;
     top: 0;
-    right: 0;
+    right: -0.5em;
     transform: translate(100%, 0%);
 }
