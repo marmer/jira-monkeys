@@ -41,6 +41,7 @@ describe("EstimationShiftView", () => {
         expect(originalEstimateInput).toBeDisabled();
         expect(originalEstimateInput).toHaveAttribute("type", "text");
 
+        fail("go on here ;)")
     });
 
     it.skip("should do all the todos of this body ;)", () => {
