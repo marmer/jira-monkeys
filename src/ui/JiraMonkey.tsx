@@ -40,7 +40,7 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
                    onClick={() => this.setState({toolsVisible: !this.state.toolsVisible})}
                    title="Jira Monkeys"/>
             {this.state.toolsVisible &&
-            <div id="JiraMonkeyContainer">
+            <header id="JiraMonkeyContainer">
                 <div className="monkeyToggler">
                     <button onClick={() => this.setCurrentView(<WorklogSummarizerView/>)}>
                         Worklog-summarizer
@@ -55,10 +55,10 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
                         (Estimation-fixer)</div>)}>Estimation-fixer
                     </button>
                 </div>
-                <div>
+                <main>
                     {this.state.currentView}
-                </div>
-            </div>
+                </main>
+            </header>
             }
         </div>;
     }
