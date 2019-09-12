@@ -73,8 +73,9 @@ export default class EstimationShiftService {
                 ...currentStates.targetEstimation,
                 originalEstimate: JiraTimeService.minutesToJiraFormat(targetOriginalEstimateInMinutes),
                 originalEstimateInMinutes: targetOriginalEstimateInMinutes,
-                remainingEstimate: JiraTimeService.minutesToJiraFormat(targetOriginalEstimateInMinutes),
+                remainingEstimate: JiraTimeService.minutesToJiraFormat(targetRemainingEstimateInMinutes),
                 remainingEstimateInMinutes: targetRemainingEstimateInMinutes,
+
             },
         };
     }
