@@ -25,10 +25,6 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
 
     public setState<K extends keyof JiraMonkeyState>(state: ((prevState: Readonly<JiraMonkeyState>, props: Readonly<{}>) => (Pick<JiraMonkeyState, K> | JiraMonkeyState | null)) | Pick<JiraMonkeyState, K> | JiraMonkeyState | null, callback?: () => void): void {
         super.setState(state, () => {
-            if (callback) {
-                callback();
-            }
-
             localStorage.setItem(JiraMonkey.name + ".toolsVisible", "" + this.state.toolsVisible);
         });
     }
@@ -37,7 +33,7 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
         return <div>
             <input id="JiraMonkeyToggle" type="checkbox"
                    checked={this.state.toolsVisible}
-                   onClick={() => this.setState({toolsVisible: !this.state.toolsVisible})}
+                   onChange={() => this.setState({toolsVisible: !this.state.toolsVisible})}
                    title="Jira Monkeys"/>
             {this.state.toolsVisible &&
             <header id="JiraMonkeyContainer">
