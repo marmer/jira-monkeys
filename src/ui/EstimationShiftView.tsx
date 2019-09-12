@@ -67,7 +67,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 <label>
                     Issue key:
                     <input type="text"
-                           placeholder="TICKET-123"
+                           placeholder="ISSUE-123"
                            autoFocus={true}
                            value={this.state.targetIssueText}
                            onChange={e => this.onTargetIssueTextChange(e)}/></label>
