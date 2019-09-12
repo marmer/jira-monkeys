@@ -37,7 +37,6 @@ describe("WorklogSummarizerView", () => {
 
         domTest.fireEvent.click(worklogSummarizerView.getByText("display name"));
         expect(worklogSummarizerView.container).toMatchSnapshot("whenSortedByDisplayName");
-        // console.log(prettyDOM(worklogSummarizerView.container));
     });
 
     it("should sho when an error occurs while loading the worklog summary", async () => {
@@ -49,7 +48,6 @@ describe("WorklogSummarizerView", () => {
         await reactTest.waitForElement(() => worklogSummarizerView.getByText("Error. Wanna try to reaload? ;)"));
 
         expect(worklogSummarizerView.container).toMatchSnapshot("whenLoadingIsDone");
-        console.log(domTest.prettyDOM(worklogSummarizerView.container));
     });
 
 });
