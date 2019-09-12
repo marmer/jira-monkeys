@@ -1,4 +1,4 @@
-import {fireEvent} from "@testing-library/dom";
+import * as dom from "@testing-library/dom";
 import {cleanup, render, waitForElement} from "@testing-library/react";
 import React from "react";
 import WorklogService, {Worklog} from "../core/WorklogService";
@@ -29,17 +29,27 @@ describe("WorklogSummarizerView", () => {
 
         const worklogSummarizerView = render(<WorklogSummarizerView/>);
         expect(worklogSummarizerView.container).toMatchSnapshot("onInitialLoading");
-
-        const heading = await waitForElement(() => worklogSummarizerView.getByText("Worklogs summarized per User"));
+        await waitForElement(() => worklogSummarizerView.getByText("Worklogs summarized per User"));
         expect(worklogSummarizerView.container).toMatchSnapshot("whenLoadingIsDone");
 
-        fireEvent.click(worklogSummarizerView.getByText("time spent"));
+        dom.fireEvent.click(worklogSummarizerView.getByText("time spent"));
         expect(worklogSummarizerView.container).toMatchSnapshot("whenSortedByTimeSpent");
 
-        fireEvent.click(worklogSummarizerView.getByText("display name"));
+        dom.fireEvent.click(worklogSummarizerView.getByText("display name"));
         expect(worklogSummarizerView.container).toMatchSnapshot("whenSortedByDisplayName");
         // console.log(prettyDOM(worklogSummarizerView.container));
     });
 
-    // TODO: marmer 12.09.2019 Error handling
+    it("should sho when an error occurs while loading the worklog summary", async () => {
+
+        WorklogService.getSummedWorklogsByUser = jest.fn().mockImplementation(() => Promise.reject(new Error("Some loading error")));
+
+        const worklogSummarizerView = render(<WorklogSummarizerView/>);
+        expect(worklogSummarizerView.container).toMatchSnapshot("onInitialLoading");
+        await waitForElement(() => worklogSummarizerView.getByText("Error. Wanna try to reaload? ;)"));
+
+        expect(worklogSummarizerView.container).toMatchSnapshot("whenLoadingIsDone");
+        console.log(dom.prettyDOM(worklogSummarizerView.container));
+    });
+
 });
