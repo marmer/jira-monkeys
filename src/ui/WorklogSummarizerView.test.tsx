@@ -1,11 +1,11 @@
-import * as dom from "@testing-library/dom";
-import {cleanup, render, waitForElement} from "@testing-library/react";
+import * as domTest from "@testing-library/dom";
+import * as reactTest from "@testing-library/react";
 import React from "react";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogSummarizerView from "./WorklogSummarizerView";
 
 describe("WorklogSummarizerView", () => {
-    afterEach(() => cleanup());
+    afterEach(() => reactTest.cleanup());
     it("should render the worklog entries", async () => {
         WorklogService.getSummedWorklogsByUser = jest.fn().mockImplementation(() => Promise.resolve([
             {
@@ -27,15 +27,15 @@ describe("WorklogSummarizerView", () => {
                 },
             }] as Worklog[]));
 
-        const worklogSummarizerView = render(<WorklogSummarizerView/>);
+        const worklogSummarizerView = reactTest.render(<WorklogSummarizerView/>);
         expect(worklogSummarizerView.container).toMatchSnapshot("onInitialLoading");
-        await waitForElement(() => worklogSummarizerView.getByText("Worklogs summarized per User"));
+        await reactTest.waitForElement(() => worklogSummarizerView.getByText("Worklogs summarized per User"));
         expect(worklogSummarizerView.container).toMatchSnapshot("whenLoadingIsDone");
 
-        dom.fireEvent.click(worklogSummarizerView.getByText("time spent"));
+        domTest.fireEvent.click(worklogSummarizerView.getByText("time spent"));
         expect(worklogSummarizerView.container).toMatchSnapshot("whenSortedByTimeSpent");
 
-        dom.fireEvent.click(worklogSummarizerView.getByText("display name"));
+        domTest.fireEvent.click(worklogSummarizerView.getByText("display name"));
         expect(worklogSummarizerView.container).toMatchSnapshot("whenSortedByDisplayName");
         // console.log(prettyDOM(worklogSummarizerView.container));
     });
@@ -44,12 +44,12 @@ describe("WorklogSummarizerView", () => {
 
         WorklogService.getSummedWorklogsByUser = jest.fn().mockImplementation(() => Promise.reject(new Error("Some loading error")));
 
-        const worklogSummarizerView = render(<WorklogSummarizerView/>);
+        const worklogSummarizerView = reactTest.render(<WorklogSummarizerView/>);
         expect(worklogSummarizerView.container).toMatchSnapshot("onInitialLoading");
-        await waitForElement(() => worklogSummarizerView.getByText("Error. Wanna try to reaload? ;)"));
+        await reactTest.waitForElement(() => worklogSummarizerView.getByText("Error. Wanna try to reaload? ;)"));
 
         expect(worklogSummarizerView.container).toMatchSnapshot("whenLoadingIsDone");
-        console.log(dom.prettyDOM(worklogSummarizerView.container));
+        console.log(domTest.prettyDOM(worklogSummarizerView.container));
     });
 
 });
