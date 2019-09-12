@@ -4,6 +4,7 @@ import EstimationShiftService from "../core/EstimationShiftService";
 import IssueSiteInfos from "../core/IssueSiteInfos";
 import JiraTimeService from "../core/JiraTimeService";
 import "./EstimationShiftView.css";
+import ModalView from "./ModalView";
 
 interface EstimationShiftViewState {
     sourceIssueEstimation?: Estimation | null;
@@ -12,6 +13,7 @@ interface EstimationShiftViewState {
     targetIssueEstimationState?: "LOADING" | "ERROR" | "DONE";
     targetIssueText: string;
     timeToShiftText: string;
+    errors: string[];
 }
 
 export default class EstimationShiftView extends Component<{}, EstimationShiftViewState> {
@@ -22,6 +24,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
         this.state = {
             targetIssueText: "",
             timeToShiftText: "",
+            errors: [],
         };
     }
 
@@ -51,6 +54,10 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
 
     public render(): React.ReactElement {
         return <div className={"estimationShiftContainer"}>
+            {this.hasErrors() &&
+            <ModalView onClose={() => this.clearErrors()}>
+                {this.state.errors.map(error => <div key={error}>{error}</div>)}
+            </ModalView>}
 
             {this.state.sourceIssueEstimation &&
             <EstimationView estimation={this.state.sourceIssueEstimation} readonly={true}/>}
@@ -79,6 +86,11 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
             <EstimationView estimation={this.state.targetIssueEstimation} readonly={true}/>}
         </div>;
     }
+
+    private hasErrors() {
+        return this.state.errors.length > 0;
+    }
+
     private loadEstimations(): void {
         this.loadSourceEstimations();
         this.loadDestinationEstimations();
@@ -94,7 +106,10 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 targetIssueEstimation: estimation,
                 targetIssueEstimationState: "DONE",
             }))
-            .catch(() => this.setState({targetIssueEstimationState: "ERROR"}));
+            .catch(reason => {
+                this.setState({targetIssueEstimationState: "ERROR"});
+                this.addError("Error on loading destinatino Estimation: " + reason);
+            });
     }
 
     private loadSourceEstimations() {
@@ -107,7 +122,10 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 sourceIssueEstimation: estimation,
                 sourceIssueEstimationState: "DONE",
             }))
-            .catch(() => this.setState({sourceIssueEstimationState: "ERROR"}));
+            .catch(reason => {
+                this.setState({sourceIssueEstimationState: "ERROR"});
+                this.addError("Error on loading destinatino Estimation: " + reason);
+            });
     }
 
     private onTargetIssueTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -144,8 +162,21 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
             })
             .catch(reason => {
                 this.loadEstimations();
-                return alert("Something went wrong: " + reason);
+                console.log(reason);
+                this.addError("Something went wrong: " + reason);
             });
+    }
+
+    private addError(reason: string) {
+        const errors = [...this.state.errors];
+        errors.push(reason);
+        this.setState({
+            errors,
+        });
+    }
+
+    private clearErrors() {
+        this.setState({errors: []});
     }
 }
 
