@@ -42,8 +42,11 @@ describe("JiraMonkey", () => {
     it("should remind whether it's active or not between different renderings", () => {
         const jiraMonkeyOld = reactTest.render(<JiraMonkey/>);
         reactTest.fireEvent.click(jiraMonkeyOld.getByTitle("Jira Monkeys"));
+        const oldStateAsString = reactTest.prettyDOM(jiraMonkeyOld.container);
         jiraMonkeyOld.unmount();
 
         const jiraMonkeyNew = reactTest.render(<JiraMonkey/>);
+
+        expect(oldStateAsString).toBe(reactTest.prettyDOM(jiraMonkeyNew.container));
     });
 });
