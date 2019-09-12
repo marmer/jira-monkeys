@@ -21,7 +21,7 @@ describe("EstimationShiftView", () => {
             return Promise.reject("unexpected issuekeyrequest: " + paramIssueKey);
         });
         const estimationShiftView = reactTest.render(<EstimationShiftView/>);
-
+        fail("This test implementation must be done ;)");
     });
 
     it.skip("should do all the todos of this body ;)", () => {
