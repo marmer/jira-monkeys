@@ -1,11 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`WorklogSummarizerView should render the worklog entries: blaaa 1`] = `
-<h1>
-  Worklogs summarized per User
-</h1>
-`;
-
 exports[`WorklogSummarizerView should render the worklog entries: onInitialLoading 1`] = `
 <div>
   <div>
@@ -67,6 +61,67 @@ exports[`WorklogSummarizerView should render the worklog entries: whenLoadingIsD
             class="timeSpentColumn"
           >
             10m
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
+
+exports[`WorklogSummarizerView should render the worklog entries: whenSortedByDisplayName 1`] = `
+<div>
+  <div>
+    <h1>
+      Worklogs summarized per User
+    </h1>
+    <table>
+      <thead>
+        <tr>
+          <th>
+            display name
+            ^
+          </th>
+          <th>
+            time spent
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td
+            class="displayNameColumn"
+          >
+            Andy Anderson
+          </td>
+          <td
+            class="timeSpentColumn"
+          >
+            10m
+          </td>
+        </tr>
+        <tr>
+          <td
+            class="displayNameColumn"
+          >
+            Billy Big
+          </td>
+          <td
+            class="timeSpentColumn"
+          >
+            5m
+          </td>
+        </tr>
+        <tr>
+          <td
+            class="displayNameColumn"
+          >
+            Claudette clever
+          </td>
+          <td
+            class="timeSpentColumn"
+          >
+            15m
           </td>
         </tr>
       </tbody>
