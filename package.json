@@ -16,6 +16,7 @@
     "react-dom": "^16.9.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^4.1.0",
     "@testing-library/react": "^9.1.4",
     "@types/enzyme": "^3.10.3",
     "@types/enzyme-adapter-react-16": "^1.0.5",
