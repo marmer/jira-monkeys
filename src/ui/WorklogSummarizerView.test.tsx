@@ -5,7 +5,6 @@ import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogSummarizerView from "./WorklogSummarizerView";
 
 describe("WorklogSummarizerView", () => {
-    afterEach(() => reactTest.cleanup());
     it("should render the worklog entries", async () => {
         WorklogService.getSummedWorklogsByUser = jest.fn().mockImplementation(() => Promise.resolve([
             {
