@@ -15,18 +15,25 @@ describe("EstimationShiftView", () => {
         remainingEstimateInMinutes: 240,
     };
 
-    it("should render with estimation information for the current issue", async () => {
-        const currentIssueKey = "currentIssue-123";
+    const currentEstimation = {
+        ...baseEstimation,
+        issueKey: "currentIssue-123",
+        issueSummary: "currentSummary",
+    };
+    const targetEstimation = {
+        ...baseEstimation,
+        issueKey: "targetIssue-123",
+        issueSummary: "targetSummary",
+        remainingEstimate: "1w",
+        originalEstimate: "2w",
+    };
 
-        IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentIssueKey);
+    it("should render with estimation information for the current issue", async () => {
+        IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentEstimation.issueKey);
 
         EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
-            if (paramIssueKey === currentIssueKey) {
-                return Promise.resolve({
-                    ...baseEstimation,
-                    issueKey: paramIssueKey,
-                    issueSummary: "currentSummary",
-                });
+            if (paramIssueKey === currentEstimation.issueKey) {
+                return Promise.resolve(currentEstimation);
             }
             fail("unexpected issuekeyrequest: " + paramIssueKey);
             return Promise.reject("unexpected issuekeyrequest: " + paramIssueKey);
@@ -37,7 +44,7 @@ describe("EstimationShiftView", () => {
         const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle("currentIssue-123: currentSummary"));
 
         const sourceIssueField = reactTest.getByLabelText(sourceIssueView, "Issue");
-        expect(sourceIssueField).toHaveValue(currentIssueKey);
+        expect(sourceIssueField).toHaveValue(currentEstimation.issueKey);
         expect(sourceIssueField).toBeDisabled();
         expect(sourceIssueField).toHaveAttribute("type", "text");
 
@@ -53,20 +60,6 @@ describe("EstimationShiftView", () => {
     });
 
     it("should try to load the target issue delayed", async () => {
-        const currentEstimation = {
-            ...baseEstimation,
-            issueKey: "currentIssue-123",
-            issueSummary: "currentSummary",
-        };
-        const targetEstimation = {
-            ...baseEstimation,
-            issueKey: "targetIssue-123",
-            issueSummary: "targetSummary",
-            remainingEstimate: "1w",
-            originalEstimate: "2w",
-        };
-
-
         IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentEstimation.issueKey);
 
         EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
@@ -115,6 +108,7 @@ describe("EstimationShiftView", () => {
     });
 
     it.skip("should do all the todos of this body ;)", () => {
+        // TODO: marmer 12.09.2019 handling of error when loading THIS initially
         // TODO: marmer 12.09.2019 handling of error when loading THIS
         // TODO: marmer 12.09.2019 handling of error when loading target
         // TODO: marmer 12.09.2019 validation
