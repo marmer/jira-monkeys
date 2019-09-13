@@ -12,3 +12,14 @@
     font-weight: bold;
     align-self: flex-end;
 }
+
+.shiftButtons {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    justify-content: space-between;
+}
+
+.shiftButtons > * {
+    flex-grow: 1;
+}
