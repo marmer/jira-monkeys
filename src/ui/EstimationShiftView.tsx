@@ -9,8 +9,8 @@ import ModalView from "./ModalView";
 interface EstimationShiftViewState {
     sourceIssueEstimation?: Estimation | null;
     targetIssueEstimation?: Estimation | null;
-    sourceIssueEstimationState?: "LOADING" | "ERROR" | "DONE";
-    targetIssueEstimationState?: "LOADING" | "ERROR" | "DONE";
+    sourceIssueEstimationState?: "LOADING" | "ERROR" | "DONE" | "SENDING";
+    targetIssueEstimationState?: "LOADING" | "ERROR" | "DONE" | "SENDING";
     targetIssueText: string;
     timeToShiftText: string;
     errors: string[];
@@ -69,9 +69,14 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                            placeholder="1w 5d 7h 30m"
                            value={this.state.timeToShiftText}
                            onChange={e => this.onTimeToShiftTextChange(e)}/></label>
-                <button type="button" onClick={() => this.shiftEstimations()}
-                        disabled={!this.isEstimationShiftable()}>send
-                </button>
+                <div className="shiftButtons">
+                    <button type="button" onClick={() => this.fetchEstimation()}
+                            disabled={!this.isEstimationShiftable()} title="fetch">{"<"}
+                    </button>
+                    <button type="button" onClick={() => this.sendEstimation()}
+                            disabled={!this.isEstimationShiftable()} title="send">{">"}
+                    </button>
+                </div>
             </div>
 
             {this.state.targetIssueEstimation &&
@@ -143,10 +148,16 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
         return !!this.state.targetIssueEstimation &&
             !!this.state.sourceIssueEstimation &&
             !!this.state.timeToShiftText &&
+            this.state.sourceIssueEstimationState === "DONE" &&
+            this.state.targetIssueEstimationState === "DONE" &&
             JiraTimeService.isValidJiraFormat(this.state.timeToShiftText);
     }
 
-    private shiftEstimations() {
+    private sendEstimation() {
+        this.setState({
+            targetIssueEstimationState: "SENDING",
+            sourceIssueEstimationState: "SENDING",
+        });
         EstimationShiftService.shiftEstimation({
             sourceIssueKey: this.state.sourceIssueEstimation!.issueKey,
             targetIssueKey: this.state.targetIssueEstimation!.issueKey,
@@ -156,6 +167,33 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 this.setState({
                     sourceIssueEstimation: result.sourceEstimation,
                     targetIssueEstimation: result.targetEstimation,
+                    targetIssueEstimationState: "DONE",
+                    sourceIssueEstimationState: "DONE",
+                });
+            })
+            .catch(reason => {
+                this.loadEstimations();
+                console.log(reason);
+                this.addError("Something went wrong: " + reason);
+            });
+    }
+
+    private fetchEstimation() {
+        this.setState({
+            targetIssueEstimationState: "SENDING",
+            sourceIssueEstimationState: "SENDING",
+        });
+        EstimationShiftService.shiftEstimation({
+            sourceIssueKey: this.state.targetIssueEstimation!.issueKey,
+            targetIssueKey: this.state.sourceIssueEstimation!.issueKey,
+            timeToShiftAsJiraString: this.state.timeToShiftText,
+        })
+            .then(result => {
+                this.setState({
+                    sourceIssueEstimation: result.targetEstimation,
+                    targetIssueEstimation: result.sourceEstimation,
+                    targetIssueEstimationState: "DONE",
+                    sourceIssueEstimationState: "DONE",
                 });
             })
             .catch(reason => {
