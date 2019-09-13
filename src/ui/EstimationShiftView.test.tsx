@@ -4,6 +4,7 @@ import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
 import IssueSiteInfos from "../core/IssueSiteInfos";
 import EstimationShiftView from "./EstimationShiftView";
 import userEvent from "@testing-library/user-event";
+import JiraTimeService from "../core/JiraTimeService";
 
 describe("EstimationShiftView", () => {
     const baseEstimation: Estimation = {
@@ -126,18 +127,22 @@ describe("EstimationShiftView", () => {
         const timeToShiftInput = estimationShiftView.getByLabelText("Time to shift")
         await reactTest.wait(() => expect(timeToShiftInput).toBeEnabled());
 
-        // userEvent.type(timeToShiftInput, targetEstimation.issueKey);
+        const invalidJiraTimeString = "24invalid";
+        const validJiraTimeString = "42valid";
+        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(timeString => timeString === validJiraTimeString);
 
+        userEvent.type(timeToShiftInput, invalidJiraTimeString);
         const sendButton = estimationShiftView.getByTitle("send");
+        await reactTest.wait(() => expect(sendButton).toBeDisabled());
 
-        fail("not done here yet")
+        userEvent.type(timeToShiftInput, validJiraTimeString);
+        await reactTest.wait(() => expect(sendButton).toBeEnabled());
     });
 
     it.skip("should do all the todos of this body ;)", () => {
         // TODO: marmer 12.09.2019 handling of error when loading THIS initially
         // TODO: marmer 12.09.2019 handling of error when loading THIS
         // TODO: marmer 12.09.2019 handling of error when loading target
-        // TODO: marmer 12.09.2019 validation
         // TODO: marmer 12.09.2019 sending
         // TODO: marmer 12.09.2019 errorhandling when sending
         // TODO: marmer 12.09.2019 local storage
