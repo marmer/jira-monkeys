@@ -27,9 +27,9 @@ describe("EstimationShiftView", () => {
         remainingEstimate: "1w",
         originalEstimate: "2w",
     };
+    IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentEstimation.issueKey);
 
     it("should render with estimation information for the current issue", async () => {
-        IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentEstimation.issueKey);
 
         EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
             if (paramIssueKey === currentEstimation.issueKey) {
@@ -60,8 +60,6 @@ describe("EstimationShiftView", () => {
     });
 
     it("should try to load the target issue delayed", async () => {
-        IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentEstimation.issueKey);
-
         EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
             if (paramIssueKey === targetEstimation.issueKey) {
                 return Promise.resolve(targetEstimation);
@@ -107,6 +105,34 @@ describe("EstimationShiftView", () => {
         expect(sourceRemainingEstimateField).toHaveAttribute("type", "text");
     });
 
+    it("should not be possible to send an estimation with an invalid jira string", async () => {
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
+            if (paramIssueKey === targetEstimation.issueKey) {
+                return Promise.resolve(targetEstimation);
+            }
+
+            if (paramIssueKey === currentEstimation.issueKey) {
+                return Promise.resolve(currentEstimation);
+            }
+
+            fail("No request expected for an issue with key: " + paramIssueKey);
+            return Promise.reject("No request expected for an issue with key: " + paramIssueKey);
+        });
+
+        const estimationShiftView = reactTest.render(<EstimationShiftView/>);
+        const issueKeyInput = estimationShiftView.getByLabelText("Issue key");
+        userEvent.type(issueKeyInput, targetEstimation.issueKey);
+
+        const timeToShiftInput = estimationShiftView.getByLabelText("Time to shift")
+        await reactTest.wait(() => expect(timeToShiftInput).toBeEnabled());
+
+        // userEvent.type(timeToShiftInput, targetEstimation.issueKey);
+
+        const sendButton = estimationShiftView.getByTitle("send");
+
+        fail("not done here yet")
+    });
+
     it.skip("should do all the todos of this body ;)", () => {
         // TODO: marmer 12.09.2019 handling of error when loading THIS initially
         // TODO: marmer 12.09.2019 handling of error when loading THIS
@@ -115,5 +141,6 @@ describe("EstimationShiftView", () => {
         // TODO: marmer 12.09.2019 sending
         // TODO: marmer 12.09.2019 errorhandling when sending
         // TODO: marmer 12.09.2019 local storage
+        // TODO: marmer 13.09.2019 block shifting buttons while loading!
     });
 });
