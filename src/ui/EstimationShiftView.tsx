@@ -28,13 +28,6 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
         };
     }
 
-    public getSnapshotBeforeUpdate(prevProps: Readonly<{}>, prevState: Readonly<EstimationShiftViewState>): any | null {
-        if (prevState.targetIssueText !== this.state.targetIssueText) {
-            clearTimeout(this.timer);
-            this.timer = setTimeout(() => this.loadEstimations(), 750);
-        }
-    }
-
     public componentDidMount(): void {
         this.setState({
             targetIssueText: localStorage.getItem(EstimationShiftView.name + ".targetIssueText") || "",
@@ -87,16 +80,23 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
         </div>;
     }
 
+    componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<EstimationShiftViewState>, snapshot?: any): void {
+        if (prevState.targetIssueText !== this.state.targetIssueText) {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.loadEstimations(), 750);
+        }
+    }
+
     private hasErrors() {
         return this.state.errors.length > 0;
     }
 
     private loadEstimations(): void {
         this.loadSourceEstimations();
-        this.loadDestinationEstimations();
+        this.loadTargetEstimations();
     }
 
-    private loadDestinationEstimations() {
+    private loadTargetEstimations() {
         this.setState({
             targetIssueEstimation: null,
             targetIssueEstimationState: "LOADING",
@@ -106,9 +106,8 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 targetIssueEstimation: estimation,
                 targetIssueEstimationState: "DONE",
             }))
-            .catch(reason => {
+            .catch(() => {
                 this.setState({targetIssueEstimationState: "ERROR"});
-                this.addError("Error on loading destinatino Estimation: " + reason);
             });
     }
 
@@ -124,7 +123,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
             }))
             .catch(reason => {
                 this.setState({sourceIssueEstimationState: "ERROR"});
-                this.addError("Error on loading destinatino Estimation: " + reason);
+                this.addError("Error on loading source Estimation: " + reason);
             });
     }
 
@@ -184,19 +183,19 @@ const EstimationView = (props: { estimation: Estimation, readonly: boolean }): R
     return <div className="estimationShiftCardContainer"
                 title={props.estimation.issueKey + ": " + props.estimation.issueSummary}>
         <label>
-            Issue: <input type="text"
-                          value={props.estimation.issueKey}
-                          disabled={props.readonly}/>
+            Issue<input type="text"
+                        value={props.estimation.issueKey}
+                        disabled={props.readonly}/>
         </label>
         <label>
-            Original Estimate: <input type="text"
-                                      value={props.estimation.originalEstimate}
-                                      disabled={props.readonly}/>
+            Original Estimate<input type="text"
+                                    value={props.estimation.originalEstimate}
+                                    disabled={props.readonly}/>
         </label>
         <label>
-            Remaining Estimate: <input type="text"
-                                       value={props.estimation.remainingEstimate}
-                                       disabled={props.readonly}/>
+            Remaining Estimate<input type="text"
+                                     value={props.estimation.remainingEstimate}
+                                     disabled={props.readonly}/>
         </label>
     </div>;
 };

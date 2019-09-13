@@ -15,12 +15,12 @@ describe("EstimationShiftView", () => {
     };
 
     it("should render with estimation information for the current issue", async () => {
-        const currentIssueKey123 = "currentIssue-123";
+        const currentIssueKey = "currentIssue-123";
 
-        IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentIssueKey123);
+        IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentIssueKey);
 
         EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
-            if (paramIssueKey === currentIssueKey123) {
+            if (paramIssueKey === currentIssueKey) {
                 return Promise.resolve({
                     ...baseEstimation,
                     issueKey: paramIssueKey,
@@ -36,12 +36,20 @@ describe("EstimationShiftView", () => {
         const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle("currentIssue-123: sourceSummary"));
         console.log(reactTest.prettyDOM(estimationShiftView.container));
 
-        const originalEstimateInput = reactTest.getByLabelText(sourceIssueView, content => content === "Original Estimate:");
-        expect(originalEstimateInput).toHaveValue("1d");
-        expect(originalEstimateInput).toBeDisabled();
-        expect(originalEstimateInput).toHaveAttribute("type", "text");
+        const sourceIssueField = reactTest.getByLabelText(sourceIssueView, "Issue");
+        expect(sourceIssueField).toHaveValue(currentIssueKey);
+        expect(sourceIssueField).toBeDisabled();
+        expect(sourceIssueField).toHaveAttribute("type", "text");
 
-        fail("go on here ;)")
+        const sourceOriginalEstimateField = reactTest.getByLabelText(sourceIssueView, "Original Estimate");
+        expect(sourceOriginalEstimateField).toHaveValue("1d");
+        expect(sourceOriginalEstimateField).toBeDisabled();
+        expect(sourceOriginalEstimateField).toHaveAttribute("type", "text");
+
+        const sourceRemainingEstimateField = reactTest.getByLabelText(sourceIssueView, "Remaining Estimate");
+        expect(sourceRemainingEstimateField).toHaveValue("4h");
+        expect(sourceRemainingEstimateField).toBeDisabled();
+        expect(sourceRemainingEstimateField).toHaveAttribute("type", "text");
     });
 
     it.skip("should do all the todos of this body ;)", () => {
