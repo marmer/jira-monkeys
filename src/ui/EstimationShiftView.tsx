@@ -174,7 +174,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
             .catch(reason => {
                 this.loadEstimations();
                 console.log(reason);
-                this.addError("Something went wrong: " + reason);
+                this.addError("Something went wrong while sending: " + reason);
             });
     }
 
@@ -199,7 +199,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
             .catch(reason => {
                 this.loadEstimations();
                 console.log(reason);
-                this.addError("Something went wrong: " + reason);
+                this.addError("Something went wrong while fetching: " + reason);
             });
     }
 
