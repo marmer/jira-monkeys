@@ -1,6 +1,6 @@
 {
   "name": "jira-monkeys",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "main": "src/index.tsx",
   "repository": "https://github.com/marmer/Tampermonkeys.git",
   "homepage": "https://github.com/marmer/jira-monkeys",
