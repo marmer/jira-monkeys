@@ -195,21 +195,22 @@ describe("EstimationShiftView", () => {
             }
         );
 
+        userEvent.click(sendButton);
         const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(getEstimationViewTitleFor(currentEstimation)));
 
         const sourceOriginalEstimateField = reactTest.getByLabelText(sourceIssueView, "Original Estimate");
-        await reactTest.wait(() => expect(sourceOriginalEstimateField).toHaveValue(currentEstimation.originalEstimate));
+        await reactTest.wait(() => expect(sourceOriginalEstimateField).toHaveValue(updatedCurrentEstimation.originalEstimate));
 
         const sourceRemainingEstimateField = reactTest.getByLabelText(sourceIssueView, "Remaining Estimate");
-        expect(sourceRemainingEstimateField).toHaveValue(currentEstimation.remainingEstimate);
+        expect(sourceRemainingEstimateField).toHaveValue(updatedCurrentEstimation.remainingEstimate);
 
         const targetIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(getEstimationViewTitleFor(targetEstimation)));
 
         const targetOriginalEstimateField = reactTest.getByLabelText(targetIssueView, "Original Estimate");
-        await reactTest.wait(() => expect(targetOriginalEstimateField).toHaveValue(targetEstimation.originalEstimate));
+        await reactTest.wait(() => expect(targetOriginalEstimateField).toHaveValue(updatedTargetEstimation.originalEstimate));
 
         const targetRemainingEstimateField = reactTest.getByLabelText(targetIssueView, "Remaining Estimate");
-        expect(targetRemainingEstimateField).toHaveValue(targetEstimation.remainingEstimate);
+        expect(targetRemainingEstimateField).toHaveValue(updatedTargetEstimation.remainingEstimate);
 
         // TODO: marmer 13.09.2019 block shifting buttons while sending is in progress!
     });
