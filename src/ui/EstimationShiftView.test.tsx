@@ -211,7 +211,7 @@ describe("EstimationShiftView", () => {
         const targetRemainingEstimateField = reactTest.getByLabelText(targetIssueView, "Remaining Estimate");
         expect(targetRemainingEstimateField).toHaveValue(targetEstimation.remainingEstimate);
 
-        // TODO: marmer 13.09.2019 block shifting buttons while loading!
+        // TODO: marmer 13.09.2019 block shifting buttons while sending is in progress!
     });
 
     it.skip("should show the fetching results after send", () => {
