@@ -5,6 +5,7 @@ import IssueSiteInfos from "../core/IssueSiteInfos";
 import EstimationShiftView from "./EstimationShiftView";
 import userEvent from "@testing-library/user-event";
 import JiraTimeService from "../core/JiraTimeService";
+import EstimationShiftService from "../core/EstimationShiftService";
 
 describe("EstimationShiftView", () => {
     const baseEstimation: Estimation = {
@@ -42,7 +43,7 @@ describe("EstimationShiftView", () => {
 
         const estimationShiftView = reactTest.render(<EstimationShiftView/>);
 
-        const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle("currentIssue-123: currentSummary"));
+        const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(getEstimationViewTitleFor(currentEstimation)));
 
         const sourceIssueField = reactTest.getByLabelText(sourceIssueView, "Issue");
         expect(sourceIssueField).toHaveValue(currentEstimation.issueKey);
@@ -86,7 +87,7 @@ describe("EstimationShiftView", () => {
         expect(estimationShiftInput).toBeDisabled();
 
         expect(estimationShiftView.queryByTitle(labelText => labelText.endsWith(targetEstimation.issueSummary))).toBeNull();
-        const targetIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(labelText => labelText.endsWith(targetEstimation.issueKey + ": " + targetEstimation.issueSummary)));
+        const targetIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(labelText => labelText === getEstimationViewTitleFor(targetEstimation)));
 
         expect(estimationShiftInput).toBeEnabled();
 
@@ -124,7 +125,7 @@ describe("EstimationShiftView", () => {
         const issueKeyInput = estimationShiftView.getByLabelText("Issue key");
         userEvent.type(issueKeyInput, targetEstimation.issueKey);
 
-        const timeToShiftInput = estimationShiftView.getByLabelText("Time to shift")
+        const timeToShiftInput = estimationShiftView.getByLabelText("Time to shift");
         await reactTest.wait(() => expect(timeToShiftInput).toBeEnabled());
 
         const invalidJiraTimeString = "24invalid";
@@ -139,13 +140,89 @@ describe("EstimationShiftView", () => {
         await reactTest.wait(() => expect(sendButton).toBeEnabled());
     });
 
+    function getEstimationViewTitleFor(estimation: Estimation) {
+        return estimation.issueKey + ": " + estimation.issueSummary;
+    }
+
+    it("should show the sending results after send", async () => {
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
+            if (paramIssueKey === targetEstimation.issueKey) {
+                return Promise.resolve(targetEstimation);
+            }
+
+            if (paramIssueKey === currentEstimation.issueKey) {
+                return Promise.resolve(currentEstimation);
+            }
+
+            fail("No request expected for an issue with key: " + paramIssueKey);
+            return Promise.reject("No request expected for an issue with key: " + paramIssueKey);
+        });
+
+
+        const estimationShiftView = reactTest.render(<EstimationShiftView/>);
+        const issueKeyInput = estimationShiftView.getByLabelText("Issue key");
+        userEvent.type(issueKeyInput, targetEstimation.issueKey);
+
+        const timeToShiftInput = estimationShiftView.getByLabelText("Time to shift");
+        await reactTest.wait(() => expect(timeToShiftInput).toBeEnabled());
+
+        const jiraTimeString = "42m";
+        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(timeString => timeString === jiraTimeString);
+        userEvent.type(timeToShiftInput, jiraTimeString);
+
+        const sendButton = estimationShiftView.getByTitle("send");
+        await reactTest.wait(() => expect(sendButton).toBeEnabled());
+
+        const updatedCurrentEstimation = {
+            ...currentEstimation,
+            originalEstimate: "newCurrentOriginalEstimate",
+            remainingEstimate: "newCurrentRemainingEstimate"
+        };
+        const updatedTargetEstimation = {
+            ...targetEstimation,
+            originalEstimate: "newTargetOriginalEstimate",
+            remainingEstimate: "newTargetRemainingEstimate"
+        };
+
+        EstimationShiftService.shiftEstimation = jest.fn().mockImplementation((param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }) => {
+                expect(param.sourceIssueKey).toBe(currentEstimation.issueKey);
+                expect(param.targetIssueKey).toBe(targetEstimation.issueKey);
+                return Promise.resolve({
+                        sourceEstimation: updatedCurrentEstimation,
+                        targetEstimation: updatedTargetEstimation,
+                    }
+                )
+            }
+        );
+
+        const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(getEstimationViewTitleFor(currentEstimation)));
+
+        const sourceOriginalEstimateField = reactTest.getByLabelText(sourceIssueView, "Original Estimate");
+        await reactTest.wait(() => expect(sourceOriginalEstimateField).toHaveValue(currentEstimation.originalEstimate));
+
+        const sourceRemainingEstimateField = reactTest.getByLabelText(sourceIssueView, "Remaining Estimate");
+        expect(sourceRemainingEstimateField).toHaveValue(currentEstimation.remainingEstimate);
+
+        const targetIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(getEstimationViewTitleFor(targetEstimation)));
+
+        const targetOriginalEstimateField = reactTest.getByLabelText(targetIssueView, "Original Estimate");
+        await reactTest.wait(() => expect(targetOriginalEstimateField).toHaveValue(targetEstimation.originalEstimate));
+
+        const targetRemainingEstimateField = reactTest.getByLabelText(targetIssueView, "Remaining Estimate");
+        expect(targetRemainingEstimateField).toHaveValue(targetEstimation.remainingEstimate);
+
+        // TODO: marmer 13.09.2019 block shifting buttons while loading!
+    });
+
+    it.skip("should show the fetching results after send", () => {
+        // TODO: marmer 12.09.2019 fetching
+    });
+
     it.skip("should do all the todos of this body ;)", () => {
         // TODO: marmer 12.09.2019 handling of error when loading THIS initially
         // TODO: marmer 12.09.2019 handling of error when loading THIS
         // TODO: marmer 12.09.2019 handling of error when loading target
-        // TODO: marmer 12.09.2019 sending
         // TODO: marmer 12.09.2019 errorhandling when sending
         // TODO: marmer 12.09.2019 local storage
-        // TODO: marmer 13.09.2019 block shifting buttons while loading!
     });
 });
