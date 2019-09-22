@@ -293,11 +293,10 @@ describe("EstimationShiftView", () => {
     });
 
     it.skip("should show an empty source estimation when an error occurs while initially loading a source estimation", () => {
-        // TODO: marmer 22.09.2019  impement me! ;)
+        // TODO: marmer 12.09.2019 handling of error when loading THIS initially
     });
 
     it.skip("should do all the todos of this body ;)", () => {
-        // TODO: marmer 12.09.2019 handling of error when loading THIS initially
         // TODO: marmer 12.09.2019 handling of error when loading THIS
         // TODO: marmer 12.09.2019 handling of error when loading target
         // TODO: marmer 12.09.2019 errorhandling when sending
