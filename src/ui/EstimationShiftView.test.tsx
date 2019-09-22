@@ -1,11 +1,11 @@
 import * as reactTest from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
-import IssueSiteInfos from "../core/IssueSiteInfos";
-import EstimationShiftView from "./EstimationShiftView";
-import userEvent from "@testing-library/user-event";
-import JiraTimeService from "../core/JiraTimeService";
 import EstimationShiftService from "../core/EstimationShiftService";
+import IssueSiteInfos from "../core/IssueSiteInfos";
+import JiraTimeService from "../core/JiraTimeService";
+import EstimationShiftView from "./EstimationShiftView";
 
 describe("EstimationShiftView", () => {
     const baseEstimation: Estimation = {
@@ -158,7 +158,6 @@ describe("EstimationShiftView", () => {
             return Promise.reject("No request expected for an issue with key: " + paramIssueKey);
         });
 
-
         const estimationShiftView = reactTest.render(<EstimationShiftView/>);
         const issueKeyInput = estimationShiftView.getByLabelText("Issue key");
         userEvent.type(issueKeyInput, targetEstimation.issueKey);
@@ -171,17 +170,18 @@ describe("EstimationShiftView", () => {
         userEvent.type(timeToShiftInput, jiraTimeString);
 
         const sendButton = estimationShiftView.getByTitle("send");
+        const fetchButton = estimationShiftView.getByTitle("fetch");
         await reactTest.wait(() => expect(sendButton).toBeEnabled());
 
         const updatedCurrentEstimation = {
             ...currentEstimation,
             originalEstimate: "newCurrentOriginalEstimate",
-            remainingEstimate: "newCurrentRemainingEstimate"
+            remainingEstimate: "newCurrentRemainingEstimate",
         };
         const updatedTargetEstimation = {
             ...targetEstimation,
             originalEstimate: "newTargetOriginalEstimate",
-            remainingEstimate: "newTargetRemainingEstimate"
+            remainingEstimate: "newTargetRemainingEstimate",
         };
 
         EstimationShiftService.shiftEstimation = jest.fn().mockImplementation((param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }) => {
@@ -190,12 +190,14 @@ describe("EstimationShiftView", () => {
                 return Promise.resolve({
                         sourceEstimation: updatedCurrentEstimation,
                         targetEstimation: updatedTargetEstimation,
-                    }
-                )
-            }
+                    },
+                );
+            },
         );
 
         userEvent.click(sendButton);
+        expect(sendButton).toBeDisabled();
+        expect(fetchButton).toBeDisabled();
         const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(getEstimationViewTitleFor(currentEstimation)));
 
         const sourceOriginalEstimateField = reactTest.getByLabelText(sourceIssueView, "Original Estimate");
@@ -212,7 +214,8 @@ describe("EstimationShiftView", () => {
         const targetRemainingEstimateField = reactTest.getByLabelText(targetIssueView, "Remaining Estimate");
         expect(targetRemainingEstimateField).toHaveValue(updatedTargetEstimation.remainingEstimate);
 
-        // TODO: marmer 13.09.2019 block shifting buttons while sending is in progress!
+        expect(sendButton).toBeEnabled();
+        expect(fetchButton).toBeEnabled();
     });
 
     it.skip("should show the fetching results after send", () => {
