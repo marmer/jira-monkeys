@@ -56,19 +56,17 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
 
             <div className="estimationShiftCardContainer">
                 <label>
-                    Issue key
-                    <input type="text"
-                           placeholder="ISSUE-123"
-                           autoFocus={true}
-                           value={this.state.targetIssueText}
-                           onChange={e => this.onTargetIssueTextChange(e)}/></label>
+                    Issue key <input type="text"
+                                     placeholder="ISSUE-123"
+                                     autoFocus={true}
+                                     value={this.state.targetIssueText}
+                                     onChange={e => this.onTargetIssueTextChange(e)}/></label>
                 <label>
-                    Time to shift
-                    <input disabled={!this.state.targetIssueEstimation}
-                           type="text"
-                           placeholder="1w 5d 7h 30m"
-                           value={this.state.timeToShiftText}
-                           onChange={e => this.onTimeToShiftTextChange(e)}/></label>
+                    Time to shift <input disabled={!this.state.targetIssueEstimation}
+                                         type="text"
+                                         placeholder="1w 5d 7h 30m"
+                                         value={this.state.timeToShiftText}
+                                         onChange={e => this.onTimeToShiftTextChange(e)}/></label>
                 <div className="shiftButtons">
                     <button type="button" onClick={() => this.fetchEstimation()}
                             disabled={!this.isEstimationShiftable()} title="fetch">{"<"}
