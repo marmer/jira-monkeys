@@ -39,3 +39,9 @@ steps:
     reportDirectory: 'coverage/lcov-report'
     failIfCoverageEmpty: true
 
+- task: SonarCloudPrepare@1
+  inputs:
+    scannerMode: 'CLI'
+    configMode: 'file'
+    SonarCloud: https://sonarcloud.io
+    organization: marmer-github
