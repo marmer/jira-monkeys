@@ -39,7 +39,8 @@ steps:
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: 'Cobertura'
-    summaryFileLocation: 'coverage/cobertura-coverage.xml'
+    summaryFileLocation: 'cobertura-coverage.xml'
     pathToSources: 'src'
     reportDirectory: 'coverage'
     failIfCoverageEmpty: true
+
