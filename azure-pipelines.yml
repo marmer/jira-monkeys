@@ -44,4 +44,5 @@ steps:
     scannerMode: 'CLI'
     configMode: 'file'
     SonarCloud: https://sonarcloud.io
+    projectKey: io.github.marmer.utils.jira-monkeys:jira-monkeys
     organization: marmer-github
