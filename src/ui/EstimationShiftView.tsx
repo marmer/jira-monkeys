@@ -13,7 +13,7 @@ interface EstimationShiftViewState {
     targetIssueEstimationState?: "LOADING" | "ERROR" | "DONE" | "SENDING";
     targetIssueText: string;
     timeToShiftText: string;
-    errors: string[];
+    errorMessages: string[];
 }
 
 export default class EstimationShiftView extends Component<{}, EstimationShiftViewState> {
@@ -24,7 +24,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
         this.state = {
             targetIssueText: "",
             timeToShiftText: "",
-            errors: [],
+            errorMessages: [],
         };
     }
 
@@ -47,9 +47,9 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
 
     public render(): React.ReactElement {
         return <div className={"estimationShiftContainer"}>
-            {this.hasErrors() &&
+            {this.hasErrorMessages() &&
             <ModalView onClose={() => this.clearErrors()}>
-                {this.state.errors.map(error => <div key={error}>{error}</div>)}
+                {this.state.errorMessages.map(error => <div key={error}>{error}</div>)}
             </ModalView>}
 
             <EstimationView estimation={this.state.sourceIssueEstimation} readonly={true}/>
@@ -82,15 +82,15 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
         </div>;
     }
 
-    componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<EstimationShiftViewState>, snapshot?: any): void {
+    public componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<EstimationShiftViewState>, snapshot?: any): void {
         if (prevState.targetIssueText !== this.state.targetIssueText) {
             clearTimeout(this.timer);
             this.timer = setTimeout(() => this.loadEstimations(), 750);
         }
     }
 
-    private hasErrors() {
-        return this.state.errors.length > 0;
+    private hasErrorMessages() {
+        return this.state.errorMessages.length > 0;
     }
 
     private loadEstimations(): void {
@@ -124,9 +124,20 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 sourceIssueEstimationState: "DONE",
             }))
             .catch(reason => {
-                this.setState({sourceIssueEstimationState: "ERROR"});
-                this.addError("Error on loading source Estimation: " + reason);
+                this.setState({
+                    sourceIssueEstimationState: "ERROR",
+                    sourceIssueEstimation: this.getErrorEstimationForIssueKey(IssueSiteInfos.getCurrentIssueKey()),
+                });
             });
+    }
+
+    private getErrorEstimationForIssueKey(issueKey: string): Estimation {
+        return {
+            issueKey,
+            remainingEstimate: "Error",
+            originalEstimate: "Error",
+            issueSummary: "Error",
+        };
     }
 
     private onTargetIssueTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -202,15 +213,15 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
     }
 
     private addError(reason: string) {
-        const errors = [...this.state.errors];
-        errors.push(reason);
+        const errorMessages = [...this.state.errorMessages];
+        errorMessages.push(reason);
         this.setState({
-            errors,
+            errorMessages,
         });
     }
 
     private clearErrors() {
-        this.setState({errors: []});
+        this.setState({errorMessages: []});
     }
 }
 
