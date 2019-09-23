@@ -25,11 +25,6 @@ steps:
 - script: yarn test
 
 - task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testRunner:
-
-- task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: '**/junit.xml'
