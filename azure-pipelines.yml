@@ -15,12 +15,31 @@ steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
+    checkLatest: true
   displayName: 'Install Node.js'
 
 - script: |    
     yarn install    
   displayName: 'yarn install'
 
-- script: |    
-    yarn test
-  displayName: 'yarn test'
+- script: yarn test
+
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testRunner:
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/junit.xml'
+    mergeTestResults: true
+    failTaskOnFailedTests: true
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: 'coverage/cobertura-coverage.xml'
+    pathToSources: 'src'
+    reportDirectory: 'coverage'
+    failIfCoverageEmpty: true
