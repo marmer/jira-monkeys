@@ -41,8 +41,7 @@ steps:
 
 - task: SonarCloudPrepare@1
   inputs:
+    SonarCloud: 'SonarCloud MarMer'
+    organization: 'marmer-github'
     scannerMode: 'CLI'
     configMode: 'file'
-    SonarCloud: https://sonarcloud.io
-    projectKey: io.github.marmer.utils.jira-monkeys:jira-monkeys
-    organization: marmer-github
