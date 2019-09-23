@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/marmer/jira-monkeys.svg?branch=master)](https://travis-ci.org/marmer/sworhm)
+[![Build Status](https://dev.azure.com/MarianoMertinat/MarianoMertinat/_apis/build/status/marmer.jira-monkeys?branchName=master)](https://dev.azure.com/MarianoMertinat/MarianoMertinat/_build/latest?definitionId=1&branchName=master)
  
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=alert_status)](https://sonarcloud.io/dashboard?id=io.github.marmer.utils.jira-monkeys:jira-monkeys)
 [![Code Coverage](https://sonarcloud.io/api/project_badges/measure?project=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=coverage)](https://sonarcloud.io/component_measures?id=io.github.marmer.utils.jira-monkeys:jira-monkeys&metric=Coverage)
