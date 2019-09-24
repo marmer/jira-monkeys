@@ -355,7 +355,6 @@ describe("EstimationShiftView", () => {
     });
 
     it.skip("should do all the todos of this body ;)", () => {
-        // TODO: marmer 12.09.2019 handling of error when loading target
         // TODO: marmer 12.09.2019 errorhandling when sending
         // TODO: marmer 12.09.2019 local storage
     });
