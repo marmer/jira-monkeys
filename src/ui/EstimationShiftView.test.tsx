@@ -307,18 +307,12 @@ describe("EstimationShiftView", () => {
 
         const sourceIssueField = reactTest.getByLabelText(sourceIssueView, "Issue");
         expect(sourceIssueField).toHaveValue(currentEstimation.issueKey);
-        expect(sourceIssueField).toBeDisabled();
-        expect(sourceIssueField).toHaveAttribute("type", "text");
 
         const sourceOriginalEstimateField = reactTest.getByLabelText(sourceIssueView, "Original Estimate");
         expect(sourceOriginalEstimateField).toHaveValue("Error");
-        expect(sourceOriginalEstimateField).toBeDisabled();
-        expect(sourceOriginalEstimateField).toHaveAttribute("type", "text");
 
         const sourceRemainingEstimateField = reactTest.getByLabelText(sourceIssueView, "Remaining Estimate");
         expect(sourceRemainingEstimateField).toHaveValue("Error");
-        expect(sourceRemainingEstimateField).toBeDisabled();
-        expect(sourceRemainingEstimateField).toHaveAttribute("type", "text");
     });
 
     it("should show an empty target estimation when an error occurs while the target estimation", async () => {
@@ -340,18 +334,12 @@ describe("EstimationShiftView", () => {
 
         const sourceIssueField = reactTest.getByLabelText(sourceIssueView, "Issue");
         expect(sourceIssueField).toHaveValue(targetEstimation.issueKey);
-        expect(sourceIssueField).toBeDisabled();
-        expect(sourceIssueField).toHaveAttribute("type", "text");
 
         const sourceOriginalEstimateField = reactTest.getByLabelText(sourceIssueView, "Original Estimate");
         expect(sourceOriginalEstimateField).toHaveValue("Error");
-        expect(sourceOriginalEstimateField).toBeDisabled();
-        expect(sourceOriginalEstimateField).toHaveAttribute("type", "text");
 
         const sourceRemainingEstimateField = reactTest.getByLabelText(sourceIssueView, "Remaining Estimate");
         expect(sourceRemainingEstimateField).toHaveValue("Error");
-        expect(sourceRemainingEstimateField).toBeDisabled();
-        expect(sourceRemainingEstimateField).toHaveAttribute("type", "text");
     });
 
     it.skip("should do all the todos of this body ;)", () => {
