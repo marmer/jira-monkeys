@@ -1,21 +1,14 @@
 import * as reactTest from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React, {FunctionComponent} from "react";
+import React from "react";
 import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
 import EstimationShiftService from "../core/EstimationShiftService";
 import IssueSiteInfos from "../core/IssueSiteInfos";
 import JiraTimeService from "../core/JiraTimeService";
 import EstimationShiftView from "./EstimationShiftView";
 
-jest.mock("./ModalView", () =>
-    (): FunctionComponent<{ onClose: () => void }> =>
-        ({children, onClose}) => {
-            return <div>
-                fancy error view
-                {/*// TODO: marmer 24.09.2019 make shure the Children contain the right error messages*/}
-                {/*// TODO: marmer 24.09.2019 make sure on close does what it has todo*/}
-            </div>;
-        });
+const mock = jest.mock("./ModalView", () =>
+    (): React.ReactNode => <div title="errorView">weehah</div>);
 
 describe("EstimationShiftView", () => {
     const baseEstimation: Estimation = {
@@ -385,25 +378,20 @@ describe("EstimationShiftView", () => {
         const fetchButton = estimationShiftView.getByTitle("fetch");
         await reactTest.wait(() => expect(sendButton).toBeEnabled());
 
-        const updatedCurrentEstimation = {
-            ...currentEstimation,
-            originalEstimate: "newCurrentOriginalEstimate",
-            remainingEstimate: "newCurrentRemainingEstimate",
-        };
-        const updatedTargetEstimation = {
-            ...targetEstimation,
-            originalEstimate: "newTargetOriginalEstimate",
-            remainingEstimate: "newTargetRemainingEstimate",
-        };
-
-        EstimationShiftService.shiftEstimation = jest.fn().mockImplementation((param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }) => {
-                return Promise.reject(new Error("Too bad"));
-            },
-        );
+        EstimationShiftService.shiftEstimation = jest.fn().mockImplementation(() => {
+            return Promise.reject(new Error("Too bad"));
+        });
 
         userEvent.click(sendButton);
 
+        // const errorView = await reactTest.waitForElement(() => estimationShiftView.getByTitle("errorView"));
+        const errorView = await reactTest.waitForElement(
+            () => {
+                return estimationShiftView.getByTitle("errorView");
+            });
+
         // TODO: marmer 24.09.2019 expect error view opening and closing
+        console.log("-------------");
         console.log(reactTest.prettyDOM(estimationShiftView.container));
 
         fail("Not done yet ;)");
