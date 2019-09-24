@@ -321,6 +321,39 @@ describe("EstimationShiftView", () => {
         expect(sourceRemainingEstimateField).toHaveAttribute("type", "text");
     });
 
+    it("should show an empty target estimation when an error occurs while the target estimation", async () => {
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
+            if (paramIssueKey === currentEstimation.issueKey) {
+                return Promise.resolve(currentEstimation);
+            } else if (paramIssueKey === targetEstimation.issueKey) {
+                return Promise.reject(new Error("something went wrong"));
+            }
+            fail("unexpected issuekeyrequest: " + paramIssueKey);
+            return Promise.reject("unexpected issuekeyrequest: " + paramIssueKey);
+        });
+
+        const estimationShiftView = reactTest.render(<EstimationShiftView/>);
+
+        userEvent.type(estimationShiftView.getByLabelText("Issue key"), targetEstimation.issueKey);
+
+        const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(targetEstimation.issueKey + ": Error"));
+
+        const sourceIssueField = reactTest.getByLabelText(sourceIssueView, "Issue");
+        expect(sourceIssueField).toHaveValue(targetEstimation.issueKey);
+        expect(sourceIssueField).toBeDisabled();
+        expect(sourceIssueField).toHaveAttribute("type", "text");
+
+        const sourceOriginalEstimateField = reactTest.getByLabelText(sourceIssueView, "Original Estimate");
+        expect(sourceOriginalEstimateField).toHaveValue("Error");
+        expect(sourceOriginalEstimateField).toBeDisabled();
+        expect(sourceOriginalEstimateField).toHaveAttribute("type", "text");
+
+        const sourceRemainingEstimateField = reactTest.getByLabelText(sourceIssueView, "Remaining Estimate");
+        expect(sourceRemainingEstimateField).toHaveValue("Error");
+        expect(sourceRemainingEstimateField).toBeDisabled();
+        expect(sourceRemainingEstimateField).toHaveAttribute("type", "text");
+    });
+
     it.skip("should do all the todos of this body ;)", () => {
         // TODO: marmer 12.09.2019 handling of error when loading target
         // TODO: marmer 12.09.2019 errorhandling when sending

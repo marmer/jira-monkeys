@@ -109,7 +109,10 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 targetIssueEstimationState: "DONE",
             }))
             .catch(() => {
-                this.setState({targetIssueEstimationState: "ERROR"});
+                this.setState({
+                    targetIssueEstimationState: "ERROR",
+                    targetIssueEstimation: this.getErrorEstimationForIssueKey(this.state.targetIssueText),
+                });
             });
     }
 
