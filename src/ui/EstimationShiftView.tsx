@@ -184,9 +184,14 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 });
             })
             .catch(reason => {
+                // TODO: marmer 24.09.2019 "Remove this Debugging outputs
+                console.log("Got here1");
                 this.loadEstimations();
+                console.log("Got here2");
                 console.log(reason);
+                console.log("Got here3");
                 this.addError("Something went wrong while sending: " + reason);
+                console.log("Got here4");
             });
     }
 
