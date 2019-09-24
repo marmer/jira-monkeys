@@ -1,11 +1,21 @@
 import * as reactTest from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
+import React, {FunctionComponent} from "react";
 import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
 import EstimationShiftService from "../core/EstimationShiftService";
 import IssueSiteInfos from "../core/IssueSiteInfos";
 import JiraTimeService from "../core/JiraTimeService";
 import EstimationShiftView from "./EstimationShiftView";
+
+jest.mock("./ModalView", () =>
+    (): FunctionComponent<{ onClose: () => void }> =>
+        ({children, onClose}) => {
+            return <div>
+                fancy error view
+                {/*// TODO: marmer 24.09.2019 make shure the Children contain the right error messages*/}
+                {/*// TODO: marmer 24.09.2019 make sure on close does what it has todo*/}
+            </div>;
+        });
 
 describe("EstimationShiftView", () => {
     const baseEstimation: Estimation = {
@@ -303,7 +313,7 @@ describe("EstimationShiftView", () => {
 
         const estimationShiftView = reactTest.render(<EstimationShiftView/>);
 
-        const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(currentEstimation.issueKey + ": Error"));
+        const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(getEstimationTitleOnErrorFor(currentEstimation)));
 
         const sourceIssueField = reactTest.getByLabelText(sourceIssueView, "Issue");
         expect(sourceIssueField).toHaveValue(currentEstimation.issueKey);
@@ -330,7 +340,7 @@ describe("EstimationShiftView", () => {
 
         userEvent.type(estimationShiftView.getByLabelText("Issue key"), targetEstimation.issueKey);
 
-        const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(targetEstimation.issueKey + ": Error"));
+        const sourceIssueView = await reactTest.waitForElement(() => estimationShiftView.getByTitle(getEstimationTitleOnErrorFor(targetEstimation)));
 
         const sourceIssueField = reactTest.getByLabelText(sourceIssueView, "Issue");
         expect(sourceIssueField).toHaveValue(targetEstimation.issueKey);
@@ -342,8 +352,66 @@ describe("EstimationShiftView", () => {
         expect(sourceRemainingEstimateField).toHaveValue("Error");
     });
 
+    function getEstimationTitleOnErrorFor(estimation: Estimation) {
+        return estimation.issueKey + ": Error";
+    }
+
+    it("should show an appropriate error message when a sending an estimation is not successful", async () => {
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
+            if (paramIssueKey === targetEstimation.issueKey) {
+                return Promise.resolve(targetEstimation);
+            }
+
+            if (paramIssueKey === currentEstimation.issueKey) {
+                return Promise.resolve(currentEstimation);
+            }
+
+            fail("No request expected for an issue with key: " + paramIssueKey);
+            return Promise.reject("No request expected for an issue with key: " + paramIssueKey);
+        });
+
+        const estimationShiftView = reactTest.render(<EstimationShiftView/>);
+        const issueKeyInput = estimationShiftView.getByLabelText("Issue key");
+        userEvent.type(issueKeyInput, targetEstimation.issueKey);
+
+        const timeToShiftInput = estimationShiftView.getByLabelText("Time to shift");
+        await reactTest.wait(() => expect(timeToShiftInput).toBeEnabled());
+
+        const jiraTimeString = "42m";
+        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(timeString => timeString === jiraTimeString);
+        userEvent.type(timeToShiftInput, jiraTimeString);
+
+        const sendButton = estimationShiftView.getByTitle("send");
+        const fetchButton = estimationShiftView.getByTitle("fetch");
+        await reactTest.wait(() => expect(sendButton).toBeEnabled());
+
+        const updatedCurrentEstimation = {
+            ...currentEstimation,
+            originalEstimate: "newCurrentOriginalEstimate",
+            remainingEstimate: "newCurrentRemainingEstimate",
+        };
+        const updatedTargetEstimation = {
+            ...targetEstimation,
+            originalEstimate: "newTargetOriginalEstimate",
+            remainingEstimate: "newTargetRemainingEstimate",
+        };
+
+        EstimationShiftService.shiftEstimation = jest.fn().mockImplementation((param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }) => {
+                return Promise.reject(new Error("Too bad"));
+            },
+        );
+
+        userEvent.click(sendButton);
+
+        // TODO: marmer 24.09.2019 expect error view opening and closing
+        console.log(reactTest.prettyDOM(estimationShiftView.container));
+
+        fail("Not done yet ;)");
+    });
+
     it.skip("should do all the todos of this body ;)", () => {
         // TODO: marmer 12.09.2019 errorhandling when sending
+        // TODO: marmer 12.09.2019 errorhandling when fetching
         // TODO: marmer 12.09.2019 local storage
     });
 });
