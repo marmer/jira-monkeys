@@ -1,14 +1,19 @@
 import * as reactTest from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
+import React, {FunctionComponent} from "react";
 import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
 import EstimationShiftService from "../core/EstimationShiftService";
 import IssueSiteInfos from "../core/IssueSiteInfos";
 import JiraTimeService from "../core/JiraTimeService";
 import EstimationShiftView from "./EstimationShiftView";
 
-const mock = jest.mock("./ModalView", () =>
-    (): React.ReactNode => <div title="errorView">weehah</div>);
+jest.mock("./ModalView", () => ((({children, onClose}) =>
+    <>
+        <div data-testid="errorViewMock">
+            {children}
+        </div>
+        <button data-testid="errorViewCloseButton" onClick={onClose}>X</button>
+    </>) as FunctionComponent<{ onClose: () => void }>));
 
 describe("EstimationShiftView", () => {
     const baseEstimation: Estimation = {
@@ -375,7 +380,7 @@ describe("EstimationShiftView", () => {
         userEvent.type(timeToShiftInput, jiraTimeString);
 
         const sendButton = estimationShiftView.getByTitle("send");
-        const fetchButton = estimationShiftView.getByTitle("fetch");
+        estimationShiftView.getByTitle("fetch");
         await reactTest.wait(() => expect(sendButton).toBeEnabled());
 
         EstimationShiftService.shiftEstimation = jest.fn().mockImplementation(() => {
@@ -385,21 +390,64 @@ describe("EstimationShiftView", () => {
         userEvent.click(sendButton);
 
         // const errorView = await reactTest.waitForElement(() => estimationShiftView.getByTitle("errorView"));
+
         const errorView = await reactTest.waitForElement(
-            () => {
-                return estimationShiftView.getByTitle("errorView");
-            });
+            () => estimationShiftView.getByTestId("errorViewMock"));
 
-        // TODO: marmer 24.09.2019 expect error view opening and closing
-        console.log("-------------");
-        console.log(reactTest.prettyDOM(estimationShiftView.container));
+        reactTest.getByText(errorView, "Something went wrong while sending: Error: Too bad");
 
-        fail("Not done yet ;)");
+        userEvent.click(estimationShiftView.getByTestId("errorViewCloseButton"));
+
+        reactTest.waitForElementToBeRemoved(() => errorView);
+    });
+
+    it("should show an appropriate error message when a fetching an estimation is not successful", async () => {
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
+            if (paramIssueKey === targetEstimation.issueKey) {
+                return Promise.resolve(targetEstimation);
+            }
+
+            if (paramIssueKey === currentEstimation.issueKey) {
+                return Promise.resolve(currentEstimation);
+            }
+
+            fail("No request expected for an issue with key: " + paramIssueKey);
+            return Promise.reject("No request expected for an issue with key: " + paramIssueKey);
+        });
+
+        const estimationShiftView = reactTest.render(<EstimationShiftView/>);
+        const issueKeyInput = estimationShiftView.getByLabelText("Issue key");
+        userEvent.type(issueKeyInput, targetEstimation.issueKey);
+
+        const timeToShiftInput = estimationShiftView.getByLabelText("Time to shift");
+        await reactTest.wait(() => expect(timeToShiftInput).toBeEnabled());
+
+        const jiraTimeString = "42m";
+        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(timeString => timeString === jiraTimeString);
+        userEvent.type(timeToShiftInput, jiraTimeString);
+
+        const fetchButton = estimationShiftView.getByTitle("fetch");
+        await reactTest.wait(() => expect(fetchButton).toBeEnabled());
+
+        EstimationShiftService.shiftEstimation = jest.fn().mockImplementation(() => {
+            return Promise.reject(new Error("Too bad"));
+        });
+
+        userEvent.click(fetchButton);
+
+        // const errorView = await reactTest.waitForElement(() => estimationShiftView.getByTitle("errorView"));
+
+        const errorView = await reactTest.waitForElement(
+            () => estimationShiftView.getByTestId("errorViewMock"));
+
+        reactTest.getByText(errorView, "Something went wrong while fetching: Error: Too bad");
+
+        userEvent.click(estimationShiftView.getByTestId("errorViewCloseButton"));
+
+        reactTest.waitForElementToBeRemoved(() => errorView);
     });
 
     it.skip("should do all the todos of this body ;)", () => {
-        // TODO: marmer 12.09.2019 errorhandling when sending
-        // TODO: marmer 12.09.2019 errorhandling when fetching
         // TODO: marmer 12.09.2019 local storage
     });
 });
