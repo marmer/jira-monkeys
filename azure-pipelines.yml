@@ -35,8 +35,8 @@ steps:
     checkLatest: true
   displayName: 'Install Node.js'
 
-- script: echo ${{ someVar }}
-- script: echo ${{ someOtherVar }}
+- script: echo ${{ variables.someVar }}
+- script: echo ${{ variables.someOtherVar }}
 
 - script: |    
     yarn install    
