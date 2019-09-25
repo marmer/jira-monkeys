@@ -37,12 +37,10 @@ steps:
 - script: |    
     yarn install    
   displayName: 'yarn install'
-  condition: eq(variables.withSonar,true)
 
 - script: |
     yarn test
   displayName: yarn test
-  condition: false
 
 - task: PublishTestResults@2
   inputs:
@@ -50,7 +48,6 @@ steps:
     testResultsFiles: '**/junit.xml'
     mergeTestResults: true
     failTaskOnFailedTests: true
-  condition: false
 
 - task: PublishCodeCoverageResults@1
   inputs:
