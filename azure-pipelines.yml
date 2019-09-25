@@ -7,14 +7,17 @@ strategy:
  matrix:
   linux:
    imageName: 'ubuntu-latest'
-   anotherVar: 'anotherVarLinux'
-   isLinux: true
   mac:
    imageName: 'macOS-latest'
-   anotherVar: 'anotherVarMac'
   windows:
    imageName: 'windows-latest'
-   anotherVar: 'anotherVarWindows'
+
+variables:
+  isLinux1: ${{ eq(imageName,'ubuntu-latest') }}
+  isLinux2: ${{ eq(imageName,'ubuntu-latest') }}
+  iname1: ${imageName}
+  iname2: ${variables:imageName}
+  
 
 trigger:
  branches:
@@ -31,8 +34,20 @@ steps:
     checkLatest: true
   displayName: 'Install Node.js'
 
-- script: echo ${{ anotherVar }}
-- script: echo ${{ isLinux }}
+- script: echo ${{ isLinux1 }}
+- script: echo ${{ isLinux2 }}
+- script: echo ${{ iname1 }}
+- script: echo ${{ iname2 }}
+
+- script: echo ${{ variables.isLinux1 }}
+- script: echo ${{ variables.isLinux2 }}
+- script: echo ${{ variables.iname1 }}
+- script: echo ${{ variables.iname2 }}
+
+- script: echo ${variables.isLinux1}
+- script: echo ${variables.isLinux2}
+- script: echo ${variables.iname1}
+- script: echo ${variables.iname2}
 
 - script: |    
     yarn install    
