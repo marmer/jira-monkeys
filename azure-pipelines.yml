@@ -35,8 +35,8 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-  echo withSonar = ${{ variables.withSonar }}
-  displayName: 'Variable Printout
+    echo withSonar = ${{ variables.withSonar }}
+  displayName: 'Variable Printout'
 
 - script: |    
     yarn install    
