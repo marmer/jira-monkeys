@@ -34,7 +34,7 @@ steps:
     checkLatest: true
   displayName: 'Install Node.js'
 
-- script: echo ${{ withSonar }}
+- script: echo ${{ variables.withSonar }}
 
 - script: |    
     yarn install    
