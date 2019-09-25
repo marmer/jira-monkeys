@@ -34,6 +34,10 @@ steps:
     checkLatest: true
   displayName: 'Install Node.js'
 
+- script: |
+  echo withSonar = ${{ variables.withSonar }}
+  displayName: 'Variable Printout
+
 - script: |    
     yarn install    
   displayName: 'yarn install'
@@ -46,6 +50,7 @@ steps:
     testResultsFiles: '**/junit.xml'
     mergeTestResults: true
     failTaskOnFailedTests: true
+  condition: false
 
 - task: PublishCodeCoverageResults@1
   inputs:
@@ -54,7 +59,7 @@ steps:
     pathToSources: 'src'
     reportDirectory: 'coverage/lcov-report'
     failIfCoverageEmpty: true
-  condition: ${{ variables.withSonar }}
+  condition: false
 
 - task: SonarCloudPrepare@1
   inputs:
@@ -62,12 +67,12 @@ steps:
     organization: 'marmer-github'
     scannerMode: 'CLI'
     configMode: 'file'
-  condition: ${{ variables.withSonar }}
+  condition: false
 
 - task: SonarCloudAnalyze@1
-  condition: ${{ variables.withSonar }}
+  condition: false
 
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
-  condition: ${{ variables.withSonar }}
+  condition: false
