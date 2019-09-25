@@ -1,15 +1,16 @@
-import React, {Component, ReactNode} from "react";
+import React, {Component} from "react";
 import EstimationShiftView from "./EstimationShiftView";
 import "./JiraMonkey.css";
 import WorklogSummarizerView from "./WorklogSummarizerView";
 
+type ViewChoices = "WORKLOG_SUMMARIZER" | "ESTIMATION_SHIFT" | "BOOKING_SHIFT" | "ESTIMATION_FIX" | null | undefined;
+
 interface JiraMonkeyState {
     toolsVisible: boolean;
-    currentView?: ReactNode;
+    currentView?: ViewChoices;
 }
 
 export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
-
     constructor(props: Readonly<{}>) {
         super(props);
         this.state = {
@@ -19,13 +20,15 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
 
     public componentDidMount(): void {
         this.setState({
-            toolsVisible: (localStorage.getItem(JiraMonkey.name + ".toolsVisible") || "false") === "true",
+            toolsVisible: (sessionStorage.getItem(JiraMonkey.name + ".toolsVisible") || "false") === "true",
+            currentView: (sessionStorage.getItem(JiraMonkey.name + ".currentView")) as ViewChoices,
         });
     }
 
     public setState<K extends keyof JiraMonkeyState>(state: ((prevState: Readonly<JiraMonkeyState>, props: Readonly<{}>) => (Pick<JiraMonkeyState, K> | JiraMonkeyState | null)) | Pick<JiraMonkeyState, K> | JiraMonkeyState | null, callback?: () => void): void {
         super.setState(state, () => {
-            localStorage.setItem(JiraMonkey.name + ".toolsVisible", "" + this.state.toolsVisible);
+            sessionStorage.setItem(JiraMonkey.name + ".toolsVisible", "" + this.state.toolsVisible);
+            sessionStorage.setItem(JiraMonkey.name + ".currentView", "" + this.state.currentView);
         });
     }
 
@@ -38,33 +41,34 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
             {this.state.toolsVisible &&
             <header id="JiraMonkeyContainer">
                 <div className="monkeyToggler">
-                    <button onClick={() => this.setCurrentView(<WorklogSummarizerView/>)}>
+                    <button onClick={() => this.setState({currentView: "WORKLOG_SUMMARIZER"})}>
                         Worklog-summarizer
                     </button>
-                    <button onClick={() => this.setCurrentView(<EstimationShiftView/>)}>
+                    <button onClick={() => this.setState({currentView: "ESTIMATION_SHIFT"})}>
                         Estimation-shifter
                     </button>
-                    <button onClick={() => this.setCurrentView(<div>nothing to see here yet
-                        (Booking-shifter)</div>)}>Booking-shifter
+                    <button onClick={() => this.setState({currentView: "BOOKING_SHIFT"})}>
+                        Booking-shifter
                     </button>
-                    <button onClick={() => this.setCurrentView(<div>nothing to see here yet
-                        (Estimation-fixer)</div>)}>Estimation-fixer
+                    <button onClick={() => this.setState({currentView: "ESTIMATION_FIX"})}>
+                        Estimation-fixer
                     </button>
                 </div>
                 <main>
-                    {this.state.currentView}
+                    {this.state.currentView === "ESTIMATION_FIX" &&
+                    <WorklogSummarizerView/>}
+
+                    {this.state.currentView === "ESTIMATION_SHIFT" &&
+                    <EstimationShiftView/>}
+
+                    {this.state.currentView === "BOOKING_SHIFT" &&
+                    <div>nothing to see here yet (Booking-shifter)</div>}
+
+                    {this.state.currentView === "ESTIMATION_FIX" &&
+                    <div>nothing to see here yet (Estimation-fixer)</div>}
                 </main>
             </header>
             }
         </div>;
-    }
-
-    private setCurrentView(view: ReactNode) {
-        this.setState({
-            currentView: null,
-        });
-        this.setState({
-            currentView: view,
-        });
     }
 }
