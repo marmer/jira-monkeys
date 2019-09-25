@@ -7,17 +7,16 @@ strategy:
  matrix:
   linux:
    imageName: 'ubuntu-latest'
-   otherVar: 'linux'
+   withSonar: true
   mac:
    imageName: 'macOS-latest'
-   otherVar: 'mac'
+   withSonar: false
   windows:
    imageName: 'windows-latest'
-   otherVar: 'windows'
+   withSonar: false
 
 variables:
-  someVar: $(imageName)
-  someOtherVar: $(otherVar)
+  withSonar: $(withSonar)
   
 
 trigger:
@@ -35,8 +34,7 @@ steps:
     checkLatest: true
   displayName: 'Install Node.js'
 
-- script: echo ${{ variables.someVar }}
-- script: echo ${{ variables.someOtherVar }}
+- script: echo ${{ withSonar }}
 
 - script: |    
     yarn install    
