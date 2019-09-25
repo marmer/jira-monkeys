@@ -181,3 +181,19 @@ exports[`WorklogSummarizerView should render the worklog entries: whenSortedByTi
   </div>
 </div>
 `;
+
+exports[`WorklogSummarizerView should sho when an error occurs while loading the worklog summary: onInitialLoading 1`] = `
+<div>
+  <div>
+    Loading. Be patient!
+  </div>
+</div>
+`;
+
+exports[`WorklogSummarizerView should sho when an error occurs while loading the worklog summary: whenLoadingIsDone 1`] = `
+<div>
+  <div>
+    Error. Wanna try to reaload? ;)
+  </div>
+</div>
+`;
