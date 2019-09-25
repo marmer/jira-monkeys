@@ -7,10 +7,13 @@ strategy:
  matrix:
   linux:
    imageName: 'ubuntu-latest'
+   withAnalyzisUploads: True
   mac:
    imageName: 'macOS-latest'
+   withAnalyzisUploads: False
   windows:
    imageName: 'windows-latest'
+   withAnalyzisUploads: False
 
 trigger:
  branches:
@@ -39,6 +42,7 @@ steps:
     testResultsFiles: '**/junit.xml'
     mergeTestResults: true
     failTaskOnFailedTests: true
+  condition: ${{ withAnalyzisUploads }}
 
 - task: PublishCodeCoverageResults@1
   inputs:
@@ -54,12 +58,12 @@ steps:
     organization: 'marmer-github'
     scannerMode: 'CLI'
     configMode: 'file'
-  condition: ${{ eq( variables['imageName'], 'ubuntu-latest') }}
+  condition: ${{ withAnalyzisUploads }}
 
 - task: SonarCloudAnalyze@1
-  condition: ${{ eq(variables.imageName, 'ubuntu-latest') }}
+  condition: ${{ withAnalyzisUploads }}
 
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
-  condition: ${{ eq(variables.imageName, 'ubuntu-latest') }}
+  condition: ${{ withAnalyzisUploads }}
