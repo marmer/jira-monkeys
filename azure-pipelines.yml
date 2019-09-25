@@ -13,7 +13,7 @@ strategy:
    imageName: 'windows-latest'
 
 variables:
-  someVar: $(imageName)
+  someVar: $(variables.imageName)
   
 
 trigger:
