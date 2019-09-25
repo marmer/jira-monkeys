@@ -15,10 +15,6 @@ strategy:
    imageName: 'windows-latest'
    withSonar: false
 
-variables:
-  withSonar: $(withSonar)
-  
-
 trigger:
  branches:
    include:
@@ -41,7 +37,7 @@ steps:
 - script: |    
     yarn install    
   displayName: 'yarn install'
-  condition: eq($(withSonar),true)
+  condition: eq(variables.withSonar,true)
 
 - script: |
     yarn test
