@@ -50,7 +50,7 @@ steps:
     pathToSources: 'src'
     reportDirectory: 'coverage/lcov-report'
     failIfCoverageEmpty: true
-  condition: ${withAnalyzisUploads}
+  condition: ${variables.withAnalyzisUploads}
 
 - task: SonarCloudPrepare@1
   inputs:
@@ -58,12 +58,12 @@ steps:
     organization: 'marmer-github'
     scannerMode: 'CLI'
     configMode: 'file'
-  condition: ${withAnalyzisUploads}
+  condition: ${variables.withAnalyzisUploads}
 
 - task: SonarCloudAnalyze@1
-  condition: ${withAnalyzisUploads}
+  condition: ${variables.withAnalyzisUploads}
 
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
-  condition: ${withAnalyzisUploads}
+  condition: ${variables.withAnalyzisUploads}
