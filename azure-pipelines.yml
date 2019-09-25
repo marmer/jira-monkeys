@@ -7,10 +7,14 @@ strategy:
  matrix:
   linux:
    imageName: 'ubuntu-latest'
+   anotherVar: 'anotherVarLinux'
+   isLinux: true
   mac:
    imageName: 'macOS-latest'
+   anotherVar: 'anotherVarMac'
   windows:
    imageName: 'windows-latest'
+   anotherVar: 'anotherVarWindows'
 
 trigger:
  branches:
@@ -26,6 +30,11 @@ steps:
     versionSpec: '10.x'
     checkLatest: true
   displayName: 'Install Node.js'
+
+- script: echo $anotherVar
+- script: echo %anotherVar%
+- script: echo %isLinux
+- script: echo $isLinux
 
 - script: |    
     yarn install    
