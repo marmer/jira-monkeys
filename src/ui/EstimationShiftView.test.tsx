@@ -435,8 +435,6 @@ describe("EstimationShiftView", () => {
 
         userEvent.click(fetchButton);
 
-        // const errorView = await reactTest.waitForElement(() => estimationShiftView.getByTitle("errorView"));
-
         const errorView = await reactTest.waitForElement(
             () => estimationShiftView.getByTestId("errorViewMock"));
 
