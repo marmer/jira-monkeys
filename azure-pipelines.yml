@@ -54,6 +54,7 @@ steps:
     pathToSources: 'src'
     reportDirectory: 'coverage/lcov-report'
     failIfCoverageEmpty: true
+  condition: false
 
 - task: SonarCloudPrepare@1
   inputs:
@@ -61,9 +62,12 @@ steps:
     organization: 'marmer-github'
     scannerMode: 'CLI'
     configMode: 'file'
+  condition: false
 
 - task: SonarCloudAnalyze@1
+  condition: false
 
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
+  condition: false
