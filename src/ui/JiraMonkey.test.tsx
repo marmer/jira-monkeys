@@ -7,7 +7,7 @@ jest.mock("./EstimationShiftView", () => (): React.ReactNode => <div>EstimationS
 
 describe("JiraMonkey", () => {
     beforeEach(() => {
-        localStorage.clear();
+        sessionStorage.clear();
     });
 
     it("should be possible to show and hide the different jira monkeys as well as the whole monkey selection", async () => {
@@ -39,9 +39,11 @@ describe("JiraMonkey", () => {
         expect(jiraMonkey.container).toMatchSnapshot("on inactive toolbar");
     });
 
-    it("should remind whether it's active or not between different renderings", () => {
+    it("should remind whether it's active or not between different renderings", async () => {
         const jiraMonkeyOld = reactTest.render(<JiraMonkey/>);
         reactTest.fireEvent.click(jiraMonkeyOld.getByTitle("Jira Monkeys"));
+        reactTest.fireEvent.click(jiraMonkeyOld.getByText("Worklog-summarizer"));
+
         const oldStateAsString = reactTest.prettyDOM(jiraMonkeyOld.container);
         jiraMonkeyOld.unmount();
 
