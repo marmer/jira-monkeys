@@ -33,9 +33,6 @@ export default class WorklogSummarizerView extends Component<{}, WorklogSummariz
                 return <div>Loading. Be patient!</div>;
             case "DONE":
                 return <div>
-                    <h1>
-                        Worklogs summarized per User
-                    </h1>
                     <table>
                         <thead>
                         <tr>

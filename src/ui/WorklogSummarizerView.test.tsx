@@ -28,7 +28,7 @@ describe("WorklogSummarizerView", () => {
 
         const worklogSummarizerView = reactTest.render(<WorklogSummarizerView/>);
         expect(worklogSummarizerView.container).toMatchSnapshot("onInitialLoading");
-        await reactTest.waitForElement(() => worklogSummarizerView.getByText("Worklogs summarized per User"));
+        await reactTest.waitForElement(() => worklogSummarizerView.getByText("display name^"));
         expect(worklogSummarizerView.container).toMatchSnapshot("whenLoadingIsDone");
 
         domTest.fireEvent.click(worklogSummarizerView.getByText("time spent"));

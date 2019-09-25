@@ -11,9 +11,6 @@ exports[`WorklogSummarizerView should render the worklog entries: onInitialLoadi
 exports[`WorklogSummarizerView should render the worklog entries: whenLoadingIsDone 1`] = `
 <div>
   <div>
-    <h1>
-      Worklogs summarized per User
-    </h1>
     <table>
       <thead>
         <tr>
@@ -72,9 +69,6 @@ exports[`WorklogSummarizerView should render the worklog entries: whenLoadingIsD
 exports[`WorklogSummarizerView should render the worklog entries: whenSortedByDisplayName 1`] = `
 <div>
   <div>
-    <h1>
-      Worklogs summarized per User
-    </h1>
     <table>
       <thead>
         <tr>
@@ -133,9 +127,6 @@ exports[`WorklogSummarizerView should render the worklog entries: whenSortedByDi
 exports[`WorklogSummarizerView should render the worklog entries: whenSortedByTimeSpent 1`] = `
 <div>
   <div>
-    <h1>
-      Worklogs summarized per User
-    </h1>
     <table>
       <thead>
         <tr>
@@ -187,22 +178,6 @@ exports[`WorklogSummarizerView should render the worklog entries: whenSortedByTi
         </tr>
       </tbody>
     </table>
-  </div>
-</div>
-`;
-
-exports[`WorklogSummarizerView should sho when an error occurs while loading the worklog summary: onInitialLoading 1`] = `
-<div>
-  <div>
-    Loading. Be patient!
-  </div>
-</div>
-`;
-
-exports[`WorklogSummarizerView should sho when an error occurs while loading the worklog summary: whenLoadingIsDone 1`] = `
-<div>
-  <div>
-    Error. Wanna try to reaload? ;)
   </div>
 </div>
 `;
