@@ -13,8 +13,7 @@ strategy:
    imageName: 'windows-latest'
 
 variables:
-  isLinux1: ${{ eq( ${imageName},'ubuntu-latest') }}
-  iname1: ${imageName}
+  someVar: 'some value'
   
 
 trigger:
@@ -32,20 +31,10 @@ steps:
     checkLatest: true
   displayName: 'Install Node.js'
 
-- script: echo ${{ isLinux1 }}
-- script: echo ${{ isLinux2 }}
-- script: echo ${{ iname1 }}
-- script: echo ${{ iname2 }}
-
-- script: echo ${{ variables.isLinux1 }}
-- script: echo ${{ variables.isLinux2 }}
-- script: echo ${{ variables.iname1 }}
-- script: echo ${{ variables.iname2 }}
-
-- script: echo ${variables.isLinux1}
-- script: echo ${variables.isLinux2}
-- script: echo ${variables.iname1}
-- script: echo ${variables.iname2}
+- script: echo ${{ variables.someVar }}
+- script: echo ${ variables.someVar }
+- script: echo ${{ someVar }}
+- script: echo ${ someVar }
 
 - script: |    
     yarn install    
