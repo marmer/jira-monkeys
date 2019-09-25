@@ -33,7 +33,6 @@ steps:
 
 - script: echo ${{ variables.someVar }}
 - script: echo ${ variables.someVar }
-- script: echo ${{ someVar }}
 - script: echo ${ someVar }
 
 - script: |    
