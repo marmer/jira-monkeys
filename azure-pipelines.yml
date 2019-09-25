@@ -41,7 +41,7 @@ steps:
 - script: |    
     yarn install    
   displayName: 'yarn install'
-  condition: ${{ variables.withSonar }}
+  condition: variables.withSonar
 
 - script: |
     yarn test
