@@ -4,6 +4,8 @@ import JiraMonkey from "./JiraMonkey";
 
 jest.mock("./WorklogSummarizerView", () => (): React.ReactNode => <div>WorklogSummarizerViewMock</div>);
 jest.mock("./EstimationShiftView", () => (): React.ReactNode => <div>EstimationShiftViewMock</div>);
+jest.mock("./EstimationFixView", () => (): React.ReactNode => <div>EstimationFixViewMock</div>);
+jest.mock("./BookingShiftView", () => (): React.ReactNode => <div>BookingShiftViewMock</div>);
 
 describe("JiraMonkey", () => {
     beforeEach(() => {
