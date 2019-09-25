@@ -41,8 +41,12 @@ steps:
 - script: |    
     yarn install    
   displayName: 'yarn install'
+  condition: false
 
-- script: yarn test
+- script: |
+    yarn test
+  displayName: yarn test
+  condition: false
 
 - task: PublishTestResults@2
   inputs:
