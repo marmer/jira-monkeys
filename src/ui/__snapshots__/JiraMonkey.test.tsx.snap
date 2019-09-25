@@ -111,9 +111,6 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
       </div>
       <main>
         <div>
-          WorklogSummarizerViewMock
-        </div>
-        <div>
           nothing to see here yet (Estimation-fixer)
         </div>
       </main>
@@ -186,7 +183,11 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
           Estimation-fixer
         </button>
       </div>
-      <main />
+      <main>
+        <div>
+          WorklogSummarizerViewMock
+        </div>
+      </main>
     </header>
   </div>
 </div>
