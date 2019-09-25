@@ -13,7 +13,7 @@ strategy:
    imageName: 'windows-latest'
 
 variables:
-  someVar: 'some value'
+  someVar: ${imageName}
   
 
 trigger:
@@ -32,8 +32,6 @@ steps:
   displayName: 'Install Node.js'
 
 - script: echo ${{ variables.someVar }}
-- script: echo ${ variables.someVar }
-- script: echo ${ someVar }
 
 - script: |    
     yarn install    
