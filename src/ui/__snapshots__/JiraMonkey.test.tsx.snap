@@ -74,7 +74,7 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
       </div>
       <main>
         <div>
-          nothing to see here yet (Booking-shifter)
+          BookingShiftViewMock
         </div>
       </main>
     </header>
@@ -111,7 +111,7 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
       </div>
       <main>
         <div>
-          nothing to see here yet (Estimation-fixer)
+          EstimationFixViewMock
         </div>
       </main>
     </header>

@@ -1,4 +1,6 @@
 import React, {Component} from "react";
+import BookingShiftView from "./BookingShiftView";
+import EstimationFixView from "./EstimationFixView";
 import EstimationShiftView from "./EstimationShiftView";
 import "./JiraMonkey.css";
 import WorklogSummarizerView from "./WorklogSummarizerView";
@@ -62,10 +64,10 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
                     <EstimationShiftView/>}
 
                     {this.state.currentView === "BOOKING_SHIFT" &&
-                    <div>nothing to see here yet (Booking-shifter)</div>}
+                    <BookingShiftView/>}
 
                     {this.state.currentView === "ESTIMATION_FIX" &&
-                    <div>nothing to see here yet (Estimation-fixer)</div>}
+                    <EstimationFixView/>}
                 </main>
             </header>
             }
