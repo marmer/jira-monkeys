@@ -31,10 +31,8 @@ steps:
     checkLatest: true
   displayName: 'Install Node.js'
 
-- script: echo $anotherVar
-- script: echo %anotherVar%
-- script: echo %isLinux
-- script: echo $isLinux
+- script: echo ${{ anotherVar }}
+- script: echo ${{ isLinux }}
 
 - script: |    
     yarn install    
