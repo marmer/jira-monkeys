@@ -69,7 +69,6 @@ steps:
     pathToSources: 'src'
     reportDirectory: 'coverage/lcov-report'
     failIfCoverageEmpty: true
-  condition: ${{ eq(variables.imageName,'ubuntu-latest') }}
 
 - task: SonarCloudPrepare@1
   inputs:
@@ -77,12 +76,9 @@ steps:
     organization: 'marmer-github'
     scannerMode: 'CLI'
     configMode: 'file'
-  condition: ${{ eq(variables.imageName,'ubuntu-latest') }}
 
 - task: SonarCloudAnalyze@1
-  condition: ${{ eq(variables.imageName,'ubuntu-latest') }}
 
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
-  condition: ${{ eq(variables.imageName,'ubuntu-latest') }}
