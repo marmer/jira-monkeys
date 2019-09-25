@@ -54,9 +54,12 @@ steps:
     organization: 'marmer-github'
     scannerMode: 'CLI'
     configMode: 'file'
+  condition: ${{ eq(imageName, 'ubuntu-latest') }}
 
 - task: SonarCloudAnalyze@1
+  condition: ${{ eq(imageName, 'ubuntu-latest') }}
 
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
+  condition: ${{ eq(imageName, 'ubuntu-latest') }}
