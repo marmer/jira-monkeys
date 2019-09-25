@@ -13,10 +13,10 @@ strategy:
    imageName: 'windows-latest'
 
 variables:
-  isLinux1: ${{ eq(imageName,'ubuntu-latest') }}
-  isLinux2: ${{ eq(imageName,'ubuntu-latest') }}
+  isLinux1: ${{ eq( ${imageName},'ubuntu-latest') }}
+  isLinux2: ${{ eq(${variables.imageName},'ubuntu-latest') }}
   iname1: ${imageName}
-  iname2: ${variables:imageName}
+  iname2: ${variables.imageName}
   
 
 trigger:
