@@ -26,16 +26,24 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
       <div
         class="monkeyToggler"
       >
-        <button>
+        <button
+          class=""
+        >
           Worklog-summarizer
         </button>
-        <button>
+        <button
+          class=""
+        >
           Estimation-shifter
         </button>
-        <button>
+        <button
+          class=""
+        >
           Booking-shifter
         </button>
-        <button>
+        <button
+          class=""
+        >
           Estimation-fixer
         </button>
       </div>
@@ -59,16 +67,24 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
       <div
         class="monkeyToggler"
       >
-        <button>
+        <button
+          class=""
+        >
           Worklog-summarizer
         </button>
-        <button>
+        <button
+          class=""
+        >
           Estimation-shifter
         </button>
-        <button>
+        <button
+          class="selectedJiraMonkey"
+        >
           Booking-shifter
         </button>
-        <button>
+        <button
+          class=""
+        >
           Estimation-fixer
         </button>
       </div>
@@ -96,16 +112,24 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
       <div
         class="monkeyToggler"
       >
-        <button>
+        <button
+          class=""
+        >
           Worklog-summarizer
         </button>
-        <button>
+        <button
+          class=""
+        >
           Estimation-shifter
         </button>
-        <button>
+        <button
+          class=""
+        >
           Booking-shifter
         </button>
-        <button>
+        <button
+          class="selectedJiraMonkey"
+        >
           Estimation-fixer
         </button>
       </div>
@@ -133,16 +157,24 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
       <div
         class="monkeyToggler"
       >
-        <button>
+        <button
+          class=""
+        >
           Worklog-summarizer
         </button>
-        <button>
+        <button
+          class="selectedJiraMonkey"
+        >
           Estimation-shifter
         </button>
-        <button>
+        <button
+          class=""
+        >
           Booking-shifter
         </button>
-        <button>
+        <button
+          class=""
+        >
           Estimation-fixer
         </button>
       </div>
@@ -170,16 +202,24 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
       <div
         class="monkeyToggler"
       >
-        <button>
+        <button
+          class="selectedJiraMonkey"
+        >
           Worklog-summarizer
         </button>
-        <button>
+        <button
+          class=""
+        >
           Estimation-shifter
         </button>
-        <button>
+        <button
+          class=""
+        >
           Booking-shifter
         </button>
-        <button>
+        <button
+          class=""
+        >
           Estimation-fixer
         </button>
       </div>

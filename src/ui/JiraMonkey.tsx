@@ -5,7 +5,7 @@ import EstimationShiftView from "./EstimationShiftView";
 import "./JiraMonkey.css";
 import WorklogSummarizerView from "./WorklogSummarizerView";
 
-type ViewChoices = "WORKLOG_SUMMARIZER" | "ESTIMATION_SHIFT" | "BOOKING_SHIFT" | "ESTIMATION_FIX" | null | undefined;
+type ViewChoices = "WORKLOG_SUMMARIZER" | "ESTIMATION_SHIFT" | "BOOKING_SHIFT" | "ESTIMATION_FIX" ;
 
 interface JiraMonkeyState {
     toolsVisible: boolean;
@@ -43,16 +43,20 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
             {this.state.toolsVisible &&
             <header id="JiraMonkeyContainer">
                 <div className="monkeyToggler">
-                    <button onClick={() => this.setState({currentView: "WORKLOG_SUMMARIZER"})}>
+                    <button onClick={() => this.setState({currentView: "WORKLOG_SUMMARIZER"})}
+                            className={this.state.currentView === "WORKLOG_SUMMARIZER" ? "selectedJiraMonkey" : ""}>
                         Worklog-summarizer
                     </button>
-                    <button onClick={() => this.setState({currentView: "ESTIMATION_SHIFT"})}>
+                    <button onClick={() => this.setState({currentView: "ESTIMATION_SHIFT"})}
+                            className={this.state.currentView === "ESTIMATION_SHIFT" ? "selectedJiraMonkey" : ""}>
                         Estimation-shifter
                     </button>
-                    <button onClick={() => this.setState({currentView: "BOOKING_SHIFT"})}>
+                    <button onClick={() => this.setState({currentView: "BOOKING_SHIFT"})}
+                            className={this.state.currentView === "BOOKING_SHIFT" ? "selectedJiraMonkey" : ""}>
                         Booking-shifter
                     </button>
-                    <button onClick={() => this.setState({currentView: "ESTIMATION_FIX"})}>
+                    <button onClick={() => this.setState({currentView: "ESTIMATION_FIX"})}
+                            className={this.state.currentView === "ESTIMATION_FIX" ? "selectedJiraMonkey" : ""}>
                         Estimation-fixer
                     </button>
                 </div>

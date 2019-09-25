@@ -9,3 +9,7 @@
     position: relative;
     left: 10px;
 }
+
+.selectedJiraMonkey {
+    font-weight: bold;
+}
