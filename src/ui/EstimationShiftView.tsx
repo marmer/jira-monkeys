@@ -30,7 +30,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
 
     public componentDidMount(): void {
         this.setState({
-            targetIssueText: localStorage.getItem(EstimationShiftView.name + ".targetIssueText") || "",
+            targetIssueText: sessionStorage.getItem(EstimationShiftView.name + ".targetIssueText") || "",
         });
         this.loadSourceEstimation();
     }
@@ -41,7 +41,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 callback();
             }
 
-            localStorage.setItem(EstimationShiftView.name + ".targetIssueText", this.state.targetIssueText);
+            sessionStorage.setItem(EstimationShiftView.name + ".targetIssueText", this.state.targetIssueText);
         });
     }
 
@@ -147,7 +147,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
         const targetIssueText = event.target.value;
         this.setState({
             targetIssueText,
-        }, () => localStorage.setItem("targetIssue", targetIssueText));
+        }, () => sessionStorage.setItem("targetIssue", targetIssueText));
     }
 
     private onTimeToShiftTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
