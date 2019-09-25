@@ -55,7 +55,7 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
                     </button>
                 </div>
                 <main>
-                    {this.state.currentView === "ESTIMATION_FIX" &&
+                    {this.state.currentView === "WORKLOG_SUMMARIZER" &&
                     <WorklogSummarizerView/>}
 
                     {this.state.currentView === "ESTIMATION_SHIFT" &&
