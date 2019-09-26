@@ -2,7 +2,7 @@ import EstimationCrudService, {Estimation} from "./EstimationCrudService";
 import JiraTimeService from "./JiraTimeService";
 
 export default class EstimationShiftService {
-    public static shiftEstimation(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSum> {
+    public static async shiftEstimation(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSum> {
         if (param.targetIssueKey.toLocaleLowerCase() === param.sourceIssueKey.toLocaleLowerCase()) {
             return this.getShiftSumForSingleIssueByIssueKey(param.sourceIssueKey);
         }
@@ -12,7 +12,7 @@ export default class EstimationShiftService {
             .then(this.updateEstimations);
     }
 
-    private static getShiftSumForSingleIssueByIssueKey(issueKey: string): Promise<ShiftSum> {
+    private static async getShiftSumForSingleIssueByIssueKey(issueKey: string): Promise<ShiftSum> {
         return EstimationCrudService.getEstimationsForIssueKey(issueKey)
             .then(result =>
                 ({
@@ -39,7 +39,7 @@ export default class EstimationShiftService {
         return summary;
     }
 
-    private static loadSourceAndTargetEstimationShiftSummaryFor(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSum> {
+    private static async loadSourceAndTargetEstimationShiftSummaryFor(param: { targetIssueKey: string; timeToShiftAsJiraString: string; sourceIssueKey: string }): Promise<ShiftSum> {
         return EstimationCrudService.getEstimationsForIssueKey(param.sourceIssueKey)
             .then((sourceEstimation) =>
                 EstimationCrudService.getEstimationsForIssueKey(param.targetIssueKey)
@@ -80,7 +80,7 @@ export default class EstimationShiftService {
         };
     }
 
-    private static updateEstimations(updateStates: ShiftSum): Promise<ShiftSum> {
+    private static async updateEstimations(updateStates: ShiftSum): Promise<ShiftSum> {
         return EstimationCrudService.updateEstimation(updateStates.targetEstimation)
             .then(
                 () => EstimationCrudService.updateEstimation(updateStates.sourceEstimation)

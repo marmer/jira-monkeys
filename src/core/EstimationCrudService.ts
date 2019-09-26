@@ -5,8 +5,10 @@ export interface Estimation {
     issueSummary: string;
     originalEstimate?: string;
     originalEstimateInMinutes?: number;
-    remainingEstimate?: string;
+    timeSpent?: string;
     remainingEstimateInMinutes?: number;
+    remainingEstimate?: string;
+    timeSpentMinutes?: number;
 }
 
 interface EstimationResponse {
@@ -14,24 +16,16 @@ interface EstimationResponse {
         summary: string
         timetracking: {
             originalEstimate: string,
-            remainingEstimate: string
+            remainingEstimate: string,
+            timeSpent: string,
             originalEstimateSeconds: number,
             remainingEstimateSeconds: number,
+            timeSpentSeconds: number,
         },
     };
 }
-
-interface EstimationRequest {
-    fields: {
-        timetracking: {
-            originalEstimate: string,
-            remainingEstimate: string,
-        },
-    };
-}
-
 export default class EstimationCrudService {
-    public static getEstimationsForIssueKey(issueKey: string): Promise<Estimation> {
+    public static async getEstimationsForIssueKey(issueKey: string): Promise<Estimation> {
         const requestUrl = IssueSiteInfos.getIssueUrlForIssueKey(issueKey);
         return fetch(requestUrl, {method: "GET"})
             .then((response) => {
@@ -54,7 +48,7 @@ export default class EstimationCrudService {
             });
     }
 
-    public static updateEstimation(estimation: Estimation): Promise<void> {
+    public static async updateEstimation(estimation: Estimation): Promise<void> {
         return fetch(IssueSiteInfos.getIssueUrlForIssueKey(estimation.issueKey),
             {
                 body: JSON.stringify({
