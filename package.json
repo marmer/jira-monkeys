@@ -47,7 +47,8 @@
     "webpack-userscript": "^2.3.1"
   },
   "scripts": {
-    "test": "jest --detectOpenHandles",
+    "test": "jest",
+    "testOpenHandles": "jest --detectOpenHandles",
     "start": "cross-env NODE_ENV=development webpack-dev-server",
     "build": "cross-env NODE_ENV=production webpack --mode=production",
     "devbuild": "cross-env NODE_ENV=development webpack --mode=development"
