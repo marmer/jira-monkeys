@@ -16,7 +16,7 @@ strategy:
    withSonar: false
 
 variables:
-  withSonar: $(withSonar)
+  withSonar: eq(withSonar,true)
   
 
 trigger:
@@ -56,7 +56,7 @@ steps:
     pathToSources: 'src'
     reportDirectory: 'coverage/lcov-report'
     failIfCoverageEmpty: true
-  condition: eq(variables.withSonar,true)
+  condition: variables.withSonar
 
 - task: SonarCloudPrepare@1
   inputs:
@@ -64,12 +64,12 @@ steps:
     organization: 'marmer-github'
     scannerMode: 'CLI'
     configMode: 'file'
-  condition: eq(variables.withSonar,true)
+  condition: variables.withSonar
 
 - task: SonarCloudAnalyze@1
-  condition: eq(variables.withSonar,true)
+  condition: variables.withSonar
 
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
-  condition: eq(variables.withSonar,true)
+  condition: variables.withSonar
