@@ -9,7 +9,7 @@ export interface Worklog {
 }
 
 export default class WorklogService {
-    public static getSummedWorklogsByUser(): Promise<Worklog[]> {
+    public static async getSummedWorklogsByUser(): Promise<Worklog[]> {
         const issueKey = IssueSiteInfos.getCurrentIssueKey();
         return this.getWorklogsPerUser(issueKey).then(this.sumUp);
 
