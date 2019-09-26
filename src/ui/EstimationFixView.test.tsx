@@ -25,8 +25,11 @@ describe("EstimationFixView", () => {
 
         userEvent.click(estimationFixView.getByText("Fix estimation"));
 
-        reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
+        await reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
         expect(WindowService.reloadPage).toBeCalled();
     });
+
     // TODO: marmer 26.09.2019 handle error when estimation fix does not work
+
+    // TODO: marmer 26.09.2019 Give a preview for the fixed estimation
 });
