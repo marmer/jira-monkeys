@@ -36,7 +36,7 @@ export default class EstimationCrudService {
             })
             .then((response) => response as EstimationResponse)
             .then((estimationResponse) => {
-                const {originalEstimateSeconds, originalEstimate, remainingEstimate, remainingEstimateSeconds} = estimationResponse.fields.timetracking;
+                const {originalEstimateSeconds, originalEstimate, remainingEstimate, remainingEstimateSeconds, timeSpent, timeSpentSeconds} = estimationResponse.fields.timetracking;
                 return {
                     issueKey,
                     issueSummary: estimationResponse.fields.summary,
@@ -44,6 +44,8 @@ export default class EstimationCrudService {
                     originalEstimateInMinutes: Math.floor(originalEstimateSeconds / 60),
                     remainingEstimate,
                     remainingEstimateInMinutes: Math.floor(remainingEstimateSeconds / 60),
+                    timeSpentMinutes: Math.floor(timeSpentSeconds / 60),
+                    timeSpent,
                 } as Estimation;
             });
     }

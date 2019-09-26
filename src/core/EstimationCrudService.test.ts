@@ -1,5 +1,3 @@
-import deepEqual from "deep-equal";
-
 import fetchMock from "fetch-mock";
 import EstimationCrudService from "./EstimationCrudService";
 import IssueSiteInfos from "./IssueSiteInfos";
@@ -65,7 +63,7 @@ describe("EstimationCrudService", () => {
         });
     });
 
-    describe("getEstimationsForIssue()", () => {
+    describe("getEstimationsForIssueKey()", () => {
         it("should serve an appropriate errormessage on a bad status", () => {
             const issueKey = "issue-200";
             const updateUrl = "http://fancy.com/updateUrl";
@@ -79,9 +77,11 @@ describe("EstimationCrudService", () => {
                             summary: "issueSummary",
                             timetracking: {
                                 originalEstimate: "originalEstimate",
-                                originalEstimateSeconds: 42,
+                                originalEstimateSeconds: 2520,
                                 remainingEstimate: "remainingEstimate",
-                                remainingEstimateSeconds: 24,
+                                remainingEstimateSeconds: 1440,
+                                timeSpent: "timeSpent",
+                                timeSpentSeconds: 80220,
                             },
                         },
                     },
@@ -93,7 +93,7 @@ describe("EstimationCrudService", () => {
                 .catch((error) => expect(error).toEqual(Error("Unexpected request status: 500")));
         });
 
-        it("should return the estimations for from the rest api", () => {
+        it("should return the estimations for from the rest api", async () => {
             const issueKey = "issue-200";
             const updateUrl = "http://fancy.com/updateUrl";
             IssueSiteInfos.getIssueUrlForIssueKey = jest.fn().mockImplementation(ik => {
@@ -106,9 +106,11 @@ describe("EstimationCrudService", () => {
                             summary: "issueSummary",
                             timetracking: {
                                 originalEstimate: "originalEstimate",
-                                originalEstimateSeconds: 42,
+                                originalEstimateSeconds: 2520,
                                 remainingEstimate: "remainingEstimate",
-                                remainingEstimateSeconds: 24,
+                                remainingEstimateSeconds: 1440,
+                                timeSpent: "timeSpent",
+                                timeSpentSeconds: 80220,
                             },
                         },
                     },
@@ -116,18 +118,18 @@ describe("EstimationCrudService", () => {
                 status: 200,
             });
 
-            return EstimationCrudService.getEstimationsForIssueKey(issueKey)
-                .then((result) =>
-                    deepEqual(result,
-                        {
-                            issueKey: "issue-200",
-                            issueSummary: "issueSummary",
-                            originalEstimate: "originalEstimate",
-                            originalEstimateInMinutes: 42,
-                            remainingEstimate: "remainingEstimate",
-                            remainingEstimateInMinutes: 24,
-                        },
-                    ));
+            const result = await EstimationCrudService.getEstimationsForIssueKey(issueKey);
+            expect(result).toStrictEqual({
+                issueKey: "issue-200",
+                issueSummary: "issueSummary",
+                originalEstimate: "originalEstimate",
+                originalEstimateInMinutes: 42,
+                remainingEstimate: "remainingEstimate",
+                remainingEstimateInMinutes: 24,
+                timeSpent: "timeSpent",
+                timeSpentMinutes: 1337,
+            });
         });
+        // TODO: marmer 26.09.2019 add tests about how to handle missing values
     });
 });
