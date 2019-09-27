@@ -56,6 +56,26 @@ describe("EstimationFixService", () => {
                     timeSpentMinutes: 2,
                 },
             }, {
+                description: "more time spent than estimated",
+                estimationToFix: {
+                    ...baseEstimation,
+                    originalEstimate: minutesToJiraFormat(10),
+                    originalEstimateInMinutes: 10,
+                    remainingEstimate: minutesToJiraFormat(5),
+                    remainingEstimateInMinutes: 5,
+                    timeSpent: "50m",
+                    timeSpentMinutes: 50,
+                },
+                fixedEstimation: {
+                    ...baseEstimation,
+                    originalEstimate: minutesToJiraFormat(10),
+                    originalEstimateInMinutes: 10,
+                    remainingEstimate: minutesToJiraFormat(0),
+                    remainingEstimateInMinutes: 0,
+                    timeSpent: "50m",
+                    timeSpentMinutes: 50,
+                },
+            }, {
                 description: "undefined remaining",
                 estimationToFix: {
                     ...baseEstimation,

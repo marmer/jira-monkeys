@@ -13,6 +13,9 @@ export default class EstimationFixService {
         if (originalEstimateInMinutes) {
             remainingEstimateInMinutes = originalEstimateInMinutes -
                 (timeSpentMinutes ? timeSpentMinutes : 0);
+            if (remainingEstimateInMinutes < 0) {
+                remainingEstimateInMinutes = 0;
+            }
         } else {
             remainingEstimateInMinutes = 0;
         }
