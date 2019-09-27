@@ -1,11 +1,11 @@
 import React, {Component} from "react";
-import BookingShiftView from "./BookingShiftView";
 import EstimationFixView from "./EstimationFixView";
 import EstimationShiftView from "./EstimationShiftView";
 import "./JiraMonkey.css";
+import WorklogShiftView from "./WorklogShiftView";
 import WorklogSummarizerView from "./WorklogSummarizerView";
 
-type ViewChoices = "WORKLOG_SUMMARIZER" | "ESTIMATION_SHIFT" | "BOOKING_SHIFT" | "ESTIMATION_FIX" ;
+type ViewChoices = "WORKLOG_SUMMARIZER" | "ESTIMATION_SHIFT" | "WORKLOG_SHIFT" | "ESTIMATION_FIX" ;
 
 interface JiraMonkeyState {
     toolsVisible: boolean;
@@ -51,9 +51,9 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
                             className={this.state.currentView === "ESTIMATION_SHIFT" ? "selectedJiraMonkey" : ""}>
                         Estimation-shifter
                     </button>
-                    <button onClick={() => this.setState({currentView: "BOOKING_SHIFT"})}
-                            className={this.state.currentView === "BOOKING_SHIFT" ? "selectedJiraMonkey" : ""}>
-                        Booking-shifter
+                    <button onClick={() => this.setState({currentView: "WORKLOG_SHIFT"})}
+                            className={this.state.currentView === "WORKLOG_SHIFT" ? "selectedJiraMonkey" : ""}>
+                        Worklog-shifter
                     </button>
                     <button onClick={() => this.setState({currentView: "ESTIMATION_FIX"})}
                             className={this.state.currentView === "ESTIMATION_FIX" ? "selectedJiraMonkey" : ""}>
@@ -67,8 +67,8 @@ export default class JiraMonkey extends Component<{}, JiraMonkeyState> {
                     {this.state.currentView === "ESTIMATION_SHIFT" &&
                     <EstimationShiftView/>}
 
-                    {this.state.currentView === "BOOKING_SHIFT" &&
-                    <BookingShiftView/>}
+                    {this.state.currentView === "WORKLOG_SHIFT" &&
+                    <WorklogShiftView/>}
 
                     {this.state.currentView === "ESTIMATION_FIX" &&
                     <EstimationFixView/>}
