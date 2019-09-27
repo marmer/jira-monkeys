@@ -16,6 +16,9 @@ jest.mock("./ModalView", () => ((({children, onClose}) =>
     </>) as FunctionComponent<{ onClose: () => void }>));
 
 describe("EstimationShiftView", () => {
+    beforeEach(() => {
+        sessionStorage.clear();
+    });
     const baseEstimation: Estimation = {
         issueKey: "BASE-0815",
         issueSummary: "base estimation issue",
@@ -445,7 +448,20 @@ describe("EstimationShiftView", () => {
         reactTest.waitForElementToBeRemoved(() => errorView);
     });
 
-    it.skip("should do all the todos of this body ;)", () => {
-        // TODO: marmer 12.09.2019 local storage
+    it("should do all the todos of this body ;)", () => {
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation((paramIssueKey: string): Promise<Estimation> => {
+            if (paramIssueKey === currentEstimation.issueKey) {
+                return Promise.resolve(currentEstimation);
+            }
+            fail("unexpected issuekeyrequest: " + paramIssueKey);
+            return Promise.reject("unexpected issuekeyrequest: " + paramIssueKey);
+        });
+
+        const estimationShiftView = reactTest.render(<EstimationShiftView/>);
+        userEvent.type(estimationShiftView.getByLabelText("Issue key"), "someTargetKey-123");
+        expect(estimationShiftView.getByLabelText("Issue key")).toHaveValue("someTargetKey-123");
+        estimationShiftView.unmount();
+
+        expect(reactTest.render(<EstimationShiftView/>).getByLabelText("Issue key")).toHaveValue("someTargetKey-123");
     });
 });
