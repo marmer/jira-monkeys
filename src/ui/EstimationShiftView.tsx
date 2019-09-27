@@ -4,6 +4,7 @@ import EstimationShiftService from "../core/EstimationShiftService";
 import IssueSiteInfos from "../core/IssueSiteInfos";
 import JiraTimeService from "../core/JiraTimeService";
 import "./EstimationShiftView.css";
+import EstimationView from "./EstimationView";
 import ModalView from "./ModalView";
 
 interface EstimationShiftViewState {
@@ -52,7 +53,8 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
                 {this.state.errorMessages.map(error => <div key={error}>{error}</div>)}
             </ModalView>}
 
-            <EstimationView estimation={this.state.sourceIssueEstimation} readonly={true}/>
+            <EstimationView estimation={this.state.sourceIssueEstimation} readonly={true}
+                            className="estimationShiftCardContainer"/>
 
             <div className="estimationShiftCardContainer">
                 <label>
@@ -78,7 +80,8 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
             </div>
 
             {this.state.targetIssueEstimation &&
-            <EstimationView estimation={this.state.targetIssueEstimation} readonly={true}/>}
+            <EstimationView className="estimationShiftCardContainer" estimation={this.state.targetIssueEstimation}
+                            readonly={true}/>}
         </div>;
     }
 
@@ -227,24 +230,3 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
         this.setState({errorMessages: []});
     }
 }
-
-const EstimationView = (props: { estimation?: Estimation | null, readonly: boolean }): React.ReactElement => {
-    return <div className="estimationShiftCardContainer"
-                title={props.estimation ? props.estimation.issueKey + ": " + props.estimation.issueSummary : ""}>
-        <label>
-            Issue <input type="text"
-                         value={props.estimation ? props.estimation.issueKey : ""}
-                         disabled={props.readonly}/>
-        </label>
-        <label>
-            Original Estimate <input type="text"
-                                     value={props.estimation ? props.estimation.originalEstimate : ""}
-                                     disabled={props.readonly}/>
-        </label>
-        <label>
-            Remaining Estimate <input type="text"
-                                      value={props.estimation ? props.estimation.remainingEstimate : ""}
-                                      disabled={props.readonly}/>
-        </label>
-    </div>;
-};
