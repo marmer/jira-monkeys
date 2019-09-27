@@ -21,12 +21,14 @@ export default class EstimationFixService {
             return;
         }
 
-        await EstimationCrudService.updateEstimation({
-            ...estimation,
-            remainingEstimateInMinutes,
-            remainingEstimate: JiraTimeService.minutesToJiraFormat(remainingEstimateInMinutes),
-        }).catch(() => {
+        try {
+            await EstimationCrudService.updateEstimation({
+                ...estimation,
+                remainingEstimateInMinutes,
+                remainingEstimate: JiraTimeService.minutesToJiraFormat(remainingEstimateInMinutes),
+            });
+        } catch (e) {
             throw new Error("Error while updating the estimation to fix");
-        });
+        }
     }
 }
