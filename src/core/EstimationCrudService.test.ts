@@ -130,6 +130,66 @@ describe("EstimationCrudService", () => {
                 timeSpentMinutes: 1337,
             });
         });
-        // TODO: marmer 26.09.2019 add tests about how to handle missing values
+
+        it("should return the estimations for from the rest api with even with undefined values", async () => {
+            const issueKey = "issue-200";
+            const updateUrl = "http://fancy.com/updateUrl";
+            IssueSiteInfos.getIssueUrlForIssueKey = jest.fn().mockImplementation(ik => {
+                expect(ik).toEqual(issueKey);
+                return updateUrl;
+            });
+            fetchMock.mock(updateUrl, {
+                body: JSON.stringify({
+                        fields: {
+                            summary: "issueSummary",
+                            timetracking: {},
+                        },
+                    },
+                ),
+                status: 200,
+            });
+
+            const result = await EstimationCrudService.getEstimationsForIssueKey(issueKey);
+            expect(result).toStrictEqual({
+                issueKey: "issue-200",
+                issueSummary: "issueSummary",
+                originalEstimate: undefined,
+                originalEstimateInMinutes: undefined,
+                remainingEstimate: undefined,
+                remainingEstimateInMinutes: undefined,
+                timeSpent: undefined,
+                timeSpentMinutes: undefined,
+            });
+        });
     });
+    it("should return the estimations for from the rest api with even when timetracking is missing", async () => {
+        const issueKey = "issue-200";
+        const updateUrl = "http://fancy.com/updateUrl";
+        IssueSiteInfos.getIssueUrlForIssueKey = jest.fn().mockImplementation(ik => {
+            expect(ik).toEqual(issueKey);
+            return updateUrl;
+        });
+        fetchMock.mock(updateUrl, {
+            body: JSON.stringify({
+                    fields: {
+                        summary: "issueSummary",
+                    },
+                },
+            ),
+            status: 200,
+        });
+
+        const result = await EstimationCrudService.getEstimationsForIssueKey(issueKey);
+        expect(result).toStrictEqual({
+            issueKey: "issue-200",
+            issueSummary: "issueSummary",
+            originalEstimate: undefined,
+            originalEstimateInMinutes: undefined,
+            remainingEstimate: undefined,
+            remainingEstimateInMinutes: undefined,
+            timeSpent: undefined,
+            timeSpentMinutes: undefined,
+        });
+    });
+
 });
