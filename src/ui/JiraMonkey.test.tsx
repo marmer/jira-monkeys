@@ -5,7 +5,7 @@ import JiraMonkey from "./JiraMonkey";
 jest.mock("./WorklogSummarizerView", () => (): React.ReactNode => <div>WorklogSummarizerViewMock</div>);
 jest.mock("./EstimationShiftView", () => (): React.ReactNode => <div>EstimationShiftViewMock</div>);
 jest.mock("./EstimationFixView", () => (): React.ReactNode => <div>EstimationFixViewMock</div>);
-jest.mock("./BookingShiftView", () => (): React.ReactNode => <div>BookingShiftViewMock</div>);
+jest.mock("./WorklogShiftView", () => (): React.ReactNode => <div>WorklogShiftViewMock</div>);
 
 describe("JiraMonkey", () => {
     beforeEach(() => {
@@ -21,7 +21,7 @@ describe("JiraMonkey", () => {
         expect(jiraMonkey.container.querySelector("#JiraMonkeyContainer")).not.toBeNull();
         expect(jiraMonkey.getByText("Worklog-summarizer")).toBeVisible();
         expect(jiraMonkey.getByText("Estimation-shifter")).toBeVisible();
-        expect(jiraMonkey.getByText("Booking-shifter")).toBeVisible();
+        expect(jiraMonkey.getByText("Worklog-shifter")).toBeVisible();
         expect(jiraMonkey.getByText("Estimation-fixer")).toBeVisible();
         expect(jiraMonkey.container).toMatchSnapshot("on activated toolbar");
 
@@ -31,7 +31,7 @@ describe("JiraMonkey", () => {
         reactTest.fireEvent.click(jiraMonkey.getByText("Estimation-shifter"));
         expect(jiraMonkey.container).toMatchSnapshot("on activated toolbar with estimation shifter");
 
-        reactTest.fireEvent.click(jiraMonkey.getByText("Booking-shifter"));
+        reactTest.fireEvent.click(jiraMonkey.getByText("Worklog-shifter"));
         expect(jiraMonkey.container).toMatchSnapshot("on activated toolbar with booking shifter");
 
         reactTest.fireEvent.click(jiraMonkey.getByText("Estimation-fixer"));

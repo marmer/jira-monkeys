@@ -39,7 +39,7 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
         <button
           class=""
         >
-          Booking-shifter
+          Worklog-shifter
         </button>
         <button
           class=""
@@ -80,7 +80,7 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
         <button
           class="selectedJiraMonkey"
         >
-          Booking-shifter
+          Worklog-shifter
         </button>
         <button
           class=""
@@ -90,7 +90,7 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
       </div>
       <main>
         <div>
-          BookingShiftViewMock
+          WorklogShiftViewMock
         </div>
       </main>
     </header>
@@ -125,7 +125,7 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
         <button
           class=""
         >
-          Booking-shifter
+          Worklog-shifter
         </button>
         <button
           class="selectedJiraMonkey"
@@ -170,7 +170,7 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
         <button
           class=""
         >
-          Booking-shifter
+          Worklog-shifter
         </button>
         <button
           class=""
@@ -215,7 +215,7 @@ exports[`JiraMonkey should be possible to show and hide the different jira monke
         <button
           class=""
         >
-          Booking-shifter
+          Worklog-shifter
         </button>
         <button
           class=""
