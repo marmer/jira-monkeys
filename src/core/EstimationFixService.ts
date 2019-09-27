@@ -3,7 +3,9 @@ import JiraTimeService from "./JiraTimeService";
 
 export default class EstimationFixService {
     public static async fixEstimationForIssue(issueKey: string): Promise<void> {
-        const estimation = await EstimationCrudService.getEstimationsForIssueKey(issueKey);
+        const estimation = await EstimationCrudService.getEstimationsForIssueKey(issueKey).catch(() => {
+            throw new Error("Error while loading the estimation to fix");
+        });
 
         const {originalEstimateInMinutes, timeSpentMinutes} = estimation;
 
@@ -23,6 +25,8 @@ export default class EstimationFixService {
             ...estimation,
             remainingEstimateInMinutes,
             remainingEstimate: JiraTimeService.minutesToJiraFormat(remainingEstimateInMinutes),
+        }).catch(() => {
+            throw new Error("Error while updating the estimation to fix");
         });
     }
 }

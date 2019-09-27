@@ -198,7 +198,48 @@ describe("EstimationFixService", () => {
                 });
             });
 
-        // TODO: marmer 27.09.2019 add negative cases (not able to load)
-        // TODO: marmer 27.09.2019 add negative cases (not able to write)
+        it("should reject with an appropriate errormessage when it's not possible to load the necessary information to fix anything", async () => {
+            EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockRejectedValue(new Error("Well, that's not nice"));
+            EstimationCrudService.updateEstimation = jest.fn();
+
+            try {
+                await EstimationFixService.fixEstimationForIssue("annyIssueKey-1234");
+                fail("it's execution was not expected to be be successful at all");
+            } catch (e) {
+                expect(e).toStrictEqual(new Error("Error while loading the estimation to fix"));
+                expect(EstimationCrudService.updateEstimation).not.toBeCalled();
+            }
+        });
+
+        it("should reject with an appropriate errormessage when it's not possible to update the necessary information to fix anything", async () => {
+            const estimationToFix = {
+                ...baseEstimation,
+                originalEstimate: minutesToJiraFormat(10),
+                originalEstimateInMinutes: 10,
+                remainingEstimate: minutesToJiraFormat(5),
+                remainingEstimateInMinutes: 5,
+                timeSpent: "8m",
+                timeSpentMinutes: 8,
+            };
+
+            EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
+                async issueKey => {
+                    if (issueKey !== estimationToFix.issueKey) {
+                        fail("Unexpected issue to load: " + issueKey);
+                    }
+                    return estimationToFix;
+                },
+            );
+
+            EstimationCrudService.updateEstimation = jest.fn().mockRejectedValue(new Error("Welllllll ... no!"));
+
+            try {
+                await EstimationFixService.fixEstimationForIssue(estimationToFix.issueKey);
+                fail("it's execution was not expected to be be successful at all");
+            } catch (e) {
+                expect(e).toStrictEqual(new Error("Error while updating the estimation to fix"));
+            }
+        });
+
     });
 });
