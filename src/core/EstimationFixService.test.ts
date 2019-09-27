@@ -19,7 +19,7 @@ describe("EstimationFixService", () => {
                 description: "too much remaining",
                 estimationToFix: {
                     ...baseEstimation,
-                    originalEstimate: "10m",
+                    originalEstimate: minutesToJiraFormat(10),
                     originalEstimateInMinutes: 10,
                     remainingEstimate: minutesToJiraFormat(5),
                     remainingEstimateInMinutes: 5,
@@ -28,7 +28,7 @@ describe("EstimationFixService", () => {
                 },
                 fixedEstimation: {
                     ...baseEstimation,
-                    originalEstimate: "10m",
+                    originalEstimate: minutesToJiraFormat(10),
                     originalEstimateInMinutes: 10,
                     remainingEstimate: minutesToJiraFormat(2),
                     remainingEstimateInMinutes: 2,
@@ -39,7 +39,7 @@ describe("EstimationFixService", () => {
                 description: "not enough remaining",
                 estimationToFix: {
                     ...baseEstimation,
-                    originalEstimate: "10m",
+                    originalEstimate: minutesToJiraFormat(10),
                     originalEstimateInMinutes: 10,
                     remainingEstimate: minutesToJiraFormat(5),
                     remainingEstimateInMinutes: 5,
@@ -48,7 +48,7 @@ describe("EstimationFixService", () => {
                 },
                 fixedEstimation: {
                     ...baseEstimation,
-                    originalEstimate: "10m",
+                    originalEstimate: minutesToJiraFormat(10),
                     originalEstimateInMinutes: 10,
                     remainingEstimate: minutesToJiraFormat(8),
                     remainingEstimateInMinutes: 8,
@@ -59,7 +59,7 @@ describe("EstimationFixService", () => {
                 description: "undefined remaining",
                 estimationToFix: {
                     ...baseEstimation,
-                    originalEstimate: "10m",
+                    originalEstimate: minutesToJiraFormat(10),
                     originalEstimateInMinutes: 10,
                     remainingEstimate: undefined,
                     remainingEstimateInMinutes: undefined,
@@ -68,7 +68,7 @@ describe("EstimationFixService", () => {
                 },
                 fixedEstimation: {
                     ...baseEstimation,
-                    originalEstimate: "10m",
+                    originalEstimate: minutesToJiraFormat(10),
                     originalEstimateInMinutes: 10,
                     remainingEstimate: minutesToJiraFormat(8),
                     remainingEstimateInMinutes: 8,
@@ -79,7 +79,7 @@ describe("EstimationFixService", () => {
                 description: "undefined timespent",
                 estimationToFix: {
                     ...baseEstimation,
-                    originalEstimate: "10m",
+                    originalEstimate: minutesToJiraFormat(10),
                     originalEstimateInMinutes: 10,
                     remainingEstimate: minutesToJiraFormat(3),
                     remainingEstimateInMinutes: 3,
@@ -88,7 +88,7 @@ describe("EstimationFixService", () => {
                 },
                 fixedEstimation: {
                     ...baseEstimation,
-                    originalEstimate: "10m",
+                    originalEstimate: minutesToJiraFormat(10),
                     originalEstimateInMinutes: 10,
                     remainingEstimate: minutesToJiraFormat(10),
                     remainingEstimateInMinutes: 10,
@@ -133,8 +133,72 @@ describe("EstimationFixService", () => {
                     expect(EstimationCrudService.updateEstimation).toBeCalledWith(fixedEstimation);
                 });
             });
+
+        ([
+            {
+                description: "a correct non zero estimation",
+                estimationToFix: {
+                    ...baseEstimation,
+                    originalEstimate: minutesToJiraFormat(10),
+                    originalEstimateInMinutes: 10,
+                    remainingEstimate: minutesToJiraFormat(3),
+                    remainingEstimateInMinutes: 3,
+                    timeSpent: minutesToJiraFormat(7),
+                    timeSpentMinutes: 7,
+                },
+            }, {
+                description: "a correct zero estimation",
+                estimationToFix: {
+                    ...baseEstimation,
+                    originalEstimate: minutesToJiraFormat(10),
+                    originalEstimateInMinutes: 10,
+                    remainingEstimate: undefined,
+                    remainingEstimateInMinutes: undefined,
+                    timeSpent: minutesToJiraFormat(10),
+                    timeSpentMinutes: 10,
+                },
+            }, {
+                description: "neither an original nor an remaining estimation",
+                estimationToFix: {
+                    ...baseEstimation,
+                    originalEstimate: undefined,
+                    originalEstimateInMinutes: undefined,
+                    remainingEstimate: undefined,
+                    remainingEstimateInMinutes: undefined,
+                    timeSpent: minutesToJiraFormat(10),
+                    timeSpentMinutes: 10,
+                },
+            }, {
+                description: "nor kind of estimation",
+                estimationToFix: {
+                    ...baseEstimation,
+                    originalEstimate: undefined,
+                    originalEstimateInMinutes: undefined,
+                    remainingEstimate: undefined,
+                    remainingEstimateInMinutes: undefined,
+                    timeSpent: undefined,
+                    timeSpentMinutes: undefined,
+                },
+            },
+        ] as Array<{ description: string, estimationToFix: Estimation }>)
+            .map(({description, estimationToFix}) => {
+                it("should shift no shift estimation when there has " + description, async () => {
+                    EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(
+                        async issueKey => {
+                            if (issueKey !== estimationToFix.issueKey) {
+                                fail("Unexpected issue to load: " + issueKey);
+                            }
+                            return estimationToFix;
+                        },
+                    );
+                    EstimationCrudService.updateEstimation = jest.fn();
+                    await EstimationFixService.fixEstimationForIssue(estimationToFix.issueKey);
+
+                    expect(EstimationCrudService.updateEstimation).not.toBeCalled();
+                });
+            });
+
         // TODO: marmer 27.09.2019 add negative cases (not able to load)
         // TODO: marmer 27.09.2019 add negative cases (not able to write)
-        // TODO: marmer 27.09.2019 add tests with nothing todo
     });
 });

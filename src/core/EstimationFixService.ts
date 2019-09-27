@@ -15,6 +15,10 @@ export default class EstimationFixService {
             remainingEstimateInMinutes = 0;
         }
 
+        if (remainingEstimateInMinutes === (estimation.remainingEstimateInMinutes ? estimation.remainingEstimateInMinutes : 0)) {
+            return;
+        }
+
         await EstimationCrudService.updateEstimation({
             ...estimation,
             remainingEstimateInMinutes,
