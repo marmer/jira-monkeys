@@ -5,11 +5,15 @@ export default class EstimationFixService {
     public static async fixEstimationForIssue(issueKey: string): Promise<void> {
         const estimation = await EstimationCrudService.getEstimationsForIssueKey(issueKey);
 
-        console.log(estimation);
-        console.log(estimation.originalEstimateInMinutes);
-        console.log(estimation.timeSpentMinutes);
-        const remainingEstimateInMinutes = estimation.originalEstimateInMinutes! - estimation.timeSpentMinutes!;
-        console.log(remainingEstimateInMinutes);
+        const {originalEstimateInMinutes, timeSpentMinutes} = estimation;
+
+        let remainingEstimateInMinutes: number;
+        if (originalEstimateInMinutes) {
+            remainingEstimateInMinutes = originalEstimateInMinutes -
+                (timeSpentMinutes ? timeSpentMinutes : 0);
+        } else {
+            remainingEstimateInMinutes = 0;
+        }
 
         await EstimationCrudService.updateEstimation({
             ...estimation,
