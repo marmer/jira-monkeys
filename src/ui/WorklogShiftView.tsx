@@ -1,5 +1,5 @@
 import React from "react";
 
 export default (): React.ReactElement => <div>
-    Booking Shift - under construction
+    Worklog Shift - under construction
 </div>;
