@@ -199,6 +199,17 @@ describe("EstimationFixService", () => {
                     timeSpent: undefined,
                     timeSpentMinutes: undefined,
                 },
+            }, {
+                description: "more time spent than estimated",
+                estimationToFix: {
+                    ...baseEstimation,
+                    originalEstimate: minutesToJiraFormat(10),
+                    originalEstimateInMinutes: 10,
+                    remainingEstimate: minutesToJiraFormat(0),
+                    remainingEstimateInMinutes: 0,
+                    timeSpent: "50m",
+                    timeSpentMinutes: 50,
+                },
             },
         ] as Array<{ description: string, estimationToFix: Estimation }>)
             .map(({description, estimationToFix}) => {
