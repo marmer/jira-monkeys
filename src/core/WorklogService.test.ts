@@ -1,6 +1,6 @@
 import fetchMock from "fetch-mock";
 import IssueSiteInfos from "./IssueSiteInfos";
-import WorklogService, {Worklog} from "./WorklogService";
+import WorklogService, {WorklogSumByUser} from "./WorklogService";
 
 describe("WorklogService", () => {
     beforeEach(() => {
@@ -79,7 +79,7 @@ describe("WorklogService", () => {
 
             return WorklogService.getSummedWorklogsByUser()
                 .then(result => {
-                    const expectedResult: Worklog[] = [
+                    const expectedResult: WorklogSumByUser[] = [
                         {
                             author: {
                                 displayName: "Jery Mouse",

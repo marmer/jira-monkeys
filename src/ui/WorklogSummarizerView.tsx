@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import JiraTimeService from "../core/JiraTimeService";
-import WorklogService, {Worklog} from "../core/WorklogService";
+import WorklogService, {WorklogSumByUser} from "../core/WorklogService";
 import "./WorklogSummarizerView.css";
 
 interface WorklogSummarizerViewState {
     loadingState: "LOADING" | "DONE" | "ERROR";
-    worklogs: Worklog[];
+    worklogs: WorklogSumByUser[];
     sortColumn: "DISPLAY_NAME" | "TIME_SPENT";
 }
 
@@ -58,11 +58,11 @@ export default class WorklogSummarizerView extends Component<{}, WorklogSummariz
     private sortWorklogsByTime() {
         this.setState({
             sortColumn: "TIME_SPENT",
-            worklogs: this.getAsSortedByComparator(this.state.worklogs, (wl1: Worklog, wl2: Worklog) => wl1.timeSpentInMinutes - wl2.timeSpentInMinutes),
+            worklogs: this.getAsSortedByComparator(this.state.worklogs, (wl1: WorklogSumByUser, wl2: WorklogSumByUser) => wl1.timeSpentInMinutes - wl2.timeSpentInMinutes),
         });
     }
 
-    private getAsSortedByComparator(worklogs: Worklog[], comparator: (wl1: Worklog, wl2: Worklog) => number) {
+    private getAsSortedByComparator(worklogs: WorklogSumByUser[], comparator: (wl1: WorklogSumByUser, wl2: WorklogSumByUser) => number) {
         const result = [...worklogs];
         result.sort(comparator);
         return result;
@@ -71,7 +71,7 @@ export default class WorklogSummarizerView extends Component<{}, WorklogSummariz
     private sortWorklogsByDisplayName() {
         this.setState({
             sortColumn: "DISPLAY_NAME",
-            worklogs: this.getAsSortedByComparator(this.state.worklogs, (wl1: Worklog, wl2: Worklog) => wl1.author.displayName < wl2.author.displayName ? -1 : 1),
+            worklogs: this.getAsSortedByComparator(this.state.worklogs, (wl1: WorklogSumByUser, wl2: WorklogSumByUser) => wl1.author.displayName < wl2.author.displayName ? -1 : 1),
         });
     }
 
