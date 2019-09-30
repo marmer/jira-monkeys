@@ -2,16 +2,27 @@ import moment = require("moment");
 import React, {Component} from "react";
 import JiraTimeService from "../core/JiraTimeService";
 import EstimationView from "./EstimationView";
+import WorklogService, {Worklog} from "../core/WorklogService";
 
 // TODO: marmer 27.09.2019 care!
 // tslint:disable-next-line:no-empty-interface
 interface WorklogShiftViewState {
+    worklogs: Worklog[]
 }
 
 export default class WorklogShiftView extends Component<{}, WorklogShiftViewState> {
 
     constructor(props: Readonly<{}>) {
         super(props);
+        this.state = {
+            worklogs: []
+        }
+    }
+
+
+    public componentDidMount(): void {
+        WorklogService.getWorklogsForCurrentIssueAndUser()
+            .then(worklogs => this.setState({worklogs}));
     }
 
 // Worklog structure (It exists already in an incomplete state)
@@ -31,6 +42,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             {/*// TODO: marmer 30.09.2019 This is just a mockup with inline styles*/}
             {/*// TODO: marmer 30.09.2019 Don't use the layout of a different View in this way*/}
             This is just a mockup remove this test when done!
+            {JSON.stringify(this.state.worklogs)}
             <div className="estimationShiftContainer">
                 <table>
                     <thead>
