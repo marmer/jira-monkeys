@@ -31,7 +31,7 @@ describe("WorklogService", () => {
             const worklogUrl = "worklogUrl";
 
             IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentIssueKey);
-            IssueSiteInfos.getCurrentUserName = jest.fn().mockRejectedValue(Promise.resolve(currentUserName));
+            IssueSiteInfos.getCurrentUserName = jest.fn().mockResolvedValue(currentUserName);
             IssueSiteInfos.getWorklogUrlForIssueKey = jest.fn().mockImplementation(issueKey => {
                 if (issueKey !== currentIssueKey) {
                     fail("Request for wrong issue key");
