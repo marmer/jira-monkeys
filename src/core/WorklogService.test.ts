@@ -1,14 +1,106 @@
 import fetchMock from "fetch-mock";
 import IssueSiteInfos from "./IssueSiteInfos";
-import WorklogService, {WorklogSumByUser} from "./WorklogService";
+import WorklogService, {Worklog, WorklogSumByUser} from "./WorklogService";
 
 describe("WorklogService", () => {
     beforeEach(() => {
         fetchMock.restore();
     });
 
+    describe("getWorklogsForCurrentIssueAndUser", () => {
+        it("should throw an appropriate error with the status code on an unexpected status code", () => {
+            IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue("isskey-1");
+            IssueSiteInfos.getWorklogUrlForIssueKey = jest.fn().mockImplementation(issueKey => {
+                if (issueKey !== "isskey-1") {
+                    fail("Request for wrong issue key");
+                }
+                return "worklogUrl";
+            });
+            const unexpectedStatusCode = 404;
+            fetchMock.get("worklogUrl", {
+                status: unexpectedStatusCode,
+            });
+
+            return WorklogService.getWorklogsForCurrentIssueAndUser()
+                .catch(reason => expect(reason).toEqual(new Error("Unexpected request status: " + unexpectedStatusCode)));
+        });
+
+        it("should only return worklogs for the current user", async () => {
+            const currentUserName = "tom.cat";
+            const currentIssueKey = "isskey-1";
+            const worklogUrl = "worklogUrl";
+
+            IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentIssueKey);
+            IssueSiteInfos.getCurrentUserName = jest.fn().mockRejectedValue(Promise.resolve(currentUserName));
+            IssueSiteInfos.getWorklogUrlForIssueKey = jest.fn().mockImplementation(issueKey => {
+                if (issueKey !== currentIssueKey) {
+                    fail("Request for wrong issue key");
+                }
+                return worklogUrl;
+            });
+            fetchMock.get(worklogUrl, {
+                status: 200,
+                body: JSON.stringify({
+                    worklogs: [
+                        {
+                            author: {
+                                displayName: "Tom Tomcat",
+                                name: currentUserName,
+                            },
+                            timeSpentSeconds: 60,
+                            started: "2019-09-02T16:03:00.000+020",
+                            id: "first",
+                            comment: "hunting for Jerry",
+                        }, {
+                            author: {
+                                displayName: "Jerry Mouse",
+                                name: "jerry.mouse",
+                            },
+                            timeSpentSeconds: 120,
+                            started: "2020-09-02T16:03:00.000+020",
+                            id: "second",
+                            comment: "sleeping",
+                        }, {
+                            author: {
+                                displayName: "Tom Tomcat",
+                                name: currentUserName,
+                            },
+                            timeSpentSeconds: 180,
+                            started: "2021-09-02T16:03:00.000+020",
+                            id: "third",
+                            comment: "curing the pain of Jerry's trap",
+                        },
+                    ],
+                }),
+            });
+
+            const worklogs = await WorklogService.getWorklogsForCurrentIssueAndUser();
+
+            expect(worklogs).toStrictEqual([
+                {
+                    author: {
+                        displayName: "Tom Tomcat",
+                        name: currentUserName,
+                    },
+                    timeSpentInMinutes: 1,
+                    started: "2019-09-02T16:03:00.000+020",
+                    id: "first",
+                    comment: "hunting for Jerry",
+                }, {
+                    author: {
+                        displayName: "Tom Tomcat",
+                        name: currentUserName,
+                    },
+                    timeSpentInMinutes: 3,
+                    started: "2021-09-02T16:03:00.000+020",
+                    id: "third",
+                    comment: "curing the pain of Jerry's trap",
+                },
+            ] as Worklog[]);
+        });
+    });
     describe("getSummedWorklogsByUser", () => {
-        it("should throw an appropriate error witht he status code on an unexpected status code", () => {
+        it("should throw an appropriate error with the status code on an unexpected status code", () => {
             IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue("isskey-1");
             IssueSiteInfos.getWorklogUrlForIssueKey = jest.fn().mockImplementation(issueKey => {
                 if (issueKey !== "isskey-1") {
