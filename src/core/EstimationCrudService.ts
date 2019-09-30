@@ -30,7 +30,7 @@ export default class EstimationCrudService {
         return fetch(requestUrl, {method: "GET"})
             .then((response) => {
                 if (response.status !== 200) {
-                    throw new Error("Unexpected request status: " + response.status);
+                    throw new Error("Unexpected response status: " + response.status);
                 }
                 return response.json();
             })
@@ -70,7 +70,7 @@ export default class EstimationCrudService {
             },
         ).then(response => {
             if (response.status !== 204) {
-                throw new Error("Unexpected request status: " + response.status);
+                throw new Error("Unexpected response status: " + response.status);
             }
         });
     }

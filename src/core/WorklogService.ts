@@ -36,7 +36,7 @@ export default class WorklogService {
         return fetch(IssueSiteInfos.getWorklogUrlForIssueKey(issueKey), {method: "GET"})
             .then((response) => {
                 if (response.status !== 200) {
-                    throw new Error("Unexpected request status: " + response.status);
+                    throw new Error("Unexpected response status: " + response.status);
                 }
                 return response.json();
             })

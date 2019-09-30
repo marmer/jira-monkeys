@@ -23,7 +23,7 @@ describe("WorklogService", () => {
             });
 
             return WorklogService.getWorklogsForCurrentIssueAndUser()
-                .catch(reason => expect(reason).toEqual(new Error("Unexpected request status: " + unexpectedStatusCode)));
+                .catch(reason => expect(reason).toEqual(new Error("Unexpected response status: " + unexpectedStatusCode)));
         });
 
         it("should only return worklogs for the current user", async () => {
@@ -115,7 +115,7 @@ describe("WorklogService", () => {
             });
 
             return WorklogService.getSummedWorklogsByUser()
-                .catch(reason => expect(reason).toEqual(new Error("Unexpected request status: " + unexpectedStatusCode)));
+                .catch(reason => expect(reason).toEqual(new Error("Unexpected response status: " + unexpectedStatusCode)));
         });
 
         it("should return and summed list of worklogs gruped by authors displayname and sorted by display name", () => {
