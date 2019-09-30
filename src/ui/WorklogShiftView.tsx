@@ -52,7 +52,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         <th>Start</th>
                         <th>Time Spent</th>
                         <th>Time to move</th>
-                        <th>Actions</th>
+                        <th>Move</th>
                     </tr>
                     </thead>
                     <tbody>
