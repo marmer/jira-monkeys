@@ -233,13 +233,8 @@ describe("EstimationFixService", () => {
             EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockRejectedValue(new Error("Well, that's not nice"));
             EstimationCrudService.updateEstimation = jest.fn();
 
-            try {
-                await EstimationFixService.fixEstimationForIssue("annyIssueKey-1234");
-                fail("it's execution was not expected to be be successful at all");
-            } catch (e) {
-                expect(e).toStrictEqual(new Error("Error while loading the estimation to fix"));
-                expect(EstimationCrudService.updateEstimation).not.toBeCalled();
-            }
+            expect(EstimationFixService.fixEstimationForIssue("annyIssueKey-1234")).rejects.toStrictEqual(new Error("Error while loading the estimation to fix"));
+            expect(EstimationCrudService.updateEstimation).not.toBeCalled();
         });
 
         it("should reject with an appropriate errormessage when it's not possible to update the necessary information to fix anything", async () => {
@@ -264,12 +259,7 @@ describe("EstimationFixService", () => {
 
             EstimationCrudService.updateEstimation = jest.fn().mockRejectedValue(new Error("Welllllll ... no!"));
 
-            try {
-                await EstimationFixService.fixEstimationForIssue(estimationToFix.issueKey);
-                fail("it's execution was not expected to be be successful at all");
-            } catch (e) {
-                expect(e).toStrictEqual(new Error("Error while updating the estimation to fix"));
-            }
+            expect(EstimationFixService.fixEstimationForIssue(estimationToFix.issueKey)).rejects.toStrictEqual(new Error("Error while updating the estimation to fix"));
         });
 
     });
