@@ -24,7 +24,7 @@ describe("EstimationCrudService", () => {
                 originalEstimateInMinutes: 42,
                 remainingEstimate: "remainingEstimateValue",
                 remainingEstimateInMinutes: 24,
-            }).catch(result => expect(result).toEqual(new Error("Unexpected request status: 500")));
+            }).catch(result => expect(result).toEqual(new Error("Unexpected response status: 500")));
         });
 
         it("should update the estimation and return succesfully on the right status code", () => {
@@ -90,7 +90,7 @@ describe("EstimationCrudService", () => {
             });
 
             return EstimationCrudService.getEstimationsForIssueKey(issueKey)
-                .catch((error) => expect(error).toEqual(Error("Unexpected request status: 500")));
+                .catch((error) => expect(error).toEqual(Error("Unexpected response status: 500")));
         });
 
         it("should return the estimations for from the rest api", async () => {

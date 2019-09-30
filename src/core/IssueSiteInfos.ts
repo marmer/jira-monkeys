@@ -18,4 +18,8 @@ export default class IssueSiteInfos {
     public static getIssueUrlForIssueKey(issueKey: string): string {
         return WindowService.getWindowLocationOrigin() + "/rest/api/2/issue/" + issueKey;
     }
+
+    public static getCurrentUserUrl(): string {
+        return WindowService.getWindowLocationOrigin() + "/rest/auth/latest/session";
+    }
 }

@@ -34,14 +34,27 @@ describe("IssueSiteInfos", () => {
     });
 
     describe("getWorklogUrlForIssueKey()", () => {
-        WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("http://some.domain");
+        it("should serve the current worklog URL for an issue key", async () => {
+            WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("http://some.domain");
 
-        expect(IssueSiteInfos.getWorklogUrlForIssueKey("issue-key")).toEqual("http://some.domain/rest/api/2/issue/issue-key/worklog");
+            expect(IssueSiteInfos.getWorklogUrlForIssueKey("issue-key")).toEqual("http://some.domain/rest/api/2/issue/issue-key/worklog");
+        });
     });
 
     describe("getIssueUrlForIssueKey()", () => {
-        WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("http://some.domain");
+        it("should serve an issue url by an issue key", async () => {
+            WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("http://some.domain");
 
-        expect(IssueSiteInfos.getIssueUrlForIssueKey("issue-key")).toEqual("http://some.domain/rest/api/2/issue/issue-key");
+            expect(IssueSiteInfos.getIssueUrlForIssueKey("issue-key")).toEqual("http://some.domain/rest/api/2/issue/issue-key");
+        });
+    });
+
+    describe("getCurrentUserUrl()", () => {
+        it("should serve the current user url", async () => {
+            WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("https://jira.server");
+
+            expect(IssueSiteInfos.getCurrentUserUrl()).toEqual("https://jira.server/rest/auth/latest/session");
+
+        });
     });
 });
