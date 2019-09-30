@@ -22,11 +22,16 @@ export interface Worklog {
 export default class WorklogService {
     public static async getSummedWorklogsByUser(): Promise<WorklogSumByUser[]> {
         const issueKey = IssueSiteInfos.getCurrentIssueKey();
-        return this.getWorklogsPerUser(issueKey).then(this.sumUp);
-
+        return this.getWorklogByIssueKey(issueKey).then(this.sumUp);
     }
 
-    private static getWorklogsPerUser(issueKey: string) {
+    public static async getWorklogsForCurrentIssueAndUser(): Promise<Worklog[]> {
+        const worklogByIssueKey = await WorklogService.getWorklogByIssueKey(IssueSiteInfos.getCurrentIssueKey());
+        const currentUserName = await IssueSiteInfos.getCurrentUserName();
+        return worklogByIssueKey.filter(worklog => worklog.author.name === currentUserName);
+    }
+
+    private static async getWorklogByIssueKey(issueKey: string): Promise<Worklog[]> {
         return fetch(IssueSiteInfos.getWorklogUrlForIssueKey(issueKey), {method: "GET"})
             .then((response) => {
                 if (response.status !== 200) {
@@ -38,18 +43,19 @@ export default class WorklogService {
     }
 
     private static toWorklog(responseWorklog: any): Worklog {
-        const timeSpentInMinutes = Math.floor(responseWorklog.timeSpentSeconds / 60);
-        const author = responseWorklog.author;
+        const {timeSpentSeconds, comment, author, id, started} = responseWorklog;
+        const timeSpentInMinutes = Math.floor(timeSpentSeconds / 60);
+        const {displayName, name} = author;
 
         return {
             author: {
-                displayName: responseWorklog.author.displayName,
-                name: "MISSING CONVERSION",
+                displayName,
+                name,
             },
             timeSpentInMinutes,
-            comment: "MISSING CONVERSION",
-            id: "MISSING CONVERSION",
-            started: "MISSING CONVERSION",
+            comment,
+            id,
+            started,
         };
     }
 
