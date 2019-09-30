@@ -35,6 +35,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
 //     timeSpentInMinutes: number;
 //     started: string ("2019-09-02T16:03:00.000+0200");
 //     id: string;
+//     comment: string;
 // }
 
     public render(): React.ReactElement {
@@ -47,6 +48,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                     <thead>
                     <tr>
                         <th>Author</th>
+                        <th>Comment</th>
                         <th>Start</th>
                         <th>Time Spent</th>
                         <th>Time to move</th>
@@ -57,6 +59,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                     <tr>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value="Sir Fakeisac Newton"/></td>
+                        <td><input style={{textAlign: "center"}} type="text" disabled={true}
+                                   value="Did the first step"/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value={moment("2019-09-02T16:03:00.000+0200").format("YYYY-MM-DD HH:mm:ss")}/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
@@ -72,6 +76,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value="Sir Fakeisac Newton"/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
+                                   value="Did the second step"/></td>
+                        <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value={moment("2019-09-02T17:03:00.000+0200").format("YYYY-MM-DD HH:mm:ss")}/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value={JiraTimeService.minutesToJiraFormat(135)}/></td>
@@ -85,6 +91,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                     <tr>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value="Sir Fakeisac Newton"/></td>
+                        <td><input style={{textAlign: "center"}} type="text" disabled={true}
+                                   value="Did nothing"/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value={moment("2019-09-02T17:05:00.000+0200").format("YYYY-MM-DD HH:mm:ss")}/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
@@ -100,6 +108,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value="Sir Fakeisac Newton"/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
+                                   value="Did the third step"/></td>
+                        <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value={moment("2019-09-09T17:05:00.000+0200").format("YYYY-MM-DD HH:mm:ss")}/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value={JiraTimeService.minutesToJiraFormat(1337)}/></td>
@@ -113,6 +123,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                     <tr>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value="Sir Fakeisac Newton"/></td>
+                        <td><input style={{textAlign: "center"}} type="text" disabled={true}
+                                   value="Did the final step"/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
                                    value={moment("2019-11-12T17:05:00.000+0200").format("YYYY-MM-DD HH:mm:ss")}/></td>
                         <td><input style={{textAlign: "center"}} type="text" disabled={true}
