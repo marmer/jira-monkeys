@@ -3,10 +3,12 @@ import EstimationCrudService from "./EstimationCrudService";
 import IssueSiteInfos from "./IssueSiteInfos";
 
 describe("EstimationCrudService", () => {
+
     beforeEach(() => {
         fetchMock.reset();
         jest.resetAllMocks();
     });
+
     describe("updateEstimation", () => {
         it("should fail with an appropriate error when the server responds with an unexpected status", () => {
             const issueKey = "issueKey-1234";
@@ -17,17 +19,17 @@ describe("EstimationCrudService", () => {
             });
 
             fetchMock.put(updateUrl, 500);
-            return EstimationCrudService.updateEstimation({
+            expect(EstimationCrudService.updateEstimation({
                 issueKey,
                 issueSummary: "issueSummary",
                 originalEstimate: "originalEstimateValue",
                 originalEstimateInMinutes: 42,
                 remainingEstimate: "remainingEstimateValue",
                 remainingEstimateInMinutes: 24,
-            }).catch(result => expect(result).toEqual(new Error("Unexpected response status: 500")));
+            })).rejects.toStrictEqual(new Error("Unexpected response status: 500"))
         });
 
-        it("should update the estimation and return succesfully on the right status code", () => {
+        it("should update the estimation and return succesfully on the right status code", async () => {
             const issueKey = "issueKey-1234";
             const updateUrl = "http://fancy.com/updateUrl";
             IssueSiteInfos.getIssueUrlForIssueKey = jest.fn().mockImplementation(ik => {
@@ -36,17 +38,16 @@ describe("EstimationCrudService", () => {
             });
 
             fetchMock.put(updateUrl, 204);
-
-            return EstimationCrudService.updateEstimation({
+            await EstimationCrudService.updateEstimation({
                 issueKey,
                 issueSummary: "issueSummary",
                 originalEstimate: "originalEstimateValue",
                 originalEstimateInMinutes: 42,
                 remainingEstimate: "remainingEstimateValue",
                 remainingEstimateInMinutes: 24,
-            })
-                .then(() => {
-                    const called = fetchMock.called((url, opts) => {
+            });
+
+            expect(fetchMock.called((url, opts) => {
                         return url === updateUrl &&
                             opts.body === JSON.stringify({
                                     fields: {
@@ -57,9 +58,7 @@ describe("EstimationCrudService", () => {
                                     },
                                 },
                             );
-                    });
-                    expect(called).toBeTruthy();
-                });
+            })).toBeTruthy();
         });
     });
 
@@ -89,8 +88,7 @@ describe("EstimationCrudService", () => {
                 status: 500,
             });
 
-            return EstimationCrudService.getEstimationsForIssueKey(issueKey)
-                .catch((error) => expect(error).toEqual(Error("Unexpected response status: 500")));
+            expect(EstimationCrudService.getEstimationsForIssueKey(issueKey)).rejects.toEqual(Error("Unexpected response status: 500"))
         });
 
         it("should return the estimations for from the rest api", async () => {
@@ -118,8 +116,7 @@ describe("EstimationCrudService", () => {
                 status: 200,
             });
 
-            const result = await EstimationCrudService.getEstimationsForIssueKey(issueKey);
-            expect(result).toStrictEqual({
+            expect(EstimationCrudService.getEstimationsForIssueKey(issueKey)).resolves.toStrictEqual({
                 issueKey: "issue-200",
                 issueSummary: "issueSummary",
                 originalEstimate: "originalEstimate",
@@ -149,8 +146,7 @@ describe("EstimationCrudService", () => {
                 status: 200,
             });
 
-            const result = await EstimationCrudService.getEstimationsForIssueKey(issueKey);
-            expect(result).toStrictEqual({
+            expect(EstimationCrudService.getEstimationsForIssueKey(issueKey)).resolves.toStrictEqual({
                 issueKey: "issue-200",
                 issueSummary: "issueSummary",
                 originalEstimate: undefined,
@@ -162,6 +158,7 @@ describe("EstimationCrudService", () => {
             });
         });
     });
+
     it("should return the estimations for from the rest api with even when timetracking is missing", async () => {
         const issueKey = "issue-200";
         const updateUrl = "http://fancy.com/updateUrl";
@@ -179,8 +176,7 @@ describe("EstimationCrudService", () => {
             status: 200,
         });
 
-        const result = await EstimationCrudService.getEstimationsForIssueKey(issueKey);
-        expect(result).toStrictEqual({
+        expect(EstimationCrudService.getEstimationsForIssueKey(issueKey)).resolves.toStrictEqual({
             issueKey: "issue-200",
             issueSummary: "issueSummary",
             originalEstimate: undefined,
@@ -191,5 +187,4 @@ describe("EstimationCrudService", () => {
             timeSpentMinutes: undefined,
         });
     });
-
 });

@@ -1,6 +1,6 @@
 import fetchMock from "fetch-mock";
 import IssueSiteInfos from "./IssueSiteInfos";
-import WorklogService, {Worklog, WorklogSumByUser} from "./WorklogService";
+import WorklogService, {Worklog} from "./WorklogService";
 import UserService from "./UserService";
 
 describe("WorklogService", () => {
@@ -22,8 +22,8 @@ describe("WorklogService", () => {
                 status: unexpectedStatusCode,
             });
 
-            return WorklogService.getWorklogsForCurrentIssueAndUser()
-                .catch(reason => expect(reason).toEqual(new Error("Unexpected response status: " + unexpectedStatusCode)));
+            expect(WorklogService.getWorklogsForCurrentIssueAndUser()).rejects.toStrictEqual(new Error("Unexpected response status: " + unexpectedStatusCode))
+
         });
 
         it("should only return worklogs for the current user", async () => {
@@ -75,9 +75,7 @@ describe("WorklogService", () => {
                 }),
             });
 
-            const worklogs = await WorklogService.getWorklogsForCurrentIssueAndUser();
-
-            expect(worklogs).toStrictEqual([
+            expect(WorklogService.getWorklogsForCurrentIssueAndUser()).resolves.toStrictEqual([
                 {
                     author: {
                         displayName: "Tom Tomcat",
@@ -114,8 +112,7 @@ describe("WorklogService", () => {
                 status: unexpectedStatusCode,
             });
 
-            return WorklogService.getSummedWorklogsByUser()
-                .catch(reason => expect(reason).toEqual(new Error("Unexpected response status: " + unexpectedStatusCode)));
+            expect(WorklogService.getSummedWorklogsByUser()).rejects.toStrictEqual(new Error("Unexpected response status: " + unexpectedStatusCode));
         });
 
         it("should return and summed list of worklogs gruped by authors displayname and sorted by display name", () => {
@@ -170,30 +167,26 @@ describe("WorklogService", () => {
                 }),
             });
 
-            return WorklogService.getSummedWorklogsByUser()
-                .then(result => {
-                    const expectedResult: WorklogSumByUser[] = [
-                        {
-                            author: {
-                                displayName: "Jery Mouse",
-                            },
-                            timeSpentInMinutes: 840,
-                        },
-                        {
-                            author: {
-                                displayName: "Pet Owner",
-                            },
-                            timeSpentInMinutes: 1,
-                        },
-                        {
-                            author: {
-                                displayName: "Tom Tomcat",
-                            },
-                            timeSpentInMinutes: 4320,
-                        },
-                    ];
-                    expect(result).toStrictEqual(expectedResult);
-                });
+            expect(WorklogService.getSummedWorklogsByUser()).resolves.toStrictEqual([
+                {
+                    author: {
+                        displayName: "Jery Mouse",
+                    },
+                    timeSpentInMinutes: 840,
+                },
+                {
+                    author: {
+                        displayName: "Pet Owner",
+                    },
+                    timeSpentInMinutes: 1,
+                },
+                {
+                    author: {
+                        displayName: "Tom Tomcat",
+                    },
+                    timeSpentInMinutes: 4320,
+                },
+            ])
         });
     });
 });
