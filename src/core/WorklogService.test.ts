@@ -1,6 +1,7 @@
 import fetchMock from "fetch-mock";
 import IssueSiteInfos from "./IssueSiteInfos";
 import WorklogService, {Worklog, WorklogSumByUser} from "./WorklogService";
+import UserService from "./UserService";
 
 describe("WorklogService", () => {
     beforeEach(() => {
@@ -31,7 +32,7 @@ describe("WorklogService", () => {
             const worklogUrl = "worklogUrl";
 
             IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentIssueKey);
-            IssueSiteInfos.getCurrentUserName = jest.fn().mockResolvedValue(currentUserName);
+            UserService.getCurrentUserName = jest.fn().mockResolvedValue(currentUserName);
             IssueSiteInfos.getWorklogUrlForIssueKey = jest.fn().mockImplementation(issueKey => {
                 if (issueKey !== currentIssueKey) {
                     fail("Request for wrong issue key");
