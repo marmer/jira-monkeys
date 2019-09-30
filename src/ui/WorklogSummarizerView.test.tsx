@@ -1,7 +1,7 @@
 import * as domTest from "@testing-library/dom";
 import * as reactTest from "@testing-library/react";
 import React from "react";
-import WorklogService, {Worklog} from "../core/WorklogService";
+import WorklogService, {WorklogSumByUser} from "../core/WorklogService";
 import WorklogSummarizerView from "./WorklogSummarizerView";
 
 describe("WorklogSummarizerView", () => {
@@ -24,7 +24,7 @@ describe("WorklogSummarizerView", () => {
                 author: {
                     displayName: "Andy Anderson",
                 },
-            }] as Worklog[]));
+            }] as WorklogSumByUser[]));
 
         const worklogSummarizerView = reactTest.render(<WorklogSummarizerView/>);
         expect(worklogSummarizerView.container).toMatchSnapshot("onInitialLoading");
