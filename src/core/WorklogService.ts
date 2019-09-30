@@ -1,5 +1,6 @@
 import groupBy from "./groupBy";
 import IssueSiteInfos from "./IssueSiteInfos";
+import UserService from "./UserService";
 
 export interface WorklogSumByUser {
     author: {
@@ -27,7 +28,7 @@ export default class WorklogService {
 
     public static async getWorklogsForCurrentIssueAndUser(): Promise<Worklog[]> {
         const worklogByIssueKey = await WorklogService.getWorklogByIssueKey(IssueSiteInfos.getCurrentIssueKey());
-        const currentUserName = await IssueSiteInfos.getCurrentUserName();
+        const currentUserName = await UserService.getCurrentUserName();
         return worklogByIssueKey.filter(worklog => worklog.author.name === currentUserName);
     }
 
