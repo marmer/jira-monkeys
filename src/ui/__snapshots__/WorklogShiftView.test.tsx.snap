@@ -12,19 +12,29 @@ Object {
         <table>
           <thead>
             <tr>
-              <th>
+              <th
+                align="center"
+              >
                 Start
               </th>
-              <th>
+              <th
+                align="center"
+              >
                 Comment
               </th>
-              <th>
+              <th
+                align="center"
+              >
                 Time Spent
               </th>
-              <th>
+              <th
+                align="center"
+              >
                 Time to move
               </th>
-              <th>
+              <th
+                align="center"
+              >
                 Move
               </th>
             </tr>
@@ -76,19 +86,29 @@ Object {
       <table>
         <thead>
           <tr>
-            <th>
+            <th
+              align="center"
+            >
               Start
             </th>
-            <th>
+            <th
+              align="center"
+            >
               Comment
             </th>
-            <th>
+            <th
+              align="center"
+            >
               Time Spent
             </th>
-            <th>
+            <th
+              align="center"
+            >
               Time to move
             </th>
-            <th>
+            <th
+              align="center"
+            >
               Move
             </th>
           </tr>
@@ -197,19 +217,29 @@ Object {
         <table>
           <thead>
             <tr>
-              <th>
+              <th
+                align="center"
+              >
                 Start
               </th>
-              <th>
+              <th
+                align="center"
+              >
                 Comment
               </th>
-              <th>
+              <th
+                align="center"
+              >
                 Time Spent
               </th>
-              <th>
+              <th
+                align="center"
+              >
                 Time to move
               </th>
-              <th>
+              <th
+                align="center"
+              >
                 Move
               </th>
             </tr>
@@ -217,43 +247,41 @@ Object {
           <tbody>
             <tr>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
-                <p
-                  style="text-align: center;"
-                >
+                <p>
                   2019-10-01 01:02:03
                 </p>
               </td>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
-                <p
-                  style="text-align: center;"
-                >
+                <p>
                   first step
                 </p>
               </td>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
-                <p
-                  style="text-align: center;"
-                >
+                <p>
                   1m
                 </p>
               </td>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
                 <input
                   placeholder="5h 9m"
-                  style="text-align: center;"
                   type="text"
                   value="1m"
                 />
               </td>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
                 <button
@@ -265,43 +293,41 @@ Object {
             </tr>
             <tr>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
-                <p
-                  style="text-align: center;"
-                >
+                <p>
                   2020-01-10 01:03:04
                 </p>
               </td>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
-                <p
-                  style="text-align: center;"
-                >
+                <p>
                   second step
                 </p>
               </td>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
-                <p
-                  style="text-align: center;"
-                >
+                <p>
                   2m
                 </p>
               </td>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
                 <input
                   placeholder="5h 9m"
-                  style="text-align: center;"
                   type="text"
                   value="2m"
                 />
               </td>
               <td
+                align="center"
                 style="padding-right: 0.5em;"
               >
                 <button
@@ -358,19 +384,29 @@ Object {
       <table>
         <thead>
           <tr>
-            <th>
+            <th
+              align="center"
+            >
               Start
             </th>
-            <th>
+            <th
+              align="center"
+            >
               Comment
             </th>
-            <th>
+            <th
+              align="center"
+            >
               Time Spent
             </th>
-            <th>
+            <th
+              align="center"
+            >
               Time to move
             </th>
-            <th>
+            <th
+              align="center"
+            >
               Move
             </th>
           </tr>
@@ -378,43 +414,41 @@ Object {
         <tbody>
           <tr>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
-              <p
-                style="text-align: center;"
-              >
+              <p>
                 2019-10-01 01:02:03
               </p>
             </td>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
-              <p
-                style="text-align: center;"
-              >
+              <p>
                 first step
               </p>
             </td>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
-              <p
-                style="text-align: center;"
-              >
+              <p>
                 1m
               </p>
             </td>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
               <input
                 placeholder="5h 9m"
-                style="text-align: center;"
                 type="text"
                 value="1m"
               />
             </td>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
               <button
@@ -426,43 +460,41 @@ Object {
           </tr>
           <tr>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
-              <p
-                style="text-align: center;"
-              >
+              <p>
                 2020-01-10 01:03:04
               </p>
             </td>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
-              <p
-                style="text-align: center;"
-              >
+              <p>
                 second step
               </p>
             </td>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
-              <p
-                style="text-align: center;"
-              >
+              <p>
                 2m
               </p>
             </td>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
               <input
                 placeholder="5h 9m"
-                style="text-align: center;"
                 type="text"
                 value="2m"
               />
             </td>
             <td
+              align="center"
               style="padding-right: 0.5em;"
             >
               <button
