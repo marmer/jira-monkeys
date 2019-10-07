@@ -46,7 +46,7 @@ describe("WorklogShiftView", () => {
             }] as Worklog[]);
 
         const underTest = reactTest.render(<WorklogShiftView/>);
-        await reactTest.waitForElement(() => underTest.getByDisplayValue("first step"));
+        await reactTest.waitForElement(() => underTest.getByText("first step"));
         expect(underTest).toMatchSnapshot();
     });
 

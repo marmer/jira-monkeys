@@ -1,8 +1,8 @@
-import moment = require("moment");
 import React, {Component, ReactNode} from "react";
 import JiraTimeService from "../core/JiraTimeService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import EstimationView from "./EstimationView";
+import moment = require("moment");
 
 // TODO: marmer 27.09.2019 care!
 // tslint:disable-next-line:no-empty-interface
@@ -33,9 +33,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                 <table>
                     <thead>
                     <tr>
-                        <th>Author</th>
-                        <th>Comment</th>
                         <th>Start</th>
+                        <th>Comment</th>
                         <th>Time Spent</th>
                         <th>Time to move</th>
                         <th>Move</th>
@@ -62,20 +61,17 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
     }
 
     private toRow(worklog: Worklog): ReactNode {
-
+        // TODO: marmer 07.10.2019 No Inline styles!
         return <tr key={worklog.id}>
-            <td><input style={{textAlign: "center"}} type="text" disabled={true}
-                       value={worklog.author.displayName}/></td>
-            <td><input style={{textAlign: "center"}} type="text" disabled={true}
-                       value={worklog.comment}/></td>
-            <td><input style={{textAlign: "center"}} type="text" disabled={true}
-                       value={moment(worklog.started).format("YYYY-MM-DD HH:mm:ss")}/></td>
-            <td><input style={{textAlign: "center"}} type="text" disabled={true}
-                       value={JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes)}/></td>
-            <td><input style={{textAlign: "center"}} type="text" placeholder="5h 9m"
+            <td style={{paddingRight: "0.5em"}}><p
+                style={{textAlign: "center"}}>{moment(worklog.started).format("YYYY-MM-DD HH:mm:ss")}</p></td>
+            <td style={{paddingRight: "0.5em"}}><p style={{textAlign: "center"}}>{worklog.comment}</p></td>
+            <td style={{paddingRight: "0.5em"}}><p style={{textAlign: "center"}}
+            >{JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes)}</p></td>
+            <td style={{paddingRight: "0.5em"}}><input style={{textAlign: "center"}} type="text" placeholder="5h 9m"
                        value={JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes)}/>
             </td>
-            <td>
+            <td style={{paddingRight: "0.5em"}}>
                 <button title="move">{">"}</button>
             </td>
         </tr>;
