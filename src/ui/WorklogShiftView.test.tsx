@@ -1,6 +1,8 @@
 import * as reactTest from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import WorklogService, {Worklog} from "../core/WorklogService";
+import WorklogShiftService from "../core/WorklogShiftService";
 import WorklogShiftView from "./WorklogShiftView";
 
 describe("WorklogShiftView", () => {
@@ -66,8 +68,28 @@ describe("WorklogShiftView", () => {
         expect(underTest).toMatchSnapshot();
     });
 
+    it("should reload the current site after some worklog has been shifted", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogShiftService.shiftFromWorklog = jest.fn().mockImplementation((worklog: Worklog, timeToShift: string, targetIssueKey: string) => {
+            // TODO: marmer 07.10.2019 check right issue
+            // TODO: marmer 07.10.2019
+        });
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "ANSWER-42");
+        const shiftButton = underTest.getByTestId("ShiftButton" + worklogBase.id);
+
+        // // TODO: marmer 07.10.2019 check reload
+    });
+
     // TODO: marmer 07.10.2019 errorhandling while shifting
     // TODO: marmer 07.10.2019 Shifting
     // TODO: marmer 07.10.2019 Handling of missing worklog parts (author, Comment, Start, ...)
     // TODO: marmer 07.10.2019 Keep destination issue in session storage in case the user wants to shift more than one worklog
+    // TODO: marmer 07.10.2019 Shifting should only be possible if the target issue exists
+    // TODO: marmer 07.10.2019 show some target issue details
+    // TODO: marmer 07.10.2019 handle errors while loading the target issue
 });

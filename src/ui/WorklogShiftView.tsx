@@ -2,7 +2,6 @@ import moment = require("moment");
 import React, {Component, ReactNode} from "react";
 import JiraTimeService from "../core/JiraTimeService";
 import WorklogService, {Worklog} from "../core/WorklogService";
-import EstimationView from "./EstimationView";
 
 // TODO: marmer 27.09.2019 care!
 // tslint:disable-next-line:no-empty-interface
@@ -67,14 +66,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                 </table>
                 <label style={{textAlign: "center", alignSelf: "baseline"}}>
                     Target
-                    {/*// TODO: marmer 30.09.2019 Don't use the layout of a different View in this way*/}
-                    <EstimationView className="estimationShiftCardContainer" readonly={true}
-                                    estimation={{
-                                        issueKey: "issue-1234",
-                                        issueSummary: "something todo",
-                                        originalEstimate: "1w 2d",
-                                        remainingEstimate: "4h 15m",
-                                    }}/></label>
+                    <input placeholder="ISSUE-1234" title="Target Issue" value="SAMPLEISSUE-123"/>
+                </label>
             </div>}
         </>;
     }
@@ -94,7 +87,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                        value={JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes)}/>
             </td>
             <td align="center" style={{paddingRight: "0.5em"}}>
-                <button title="move">{">"}</button>
+                <button data-testId={"ShiftButton" + worklog.id} title="move">{">"}</button>
             </td>
         </tr>;
     }
