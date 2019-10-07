@@ -58,7 +58,14 @@ describe("WorklogShiftView", () => {
         expect(underTest).toMatchSnapshot();
     });
 
-    // TODO: marmer 07.10.2019 errorhandling while loading
+    it("should tell the user when an error has occurred", async () => {
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockRejectedValue(new Error("dafuq"));
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        await reactTest.waitForElement(() => underTest.getByText("Error while loading worklogs for issue: dafuq"));
+        expect(underTest).toMatchSnapshot();
+    });
+
     // TODO: marmer 07.10.2019 errorhandling while shifting
     // TODO: marmer 07.10.2019 Shifting
     // TODO: marmer 07.10.2019 Handling of missing worklog parts (author, Comment, Start, ...)
