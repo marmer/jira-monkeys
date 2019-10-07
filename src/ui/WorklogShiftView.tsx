@@ -1,13 +1,13 @@
 import moment = require("moment");
 import React, {Component} from "react";
 import JiraTimeService from "../core/JiraTimeService";
-import EstimationView from "./EstimationView";
 import WorklogService, {Worklog} from "../core/WorklogService";
+import EstimationView from "./EstimationView";
 
 // TODO: marmer 27.09.2019 care!
 // tslint:disable-next-line:no-empty-interface
 interface WorklogShiftViewState {
-    worklogs: Worklog[]
+    worklogs: Worklog[];
 }
 
 export default class WorklogShiftView extends Component<{}, WorklogShiftViewState> {
@@ -15,10 +15,9 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
     constructor(props: Readonly<{}>) {
         super(props);
         this.state = {
-            worklogs: []
-        }
+            worklogs: [],
+        };
     }
-
 
     public componentDidMount(): void {
         WorklogService.getWorklogsForCurrentIssueAndUser()
