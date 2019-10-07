@@ -22,7 +22,7 @@ describe("WorklogService", () => {
                 status: unexpectedStatusCode,
             });
 
-            expect(WorklogService.getWorklogsForCurrentIssueAndUser()).rejects.toStrictEqual(new Error("Unexpected response status: " + unexpectedStatusCode))
+            expect(WorklogService.getWorklogsForCurrentIssueAndUser()).rejects.toStrictEqual(new Error("Unexpected response status: " + unexpectedStatusCode));
 
         });
 
@@ -191,7 +191,7 @@ describe("WorklogService", () => {
                     },
                     timeSpentInMinutes: 4320,
                 },
-            ])
+            ]);
         });
     });
 });
