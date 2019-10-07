@@ -9,6 +9,7 @@ import EstimationView from "./EstimationView";
 interface WorklogShiftViewState {
     worklogs: Worklog[];
     worklogLoadingState?: "LOADING" | "DONE" | "ERROR";
+    loadingError?: Error | null;
 }
 
 export default class WorklogShiftView extends Component<{}, WorklogShiftViewState> {
@@ -28,6 +29,10 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             .then(worklogs => this.setState({
                 worklogs,
                 worklogLoadingState: "DONE",
+            }))
+            .catch(loadingError => this.setState({
+                loadingError,
+                worklogLoadingState: "ERROR",
             }));
     }
 
@@ -40,6 +45,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             {this.state.worklogs.length === 0 &&
             <p>
                 {this.state.worklogLoadingState === "LOADING" && "Loading..." ||
+                this.state.worklogLoadingState === "ERROR" && ("Error while loading worklogs for issue: " + this.state.loadingError!.message) ||
                 this.state.worklogLoadingState === "DONE" && "No work logged here for you yet"}
             </p>
             }
