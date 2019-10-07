@@ -1,6 +1,7 @@
 import * as reactTest from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import WorklogShiftView from "./WorklogShiftView";
@@ -71,17 +72,18 @@ describe("WorklogShiftView", () => {
     it("should reload the current site after some worklog has been shifted", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
-        WorklogShiftService.shiftFromWorklog = jest.fn().mockImplementation((worklog: Worklog, timeToShift: string, targetIssueKey: string) => {
-            // TODO: marmer 07.10.2019 check right issue
-            // TODO: marmer 07.10.2019
-        });
+        WorklogShiftService.shiftFromWorklog = jest.fn().mockResolvedValue(undefined);
+        WindowService.reloadPage = jest.fn();
 
         const underTest = reactTest.render(<WorklogShiftView/>);
         const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
 
-        userEvent.type(targetIssueInput, "ANSWER-42");
+        userEvent.type(targetIssueInput, "5m");
         const shiftButton = underTest.getByTestId("ShiftButton" + worklogBase.id);
+        userEvent.click(shiftButton);
 
+        expect(WorklogShiftService.shiftFromWorklog).toBeCalledWith(sourceWorklog, "5m", "TARGET-123");
+        expect(WindowService.reloadPage).toBeCalled();
         // // TODO: marmer 07.10.2019 check reload
     });
 

@@ -222,6 +222,7 @@ Object {
                 style="padding-right: 0.5em;"
               >
                 <button
+                  data-testid="ShiftButton1111"
                   title="move"
                 >
                   &gt;
@@ -268,6 +269,7 @@ Object {
                 style="padding-right: 0.5em;"
               >
                 <button
+                  data-testid="ShiftButton2222"
                   title="move"
                 >
                   &gt;
@@ -280,35 +282,11 @@ Object {
           style="text-align: center; align-self: baseline;"
         >
           Target
-          <div
-            class="estimationShiftCardContainer"
-            title="issue-1234: something todo"
-          >
-            <label>
-              Issue 
-              <input
-                disabled=""
-                type="text"
-                value="issue-1234"
-              />
-            </label>
-            <label>
-              Original Estimate 
-              <input
-                disabled=""
-                type="text"
-                value="1w 2d"
-              />
-            </label>
-            <label>
-              Remaining Estimate 
-              <input
-                disabled=""
-                type="text"
-                value="4h 15m"
-              />
-            </label>
-          </div>
+          <input
+            placeholder="ISSUE-1234"
+            title="Target Issue"
+            value="SAMPLEISSUE-123"
+          />
         </label>
       </div>
     </div>
@@ -389,6 +367,7 @@ Object {
               style="padding-right: 0.5em;"
             >
               <button
+                data-testid="ShiftButton1111"
                 title="move"
               >
                 &gt;
@@ -435,6 +414,7 @@ Object {
               style="padding-right: 0.5em;"
             >
               <button
+                data-testid="ShiftButton2222"
                 title="move"
               >
                 &gt;
@@ -447,35 +427,11 @@ Object {
         style="text-align: center; align-self: baseline;"
       >
         Target
-        <div
-          class="estimationShiftCardContainer"
-          title="issue-1234: something todo"
-        >
-          <label>
-            Issue 
-            <input
-              disabled=""
-              type="text"
-              value="issue-1234"
-            />
-          </label>
-          <label>
-            Original Estimate 
-            <input
-              disabled=""
-              type="text"
-              value="1w 2d"
-            />
-          </label>
-          <label>
-            Remaining Estimate 
-            <input
-              disabled=""
-              type="text"
-              value="4h 15m"
-            />
-          </label>
-        </div>
+        <input
+          placeholder="ISSUE-1234"
+          title="Target Issue"
+          value="SAMPLEISSUE-123"
+        />
       </label>
     </div>
   </div>,
