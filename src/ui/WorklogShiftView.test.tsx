@@ -12,10 +12,17 @@ describe("WorklogShiftView", () => {
             displayName: "Me",
         },
         timeSpentInMinutes: 1337,
-        started: "yesterday",
+        started: "2000-01-01T00:00:00.000+0000",
         id: "43",
         comment: "did something",
     };
+
+    it("should not show an estimation whil it's loading", async () => {
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([{...worklogBase}] as Worklog[]);
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        expect(underTest).toMatchSnapshot();
+    });
 
     it("should show the estimations for the current user and issue when loading is done", async () => {
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([
@@ -43,7 +50,6 @@ describe("WorklogShiftView", () => {
         expect(underTest).toMatchSnapshot();
     });
 
-    // TODO: marmer 07.10.2019 loading
     // TODO: marmer 07.10.2019 errorhandling while loading
     // TODO: marmer 07.10.2019 errorhandling while shifting
     // TODO: marmer 07.10.2019 Shifting
