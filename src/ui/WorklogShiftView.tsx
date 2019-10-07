@@ -87,7 +87,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                        value={JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes)}/>
             </td>
             <td align="center" style={{paddingRight: "0.5em"}}>
-                <button data-testId={"ShiftButton" + worklog.id} title="move">{">"}</button>
+                <button data-testid={"ShiftButton" + worklog.id} title="move">{">"}</button>
             </td>
         </tr>;
     }
