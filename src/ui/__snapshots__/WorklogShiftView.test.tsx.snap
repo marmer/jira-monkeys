@@ -540,14 +540,16 @@ Object {
     <div>
       This is just work in Progress
       <p>
-        Error while loading worklogs for issue: dafuq
+        Error while loading worklogs for issue: 
+        dafuq
       </p>
     </div>
   </body>,
   "container": <div>
     This is just work in Progress
     <p>
-      Error while loading worklogs for issue: dafuq
+      Error while loading worklogs for issue: 
+      dafuq
     </p>
   </div>,
   "debug": [Function],

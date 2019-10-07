@@ -7,8 +7,7 @@ import EstimationView from "./EstimationView";
 // TODO: marmer 27.09.2019 care!
 // tslint:disable-next-line:no-empty-interface
 interface WorklogShiftViewState {
-    worklogs: Worklog[];
-    worklogLoadingState?: "LOADING" | "DONE" | "ERROR";
+    worklogs?: Worklog[] | null;
     loadingError?: Error | null;
 }
 
@@ -16,23 +15,20 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
 
     constructor(props: Readonly<{}>) {
         super(props);
-        this.state = {
-            worklogs: [],
-        };
+        this.state = {};
     }
 
     public componentDidMount(): void {
         this.setState({
-            worklogLoadingState: "LOADING",
+            worklogs: null,
+            loadingError: null,
         });
         WorklogService.getWorklogsForCurrentIssueAndUser()
             .then(worklogs => this.setState({
                 worklogs,
-                worklogLoadingState: "DONE",
             }))
             .catch(loadingError => this.setState({
                 loadingError,
-                worklogLoadingState: "ERROR",
             }));
     }
 
@@ -42,15 +38,16 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             {/*// TODO: marmer 30.09.2019 Don't use the layout of a different View in this way*/}
             This is just work in Progress
 
-            {this.state.worklogs.length === 0 &&
-            <p>
-                {this.state.worklogLoadingState === "LOADING" && "Loading..." ||
-                this.state.worklogLoadingState === "ERROR" && ("Error while loading worklogs for issue: " + this.state.loadingError!.message) ||
-                this.state.worklogLoadingState === "DONE" && "No work logged here for you yet"}
-            </p>
-            }
+            {this.state.loadingError &&
+            <p>Error while loading worklogs for issue: {this.state.loadingError.message}</p>}
 
-            {this.state.worklogs.length > 0 &&
+            {!this.state.loadingError && !this.state.worklogs &&
+            <p>Loading...</p>}
+
+            {this.state.worklogs && this.state.worklogs.length === 0 &&
+            <p>No work logged here for you yet</p>}
+
+            {this.state.worklogs && this.state.worklogs.length > 0 &&
             <div className="estimationShiftContainer">
                 <table>
                     <thead>
