@@ -1,13 +1,14 @@
+import moment = require("moment");
 import React, {Component, ReactNode} from "react";
 import JiraTimeService from "../core/JiraTimeService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import EstimationView from "./EstimationView";
-import moment = require("moment");
 
 // TODO: marmer 27.09.2019 care!
 // tslint:disable-next-line:no-empty-interface
 interface WorklogShiftViewState {
     worklogs: Worklog[];
+    worklogLoadingState?: "LOADING" | "DONE" | "ERROR";
 }
 
 export default class WorklogShiftView extends Component<{}, WorklogShiftViewState> {
@@ -20,8 +21,14 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
     }
 
     public componentDidMount(): void {
+        this.setState({
+            worklogLoadingState: "LOADING",
+        });
         WorklogService.getWorklogsForCurrentIssueAndUser()
-            .then(worklogs => this.setState({worklogs}));
+            .then(worklogs => this.setState({
+                worklogs,
+                worklogLoadingState: "DONE",
+            }));
     }
 
     public render(): React.ReactElement {
@@ -29,6 +36,15 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             {/*// TODO: marmer 30.09.2019 This is just a mockup with inline styles*/}
             {/*// TODO: marmer 30.09.2019 Don't use the layout of a different View in this way*/}
             This is just work in Progress
+
+            {this.state.worklogs.length === 0 &&
+            <p>
+                {this.state.worklogLoadingState === "LOADING" && "Loading..." ||
+                this.state.worklogLoadingState === "DONE" && "No work logged here for you yet"}
+            </p>
+            }
+
+            {this.state.worklogs.length > 0 &&
             <div className="estimationShiftContainer">
                 <table>
                     <thead>
@@ -56,7 +72,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                                         originalEstimate: "1w 2d",
                                         remainingEstimate: "4h 15m",
                                     }}/></label>
-            </div>
+            </div>}
         </>;
     }
 

@@ -50,7 +50,14 @@ describe("WorklogShiftView", () => {
         expect(underTest).toMatchSnapshot();
     });
 
-    // TODO: marmer 07.10.2019 No worklogs
+    it("should describe the absence of own worklogs", async () => {
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([] as Worklog[]);
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        await reactTest.waitForElement(() => underTest.getByText("No work logged here for you yet"));
+        expect(underTest).toMatchSnapshot();
+    });
+
     // TODO: marmer 07.10.2019 errorhandling while loading
     // TODO: marmer 07.10.2019 errorhandling while shifting
     // TODO: marmer 07.10.2019 Shifting
