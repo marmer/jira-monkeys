@@ -1,7 +1,7 @@
 import fetchMock from "fetch-mock";
 import IssueSiteInfos from "./IssueSiteInfos";
-import WorklogService, {Worklog} from "./WorklogService";
 import UserService from "./UserService";
+import WorklogService, {Worklog} from "./WorklogService";
 
 describe("WorklogService", () => {
     beforeEach(() => {
@@ -52,6 +52,7 @@ describe("WorklogService", () => {
                             started: "2019-09-02T16:03:00.000+020",
                             id: "first",
                             comment: "hunting for Jerry",
+                            issueId: "12",
                         }, {
                             author: {
                                 displayName: "Jerry Mouse",
@@ -61,6 +62,7 @@ describe("WorklogService", () => {
                             started: "2020-09-02T16:03:00.000+020",
                             id: "second",
                             comment: "sleeping",
+                            issueId: "23",
                         }, {
                             author: {
                                 displayName: "Tom Tomcat",
@@ -70,6 +72,7 @@ describe("WorklogService", () => {
                             started: "2021-09-02T16:03:00.000+020",
                             id: "third",
                             comment: "curing the pain of Jerry's trap",
+                            issueId: "34",
                         },
                     ],
                 }),
@@ -85,6 +88,7 @@ describe("WorklogService", () => {
                     started: "2019-09-02T16:03:00.000+020",
                     id: "first",
                     comment: "hunting for Jerry",
+                    issueId: "12",
                 }, {
                     author: {
                         displayName: "Tom Tomcat",
@@ -94,6 +98,7 @@ describe("WorklogService", () => {
                     started: "2021-09-02T16:03:00.000+020",
                     id: "third",
                     comment: "curing the pain of Jerry's trap",
+                    issueId: "34",
                 },
             ] as Worklog[]);
         });
