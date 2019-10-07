@@ -18,6 +18,7 @@ export interface Worklog {
     started: string;
     id: string;
     comment: string;
+    issueId: string;
 }
 
 export default class WorklogService {
@@ -44,7 +45,7 @@ export default class WorklogService {
     }
 
     private static toWorklog(responseWorklog: any): Worklog {
-        const {timeSpentSeconds, comment, author, id, started} = responseWorklog;
+        const {timeSpentSeconds, comment, author, id, started, issueId} = responseWorklog;
         const timeSpentInMinutes = Math.floor(timeSpentSeconds / 60);
         const {displayName, name} = author;
 
@@ -57,6 +58,7 @@ export default class WorklogService {
             comment,
             id,
             started,
+            issueId,
         };
     }
 
