@@ -89,7 +89,6 @@ describe("WorklogShiftView", () => {
 
     // TODO: marmer 08.10.2019 default values
     // TODO: marmer 07.10.2019 errorhandling while shifting
-    // TODO: marmer 07.10.2019 Shifting
     // TODO: marmer 07.10.2019 Handling of missing worklog parts (author, Comment, Start, ...)
     // TODO: marmer 07.10.2019 Keep destination issue in session storage in case the user wants to shift more than one worklog
     // TODO: marmer 07.10.2019 Shifting should only be possible if the target issue exists
