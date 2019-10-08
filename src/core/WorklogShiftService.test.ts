@@ -29,6 +29,7 @@ describe("WorklogShiftService", () => {
         });
     });
 
+    // TODO: marmer 08.10.2019 more time to shift than existing within worklog
     // TODO: marmer 08.10.2019 successful full shift - source deleted
     // TODO: marmer 08.10.2019 successful full shift - target created with correct time
     // TODO: marmer 08.10.2019 successful part shift - source edited with correct time
