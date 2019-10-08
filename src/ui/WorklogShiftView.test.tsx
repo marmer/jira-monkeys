@@ -5,6 +5,9 @@ import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import WorklogShiftView from "./WorklogShiftView";
+import moment = require("moment-timezone");
+
+moment.tz.setDefault("Europe/Berlin");
 
 describe("WorklogShiftView", () => {
 
