@@ -1,5 +1,5 @@
 import JiraTimeService from "./JiraTimeService";
-import {Worklog} from "./WorklogService";
+import WorklogService, {Worklog} from "./WorklogService";
 
 export default class WorklogShiftService {
     public static async shiftWorklog(worklog: Worklog, timeToShiftJiraString: string, targetIssueKey: string): Promise<void> {
@@ -9,6 +9,17 @@ export default class WorklogShiftService {
             throw new Error("It's not possible to shift more time than exist on a worklog");
         }
 
-        throw new Error("Not implemented yet");
+        const {
+            comment,
+            started,
+            timeSpentInMinutes,
+        } = worklog;
+
+        WorklogService.createWorklog({
+            comment,
+            issueKey: targetIssueKey,
+            started,
+            timeSpentInMinutes,
+        });
     }
 }

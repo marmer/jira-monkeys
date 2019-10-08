@@ -22,6 +22,15 @@ export interface Worklog {
 }
 
 export default class WorklogService {
+    public static async createWorklog(worklog: {
+        timeSpentInMinutes: number;
+        started: string;
+        comment: string;
+        issueKey: string;
+    }): Promise<Worklog> {
+        // TODO: marmer 08.10.2019 implement
+        throw new Error("Not implemented yet");
+    }
     public static async getSummedWorklogsByUser(): Promise<WorklogSumByUser[]> {
         const issueKey = IssueSiteInfos.getCurrentIssueKey();
         return this.getWorklogByIssueKey(issueKey).then(this.sumUp);

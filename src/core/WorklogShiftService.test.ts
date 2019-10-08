@@ -1,5 +1,5 @@
 import JiraTimeService from "./JiraTimeService";
-import {Worklog} from "./WorklogService";
+import WorklogService, {Worklog} from "./WorklogService";
 import WorklogShiftService from "./WorklogShiftService";
 
 describe("WorklogShiftService", () => {
@@ -43,6 +43,35 @@ describe("WorklogShiftService", () => {
             }, "validJiraString", "targetIssueKey-123")).rejects.toStrictEqual(new Error("It's not possible to shift more time than exist on a worklog"));
         });
 
+        it("should create a worklog at the target issue with the given time", async () => {
+            JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
+                if (jiraString !== "validJiraString") {
+                    fail("unexpected input: " + jiraString);
+                }
+
+                return 5;
+            });
+
+            WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
+
+            await WorklogShiftService.shiftWorklog({
+                ...worklogBase,
+                timeSpentInMinutes: 5,
+            }, "validJiraString", "targetIssueKey-123");
+
+            expect(WorklogService.createWorklog).toBeCalledWith({
+                timeSpentInMinutes: 5,
+                started: worklogBase.started,
+                issueKey: "targetIssueKey-123",
+                comment: worklogBase.comment,
+            } as {
+                timeSpentInMinutes: number;
+                started: string;
+                comment: string;
+                issueKey: string;
+            });
+        });
+
         // TODO: marmer 08.10.2019 it should do nothing when someone tries to shift zero time
         // TODO: marmer 08.10.2019 successful full shift - source deleted
         // TODO: marmer 08.10.2019 successful full shift - target created with correct time
@@ -50,7 +79,7 @@ describe("WorklogShiftService", () => {
         // TODO: marmer 08.10.2019 successful part shift - target created with correct time
         // TODO: marmer 08.10.2019 error on editing the source worklog
         // TODO: marmer 08.10.2019 error on deleting the source worklog
-        // TODO: marmer 08.10.2019 error on creating the target worklog
+        // TODO: marmer 08.10.2019 error on creating the target worklog (throw error and no change should be performed on source worklog)
     });
 
 });
