@@ -78,14 +78,16 @@ describe("WorklogShiftView", () => {
         const underTest = reactTest.render(<WorklogShiftView/>);
         const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
 
-        userEvent.type(targetIssueInput, "5m");
+        userEvent.type(targetIssueInput, "TARGET-123");
+        userEvent.type(underTest.getByTestId("ShiftInput" + worklogBase.id), "5m");
         const shiftButton = underTest.getByTestId("ShiftButton" + worklogBase.id);
         userEvent.click(shiftButton);
 
-        expect(WorklogShiftService.shiftFromWorklog).toBeCalledWith(sourceWorklog, "5m", "TARGET-123");
+        await reactTest.wait(() => expect(WorklogShiftService.shiftFromWorklog).toBeCalledWith(sourceWorklog, "5m", "TARGET-123"));
         expect(WindowService.reloadPage).toBeCalled();
     });
 
+    // TODO: marmer 08.10.2019 default values
     // TODO: marmer 07.10.2019 errorhandling while shifting
     // TODO: marmer 07.10.2019 Shifting
     // TODO: marmer 07.10.2019 Handling of missing worklog parts (author, Comment, Start, ...)

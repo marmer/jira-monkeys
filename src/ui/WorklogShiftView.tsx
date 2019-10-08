@@ -1,7 +1,9 @@
 import moment = require("moment");
 import React, {Component, ReactNode} from "react";
 import JiraTimeService from "../core/JiraTimeService";
+import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
+import WorklogShiftService from "../core/WorklogShiftService";
 
 // TODO: marmer 27.09.2019 care!
 // tslint:disable-next-line:no-empty-interface
@@ -33,7 +35,9 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
         });
         WorklogService.getWorklogsForCurrentIssueAndUser()
             .then(worklogs => {
-                const timesToShift = worklogs.map(w => ({
+                const timesToShift = worklogs.length === 0 ?
+                    {} :
+                    worklogs.map(w => ({
                     [w.id]: JiraTimeService.minutesToJiraFormat(w.timeSpentInMinutes),
                 })).reduce((previousValue, currentValue) => {
                     return {...previousValue, ...currentValue};
@@ -109,11 +113,20 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             <td align="center" style={{paddingRight: "0.5em"}}>
                 <input type="text" placeholder="5h 9m"
                        value={this.state.timesToShift[worklog.id]}
+                       data-testid={"ShiftInput" + worklog.id}
                        onChange={e => this.updateTimeToShift(e.target.value, worklog)}/>
             </td>
             <td align="center" style={{paddingRight: "0.5em"}}>
-                <button data-testid={"ShiftButton" + worklog.id} title="move">{">"}</button>
+                <button data-testid={"ShiftButton" + worklog.id} title="move"
+                        onClick={() => this.shiftTimeFor(worklog)}>{">"}</button>
             </td>
         </tr>;
+    }
+
+    private shiftTimeFor(worklog: Worklog) {
+        WorklogShiftService.shiftFromWorklog(worklog, this.state.timesToShift[worklog.id], this.state.targetIssueKey)
+            .then(() => {
+                return WindowService.reloadPage();
+            });
     }
 }
