@@ -15,11 +15,13 @@ export default class WorklogShiftService {
             timeSpentInMinutes,
         } = worklog;
 
-        WorklogService.createWorklog({
+        await WorklogService.createWorklog({
             comment,
             issueKey: targetIssueKey,
             started,
             timeSpentInMinutes,
         });
+
+        await WorklogService.deleteWorklog(worklog);
     }
 }

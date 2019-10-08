@@ -43,7 +43,7 @@ describe("WorklogShiftService", () => {
             }, "validJiraString", "targetIssueKey-123")).rejects.toStrictEqual(new Error("It's not possible to shift more time than exist on a worklog"));
         });
 
-        it("should create a worklog at the target issue with the given time", async () => {
+        it("should create a worklog at the target issue with the given time to shift", async () => {
             JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
                 if (jiraString !== "validJiraString") {
                     fail("unexpected input: " + jiraString);
@@ -53,6 +53,7 @@ describe("WorklogShiftService", () => {
             });
 
             WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.deleteWorklog = jest.fn().mockResolvedValue(undefined);
 
             await WorklogShiftService.shiftWorklog({
                 ...worklogBase,
@@ -72,11 +73,30 @@ describe("WorklogShiftService", () => {
             });
         });
 
+        it("should delete the source worklog when the same amount of time is shifted as exists at the source worklog", async () => {
+            JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
+                if (jiraString !== "validJiraString") {
+                    fail("unexpected input: " + jiraString);
+                }
+
+                return 5;
+            });
+
+            WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.deleteWorklog = jest.fn().mockResolvedValue(undefined);
+
+            const worklogToShift = {
+                ...worklogBase,
+                timeSpentInMinutes: 5,
+            };
+            await WorklogShiftService.shiftWorklog(worklogToShift, "validJiraString", "targetIssueKey-123");
+
+            expect(WorklogService.deleteWorklog).toBeCalledWith(worklogToShift);
+        });
+
         // TODO: marmer 08.10.2019 it should do nothing when someone tries to shift zero time
         // TODO: marmer 08.10.2019 successful full shift - source deleted
-        // TODO: marmer 08.10.2019 successful full shift - target created with correct time
         // TODO: marmer 08.10.2019 successful part shift - source edited with correct time
-        // TODO: marmer 08.10.2019 successful part shift - target created with correct time
         // TODO: marmer 08.10.2019 error on editing the source worklog
         // TODO: marmer 08.10.2019 error on deleting the source worklog
         // TODO: marmer 08.10.2019 error on creating the target worklog (throw error and no change should be performed on source worklog)
