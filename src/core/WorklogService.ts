@@ -36,6 +36,11 @@ export default class WorklogService {
         // TODO: marmer 08.10.2019 implement
         throw new Error("Not implemented yet");
     }
+
+    public static async updateWorklog(worklog: Worklog): Promise<void> {
+        // TODO: marmer 08.10.2019 implement
+        throw new Error("Not implemented yet");
+    }
     public static async getSummedWorklogsByUser(): Promise<WorklogSumByUser[]> {
         const issueKey = IssueSiteInfos.getCurrentIssueKey();
         return this.getWorklogByIssueKey(issueKey).then(this.sumUp);
