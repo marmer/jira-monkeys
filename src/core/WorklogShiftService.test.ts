@@ -114,8 +114,29 @@ describe("WorklogShiftService", () => {
 
             expect(WorklogService.updateWorklog).toBeCalledWith({...worklogToShift, timeSpentInMinutes: 2});
         });
+        it("should not update anything when it no time has to be changed", async () => {
+            JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
+                if (jiraString !== "validJiraString") {
+                    fail("unexpected input: " + jiraString);
+                }
 
-        // TODO: marmer 08.10.2019 it should do nothing when someone tries to shift zero time
+                return 0;
+            });
+
+            WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.updateWorklog = jest.fn().mockResolvedValue(undefined);
+
+            const worklogToShift = {
+                ...worklogBase,
+                timeSpentInMinutes: 5,
+            };
+            await WorklogShiftService.shiftWorklog(worklogToShift, "validJiraString", "targetIssueKey-123");
+
+            expect(WorklogService.updateWorklog).not.toBeCalled();
+            expect(WorklogService.createWorklog).not.toBeCalled();
+            expect(WorklogService.deleteWorklog).not.toBeCalled();
+        });
+
         // TODO: marmer 08.10.2019 error on editing the source worklog
         // TODO: marmer 08.10.2019 error on deleting the source worklog
         // TODO: marmer 08.10.2019 error on creating the target worklog (throw error and no change should be performed on source worklog)
