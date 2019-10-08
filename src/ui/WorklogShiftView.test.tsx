@@ -84,7 +84,6 @@ describe("WorklogShiftView", () => {
 
         expect(WorklogShiftService.shiftFromWorklog).toBeCalledWith(sourceWorklog, "5m", "TARGET-123");
         expect(WindowService.reloadPage).toBeCalled();
-        // // TODO: marmer 07.10.2019 check reload
     });
 
     // TODO: marmer 07.10.2019 errorhandling while shifting
