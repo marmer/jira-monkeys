@@ -83,7 +83,7 @@ describe("WorklogShiftView", () => {
     it("should reload the current site after some worklog has been shifted", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
-        WorklogShiftService.shiftFromWorklog = jest.fn().mockResolvedValue(undefined);
+        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
 
         const underTest = reactTest.render(<WorklogShiftView/>);
@@ -94,14 +94,14 @@ describe("WorklogShiftView", () => {
         const shiftButton = underTest.getByTestId("ShiftButton" + worklogBase.id);
         userEvent.click(shiftButton);
 
-        await reactTest.wait(() => expect(WorklogShiftService.shiftFromWorklog).toBeCalledWith(sourceWorklog, "5m", "TARGET-123"));
+        await reactTest.wait(() => expect(WorklogShiftService.shiftWorklog).toBeCalledWith(sourceWorklog, "5m", "TARGET-123"));
         expect(WindowService.reloadPage).toBeCalled();
     });
 
     it("should show a blocking error message when shifting is not successful and reload the page when the user closes it", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
-        WorklogShiftService.shiftFromWorklog = jest.fn().mockRejectedValue(new Error("el barto was here"));
+        WorklogShiftService.shiftWorklog = jest.fn().mockRejectedValue(new Error("el barto was here"));
         WindowService.reloadPage = jest.fn();
 
         const underTest = reactTest.render(<WorklogShiftView/>);

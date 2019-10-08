@@ -133,7 +133,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
     }
 
     private shiftTimeFor(worklog: Worklog) {
-        WorklogShiftService.shiftFromWorklog(worklog, this.state.timesToShift[worklog.id], this.state.targetIssueKey)
+        WorklogShiftService.shiftWorklog(worklog, this.state.timesToShift[worklog.id], this.state.targetIssueKey)
             .then(() => {
                 return WindowService.reloadPage();
             })
