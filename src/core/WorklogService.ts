@@ -27,7 +27,12 @@ export default class WorklogService {
         started: string;
         comment: string;
         issueKey: string;
-    }): Promise<Worklog> {
+    }): Promise<void> {
+        // TODO: marmer 08.10.2019 implement
+        throw new Error("Not implemented yet");
+    }
+
+    public static async deleteWorklog(worklog: Worklog): Promise<void> {
         // TODO: marmer 08.10.2019 implement
         throw new Error("Not implemented yet");
     }
