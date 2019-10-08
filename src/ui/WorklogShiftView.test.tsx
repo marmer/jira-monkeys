@@ -1,6 +1,6 @@
 import * as reactTest from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
+import React, {FunctionComponent} from "react";
 import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
@@ -8,6 +8,14 @@ import WorklogShiftView from "./WorklogShiftView";
 import moment = require("moment-timezone");
 
 moment.tz.setDefault("Europe/Berlin");
+
+jest.mock("./ModalView", () => ((({children, onClose}) =>
+    <>
+        <div data-testid="errorViewMock">
+            {children}
+        </div>
+        <button data-testid="errorViewCloseButton" onClick={onClose}>X</button>
+    </>) as FunctionComponent<{ onClose: () => void }>));
 
 describe("WorklogShiftView", () => {
 
@@ -90,8 +98,28 @@ describe("WorklogShiftView", () => {
         expect(WindowService.reloadPage).toBeCalled();
     });
 
+    it("should show a blocking error message when shifting is not successful and reload the page when the user closes it", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogShiftService.shiftFromWorklog = jest.fn().mockRejectedValue(new Error("el barto was here"));
+        WindowService.reloadPage = jest.fn();
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "TARGET-123");
+        userEvent.type(underTest.getByTestId("ShiftInput" + worklogBase.id), "5m");
+        const shiftButton = underTest.getByTestId("ShiftButton" + worklogBase.id);
+        userEvent.click(shiftButton);
+
+        const errorView = await reactTest.waitForElement(() => underTest.getByTestId("errorViewMock"));
+        await reactTest.waitForElement(() => reactTest.getByText(errorView, "An unexpected error has occured while shifting the worklog. Please check the worklogs of this issue and the target issue. The Site is getting reloaded when you close this message. Error: el barto was here"));
+
+        userEvent.click(underTest.getByTestId("errorViewCloseButton"));
+        reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
+    });
+
     // TODO: marmer 08.10.2019 default values
-    // TODO: marmer 07.10.2019 errorhandling while shifting
     // TODO: marmer 07.10.2019 Handling of missing worklog parts (author, Comment, Start, ...)
     // TODO: marmer 07.10.2019 Keep destination issue in session storage in case the user wants to shift more than one worklog
     // TODO: marmer 07.10.2019 Shifting should only be possible if the target issue exists
