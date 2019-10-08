@@ -212,6 +212,7 @@ Object {
                 style="padding-right: 0.5em;"
               >
                 <input
+                  data-testid="ShiftInput1111"
                   placeholder="5h 9m"
                   type="text"
                   value="1m"
@@ -259,6 +260,7 @@ Object {
                 style="padding-right: 0.5em;"
               >
                 <input
+                  data-testid="ShiftInput2222"
                   placeholder="5h 9m"
                   type="text"
                   value="2m"
@@ -279,13 +281,13 @@ Object {
           </tbody>
         </table>
         <label
-          style="text-align: center; align-self: baseline;"
+          style="text-align: center; align-self: baseline; display: flex; flex-direction: column;"
         >
           Target
           <input
             placeholder="ISSUE-1234"
             title="Target Issue"
-            value="SAMPLEISSUE-123"
+            value=""
           />
         </label>
       </div>
@@ -357,6 +359,7 @@ Object {
               style="padding-right: 0.5em;"
             >
               <input
+                data-testid="ShiftInput1111"
                 placeholder="5h 9m"
                 type="text"
                 value="1m"
@@ -404,6 +407,7 @@ Object {
               style="padding-right: 0.5em;"
             >
               <input
+                data-testid="ShiftInput2222"
                 placeholder="5h 9m"
                 type="text"
                 value="2m"
@@ -424,13 +428,13 @@ Object {
         </tbody>
       </table>
       <label
-        style="text-align: center; align-self: baseline;"
+        style="text-align: center; align-self: baseline; display: flex; flex-direction: column;"
       >
         Target
         <input
           placeholder="ISSUE-1234"
           title="Target Issue"
-          value="SAMPLEISSUE-123"
+          value=""
         />
       </label>
     </div>

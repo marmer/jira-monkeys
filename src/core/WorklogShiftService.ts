@@ -1,7 +1,7 @@
-export default class WorklogShiftService {
-    public static async shiftFromWorklog(): Promise<void> {
+import {Worklog} from "./WorklogService";
 
-        // TODO: marmer 07.10.2019 Implement me!
+export default class WorklogShiftService {
+    public static async shiftFromWorklog(worklog: Worklog, timeToShiftAsJiraString: string, targetIssueKey: string): Promise<void> {
         return Promise.reject(new Error("Not implemented yet"));
     }
 }
