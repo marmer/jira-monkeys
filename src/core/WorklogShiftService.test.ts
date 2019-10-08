@@ -73,7 +73,7 @@ describe("WorklogShiftService", () => {
             });
         });
 
-        it("should delete the source worklog when the same amount of time is shifted as exists at the source worklog", async () => {
+        it("should delete the source worklog when the same amount of time is shifted than exists at the source worklog", async () => {
             JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
                 if (jiraString !== "validJiraString") {
                     fail("unexpected input: " + jiraString);
@@ -94,9 +94,28 @@ describe("WorklogShiftService", () => {
             expect(WorklogService.deleteWorklog).toBeCalledWith(worklogToShift);
         });
 
+        it("should update the source worklog when the less time is shifted than exists at the source worklog", async () => {
+            JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
+                if (jiraString !== "validJiraString") {
+                    fail("unexpected input: " + jiraString);
+                }
+
+                return 3;
+            });
+
+            WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.updateWorklog = jest.fn().mockResolvedValue(undefined);
+
+            const worklogToShift = {
+                ...worklogBase,
+                timeSpentInMinutes: 5,
+            };
+            await WorklogShiftService.shiftWorklog(worklogToShift, "validJiraString", "targetIssueKey-123");
+
+            expect(WorklogService.updateWorklog).toBeCalledWith({...worklogToShift, timeSpentInMinutes: 2});
+        });
+
         // TODO: marmer 08.10.2019 it should do nothing when someone tries to shift zero time
-        // TODO: marmer 08.10.2019 successful full shift - source deleted
-        // TODO: marmer 08.10.2019 successful part shift - source edited with correct time
         // TODO: marmer 08.10.2019 error on editing the source worklog
         // TODO: marmer 08.10.2019 error on deleting the source worklog
         // TODO: marmer 08.10.2019 error on creating the target worklog (throw error and no change should be performed on source worklog)

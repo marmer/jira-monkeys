@@ -22,6 +22,13 @@ export default class WorklogShiftService {
             timeSpentInMinutes,
         });
 
-        await WorklogService.deleteWorklog(worklog);
+        if (timeSpentInMinutes === timeToShiftInMinutes) {
+            await WorklogService.deleteWorklog(worklog);
+        } else {
+            await WorklogService.updateWorklog({
+                ...worklog,
+                timeSpentInMinutes: timeSpentInMinutes - timeToShiftInMinutes,
+            });
+        }
     }
 }
