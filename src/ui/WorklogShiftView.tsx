@@ -4,6 +4,7 @@ import JiraTimeService from "../core/JiraTimeService";
 import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
+import ModalView from "./ModalView";
 
 // TODO: marmer 27.09.2019 care!
 // tslint:disable-next-line:no-empty-interface
@@ -15,6 +16,7 @@ interface WorklogShiftViewState {
     timesToShift: {
         [worklogId: string]: string;
     };
+    shiftError?: Error;
 }
 
 export default class WorklogShiftView extends Component<{}, WorklogShiftViewState> {
@@ -58,6 +60,13 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             {/*// TODO: marmer 30.09.2019 This is just a mockup with inline styles*/}
             {/*// TODO: marmer 30.09.2019 Don't use the layout of a different View in this way*/}
             This is just work in Progress
+
+            {this.state.shiftError &&
+            <ModalView onClose={() => WindowService.reloadPage()}>
+                An unexpected error has occured while shifting the worklog. Please check the worklogs of this issue and
+                the target issue. The Site is getting reloaded when you close this message.
+                Error: {this.state.shiftError.message}
+            </ModalView>}
 
             {this.state.loadingError &&
             <p>Error while loading worklogs for issue: {this.state.loadingError.message}</p>}
@@ -127,6 +136,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
         WorklogShiftService.shiftFromWorklog(worklog, this.state.timesToShift[worklog.id], this.state.targetIssueKey)
             .then(() => {
                 return WindowService.reloadPage();
-            });
+            })
+            .catch(shiftError => this.setState({shiftError}));
     }
 }
