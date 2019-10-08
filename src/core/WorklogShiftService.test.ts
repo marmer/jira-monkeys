@@ -27,14 +27,30 @@ describe("WorklogShiftService", () => {
 
             expect(WorklogShiftService.shiftWorklog({...worklogBase}, "invalidJiraString", "targetIssueKey-123")).rejects.toStrictEqual(cause);
         });
+
+        it("should reject when someone tries to shift more time than exists on a worklog", async () => {
+            JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
+                if (jiraString !== "validJiraString") {
+                    fail("unexpected input: " + jiraString);
+                }
+
+                return 5;
+            });
+
+            expect(WorklogShiftService.shiftWorklog({
+                ...worklogBase,
+                timeSpentInMinutes: 4,
+            }, "validJiraString", "targetIssueKey-123")).rejects.toStrictEqual(new Error("It's not possible to shift more time than exist on a worklog"));
+        });
+
+        // TODO: marmer 08.10.2019 it should do nothing when someone tries to shift zero time
+        // TODO: marmer 08.10.2019 successful full shift - source deleted
+        // TODO: marmer 08.10.2019 successful full shift - target created with correct time
+        // TODO: marmer 08.10.2019 successful part shift - source edited with correct time
+        // TODO: marmer 08.10.2019 successful part shift - target created with correct time
+        // TODO: marmer 08.10.2019 error on editing the source worklog
+        // TODO: marmer 08.10.2019 error on deleting the source worklog
+        // TODO: marmer 08.10.2019 error on creating the target worklog
     });
 
-    // TODO: marmer 08.10.2019 more time to shift than existing within worklog
-    // TODO: marmer 08.10.2019 successful full shift - source deleted
-    // TODO: marmer 08.10.2019 successful full shift - target created with correct time
-    // TODO: marmer 08.10.2019 successful part shift - source edited with correct time
-    // TODO: marmer 08.10.2019 successful part shift - target created with correct time
-    // TODO: marmer 08.10.2019 error on editing the source worklog
-    // TODO: marmer 08.10.2019 error on deleting the source worklog
-    // TODO: marmer 08.10.2019 error on creating the target worklog
 });
