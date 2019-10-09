@@ -41,6 +41,10 @@ export default class WorklogService {
                 started,
             }),
         });
+
+        if (response.status !== 201) {
+            throw new Error("Unexpected status code. Creation of worklog probably not sucecssful");
+        }
     }
 
     public static async deleteWorklog(worklog: Worklog): Promise<void> {

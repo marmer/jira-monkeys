@@ -254,5 +254,41 @@ describe("WorklogService", () => {
                     );
             })).toBeTruthy();
         });
+
+        it("should reject at a bad status code", async () => {
+            const worklogCreateUrl = "/someWorklogUrl";
+            fetchMock.post(worklogCreateUrl, {
+                status: 418,
+            });
+
+            const issueKey = "niceIssueKey-123";
+            const timeSpentInMinutes = 42;
+            const started = "startedString";
+            const comment = "fancyComment";
+
+            const timeSpent = "timeToShiftAsJiraTimeString";
+
+            JiraTimeService.minutesToJiraFormat = jest.fn().mockImplementation(tsm => {
+                if (tsm !== timeSpentInMinutes) {
+                    fail("unexpected input " + tsm);
+                }
+                return timeSpent;
+            });
+
+            IssueSiteInfos.getWorklogUrlForIssueKey = jest.fn().mockImplementation(ik => {
+                if (ik !== issueKey) {
+                    fail("Request for wrong issue key");
+                }
+                return worklogCreateUrl;
+            });
+
+            expect(WorklogService.createWorklog({
+                issueKey,
+                timeSpentInMinutes,
+                started,
+                comment,
+            })).rejects.toStrictEqual(new Error("Unexpected status code. Creation of worklog probably not sucecssful"));
+
+        });
     });
 });
