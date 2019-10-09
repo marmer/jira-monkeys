@@ -20,6 +20,10 @@ jest.mock("./ModalView", () => ((({children, onClose}) =>
 
 describe("WorklogShiftView", () => {
 
+    beforeEach(() => {
+        JiraTimeService.isValidJiraFormat = jest.fn().mockReturnValue(true);
+    });
+
     const worklogBase: Worklog = {
         issueId: "42",
         author: {
@@ -135,20 +139,13 @@ describe("WorklogShiftView", () => {
         expect(shiftButton).toBeDisabled();
     });
 
-    // TODO: marmer 09.10.2019 implement this!
-    it.skip("should not be possible to shift time when the related input does not contain a jira string", async () => {
+    it("should not be possible to shift time when the related input does not contain a jira string", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
         WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
         const invalidJiraString = "someInvalidJiraString";
-        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(jiraString => {
-            if (jiraString !== invalidJiraString) {
-                fail("unexpected jira string: " + jiraString);
-            }
-
-            return false;
-        });
+        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(jiraString => jiraString !== invalidJiraString);
 
         const underTest = reactTest.render(<WorklogShiftView/>);
         const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
