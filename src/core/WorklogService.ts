@@ -1,5 +1,6 @@
 import groupBy from "./groupBy";
 import IssueSiteInfos from "./IssueSiteInfos";
+import JiraTimeService from "./JiraTimeService";
 import UserService from "./UserService";
 
 export interface WorklogSumByUser {
@@ -28,8 +29,18 @@ export default class WorklogService {
         comment: string;
         issueKey: string;
     }): Promise<void> {
-        // TODO: marmer 08.10.2019 implement
-        throw new Error("Not implemented yet");
+
+        const {comment, issueKey, started, timeSpentInMinutes} = worklog;
+        const timeSpent = JiraTimeService.minutesToJiraFormat(timeSpentInMinutes);
+
+        const response = await fetch(IssueSiteInfos.getWorklogUrlForIssueKey(issueKey), {
+            method: "POST",
+            body: JSON.stringify({
+                comment,
+                timeSpent,
+                started,
+            }),
+        });
     }
 
     public static async deleteWorklog(worklog: Worklog): Promise<void> {
