@@ -29,7 +29,6 @@ export default class WorklogService {
         comment: string;
         issueKey: string;
     }): Promise<void> {
-
         const {comment, issueKey, started, timeSpentInMinutes} = worklog;
         const timeSpent = JiraTimeService.minutesToJiraFormat(timeSpentInMinutes);
 
@@ -40,6 +39,8 @@ export default class WorklogService {
                 timeSpent,
                 started,
             }),
+        }).catch(() => {
+            throw new Error("Communication error: Worklog creation failed");
         });
 
         if (response.status !== 201) {
