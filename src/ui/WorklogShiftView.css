@@ -1,0 +1,11 @@
+.worklogShiftTarget {
+    text-align: center;
+    align-self: baseline !important;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.2em;
+}
+
+.worklogShiftTarget > * {
+    margin-top: 0.5em;
+}

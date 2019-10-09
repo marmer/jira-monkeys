@@ -5,6 +5,7 @@ import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import ModalView from "./ModalView";
+import "./WorklogShiftView.css"
 
 interface WorklogShiftViewState {
     worklogs?: Worklog[] | null;
@@ -63,9 +64,6 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
 
     public render(): React.ReactElement {
         return <>
-            {/*// TODO: marmer 30.09.2019 This is just a mockup with inline styles*/}
-            {/*// TODO: marmer 30.09.2019 Don't use the layout of a different View in this way*/}
-
             {this.state.shiftError &&
             <ModalView onClose={() => WindowService.reloadPage()}>
                 An unexpected error has occured while shifting the worklog. Please check the worklogs of this issue and
@@ -83,8 +81,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             <p>No work logged here for you yet</p>}
 
             {this.state.worklogs && this.state.worklogs.length > 0 &&
-            <div className="estimationShiftContainer">
-                <table>
+            <div className="monkeyFlexContainer">
+                <table className="monkeyTable">
                     <thead>
                     <tr>
                         <th align="center">Start</th>
@@ -100,8 +98,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                     }
                     </tbody>
                 </table>
-                <label style={{textAlign: "center", alignSelf: "baseline", display: "flex", flexDirection: "column"}}>
-                    Target Issue key
+                <label className="worklogShiftTarget">
+                    Target Issue
                     <input placeholder="ISSUE-1234" title="Target Issue" value={this.state.targetIssueKey}
                            onChange={e => this.setState({targetIssueKey: e.target.value})}/>
                 </label>
@@ -115,22 +113,21 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
         });
     }
     private toRow(worklog: Worklog): ReactNode {
-        // TODO: marmer 07.10.2019 No Inline styles!
         return <tr key={worklog.id}>
-            <td align="center" style={{paddingRight: "0.5em"}}>
+            <td align="center">
                 <p>{moment(worklog.started).format("YYYY-MM-DD HH:mm:ss")}</p></td>
-            <td align="center" style={{paddingRight: "0.5em"}}>
+            <td align="center">
                 <p>{worklog.comment}</p></td>
-            <td align="center" style={{paddingRight: "0.5em"}}>
+            <td align="center">
                 <p>{JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes)}</p>
             </td>
-            <td align="center" style={{paddingRight: "0.5em"}}>
+            <td align="center">
                 <input type="text" placeholder="5h 9m"
                        value={this.state.timesToShift[worklog.id]}
                        data-testid={"ShiftInput" + worklog.id}
                        onChange={e => this.updateTimeToShift(e.target.value, worklog)}/>
             </td>
-            <td align="center" style={{paddingRight: "0.5em"}}>
+            <td align="center">
                 <button data-testid={"ShiftButton" + worklog.id} title="move"
                         onClick={() => this.shiftTimeFor(worklog)}
                         disabled={!this.isShiftAllowedForWorklog(worklog)}>{">"}</button>
