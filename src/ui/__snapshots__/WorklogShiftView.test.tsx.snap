@@ -224,6 +224,7 @@ Object {
               >
                 <button
                   data-testid="ShiftButton1111"
+                  disabled=""
                   title="move"
                 >
                   &gt;
@@ -272,6 +273,7 @@ Object {
               >
                 <button
                   data-testid="ShiftButton2222"
+                  disabled=""
                   title="move"
                 >
                   &gt;
@@ -371,6 +373,7 @@ Object {
             >
               <button
                 data-testid="ShiftButton1111"
+                disabled=""
                 title="move"
               >
                 &gt;
@@ -419,6 +422,7 @@ Object {
             >
               <button
                 data-testid="ShiftButton2222"
+                disabled=""
                 title="move"
               >
                 &gt;

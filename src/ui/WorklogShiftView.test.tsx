@@ -1,6 +1,7 @@
 import * as reactTest from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React, {FunctionComponent} from "react";
+import JiraTimeService from "../core/JiraTimeService";
 import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
@@ -117,6 +118,45 @@ describe("WorklogShiftView", () => {
 
         userEvent.click(underTest.getByTestId("errorViewCloseButton"));
         reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
+    });
+
+    it("should not be possible to shift anything when not target is set", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
+        WindowService.reloadPage = jest.fn();
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "  ");
+        userEvent.type(underTest.getByTestId("ShiftInput" + worklogBase.id), "5m");
+        const shiftButton = underTest.getByTestId("ShiftButton" + worklogBase.id);
+        expect(shiftButton).toBeDisabled();
+    });
+
+    // TODO: marmer 09.10.2019 implement this!
+    it.skip("should not be possible to shift time when the related input does not contain a jira string", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
+        WindowService.reloadPage = jest.fn();
+        const invalidJiraString = "someInvalidJiraString";
+        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(jiraString => {
+            if (jiraString !== invalidJiraString) {
+                fail("unexpected jira string: " + jiraString);
+            }
+
+            return false;
+        });
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "someTargetIssueKey-123");
+        userEvent.type(underTest.getByTestId("ShiftInput" + worklogBase.id), invalidJiraString);
+        const shiftButton = underTest.getByTestId("ShiftButton" + worklogBase.id);
+        expect(shiftButton).toBeDisabled();
     });
 
     // TODO: marmer 08.10.2019 default values
