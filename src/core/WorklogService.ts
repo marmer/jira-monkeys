@@ -42,7 +42,8 @@ export default class WorklogService {
                 timeSpent,
                 started,
             }),
-        }).catch(() => {
+        }).catch(reason => {
+            console.error(reason);
             throw new Error("Communication error: Worklog creation failed");
         });
 
@@ -53,7 +54,8 @@ export default class WorklogService {
 
     public static async deleteWorklog(worklog: Worklog): Promise<void> {
         const response = await fetch(IssueSiteInfos.getWorklogModifyUrlByWorklog(worklog), {method: "DELETE"})
-            .catch(() => {
+            .catch(reason => {
+                console.error(reason);
                 throw new Error("Communication error: Worklog deletion failed");
             });
 
@@ -73,10 +75,11 @@ export default class WorklogService {
                 timeSpent: JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes),
                 started: worklog.started,
             }),
-        }).catch(() => {
+        }).catch(reason => {
+            console.error(reason);
             throw new Error("Communication error: Worklog updating failed");
         });
-        if (response.status !== 204) {
+        if (response.status !== 200) {
             throw new Error("Unexpected status code. Updating of worklog probably not sucecssful");
         }
     }
