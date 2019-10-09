@@ -91,7 +91,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         <th align="center">Comment</th>
                         <th align="center">Time Spent</th>
                         <th align="center">Time to move</th>
-                        <th align="center">Move</th>
+                        <th align="center">Shift/Split</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -101,7 +101,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                     </tbody>
                 </table>
                 <label style={{textAlign: "center", alignSelf: "baseline", display: "flex", flexDirection: "column"}}>
-                    Target
+                    Target Issue key
                     <input placeholder="ISSUE-1234" title="Target Issue" value={this.state.targetIssueKey}
                            onChange={e => this.setState({targetIssueKey: e.target.value})}/>
                 </label>
