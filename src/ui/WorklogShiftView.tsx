@@ -6,9 +6,6 @@ import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import ModalView from "./ModalView";
 
-// TODO: marmer 27.09.2019 care!
-// tslint:disable-next-line:no-empty-interface
-
 interface WorklogShiftViewState {
     worklogs?: Worklog[] | null;
     loadingError?: Error | null;
@@ -127,9 +124,14 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             </td>
             <td align="center" style={{paddingRight: "0.5em"}}>
                 <button data-testid={"ShiftButton" + worklog.id} title="move"
-                        onClick={() => this.shiftTimeFor(worklog)}>{">"}</button>
+                        onClick={() => this.shiftTimeFor(worklog)}
+                        disabled={!this.isJiraStringIsSet()}>{">"}</button>
             </td>
         </tr>;
+    }
+
+    private isJiraStringIsSet() {
+        return this.state.targetIssueKey.trim() !== "";
     }
 
     private shiftTimeFor(worklog: Worklog) {
