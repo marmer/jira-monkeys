@@ -22,15 +22,21 @@ export default class WorklogShiftService {
             issueKey: targetIssueKey,
             started,
             timeSpentInMinutes,
+        }).catch(() => {
+            throw new Error("Error while creating the new worklog. At least the source worklog has not been changed yet.");
         });
 
-        if (timeSpentInMinutes === timeToShiftInMinutes) {
-            await WorklogService.deleteWorklog(worklog);
-        } else {
-            await WorklogService.updateWorklog({
-                ...worklog,
-                timeSpentInMinutes: timeSpentInMinutes - timeToShiftInMinutes,
-            });
+        try {
+            if (timeSpentInMinutes === timeToShiftInMinutes) {
+                await WorklogService.deleteWorklog(worklog);
+            } else {
+                await WorklogService.updateWorklog({
+                    ...worklog,
+                    timeSpentInMinutes: timeSpentInMinutes - timeToShiftInMinutes,
+                });
+            }
+        } catch (reason) {
+            throw new Error("Error while updating the worklog to change (source).");
         }
     }
 }
