@@ -1,9 +1,22 @@
 import fetchMock from "fetch-mock";
 import IssueSiteInfos from "./IssueSiteInfos";
+import JiraTimeService from "./JiraTimeService";
 import UserService from "./UserService";
 import WorklogService, {Worklog} from "./WorklogService";
 
 describe("WorklogService", () => {
+    const worklogBase: Worklog = {
+        issueId: "42",
+        author: {
+            name: "real.me",
+            displayName: "Me",
+        },
+        timeSpentInMinutes: 1337,
+        started: "2000-01-01T00:00:00.000+0000",
+        id: "43",
+        comment: "did something",
+    };
+
     beforeEach(() => {
         fetchMock.restore();
     });
@@ -103,6 +116,7 @@ describe("WorklogService", () => {
             ] as Worklog[]);
         });
     });
+
     describe("getSummedWorklogsByUser", () => {
         it("should throw an appropriate error with the status code on an unexpected status code", () => {
             IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue("isskey-1");
@@ -192,6 +206,53 @@ describe("WorklogService", () => {
                     timeSpentInMinutes: 4320,
                 },
             ]);
+        });
+    });
+
+    describe("createWorklog", () => {
+        it("should resolve successfull with the right status code", async () => {
+            const worklogCreateUrl = "/someWorklogUrl";
+            fetchMock.post(worklogCreateUrl, {
+                status: 201,
+            });
+
+            const issueKey = "niceIssueKey-123";
+            const timeSpentInMinutes = 42;
+            const started = "startedString";
+            const comment = "fancyComment";
+
+            const timeSpent = "timeToShiftAsJiraTimeString";
+
+            JiraTimeService.minutesToJiraFormat = jest.fn().mockImplementation(tsm => {
+                if (tsm !== timeSpentInMinutes) {
+                    fail("unexpected input " + tsm);
+                }
+                return timeSpent;
+            });
+
+            IssueSiteInfos.getWorklogUrlForIssueKey = jest.fn().mockImplementation(ik => {
+                if (ik !== issueKey) {
+                    fail("Request for wrong issue key");
+                }
+                return worklogCreateUrl;
+            });
+
+            expect(WorklogService.createWorklog({
+                issueKey,
+                timeSpentInMinutes,
+                started,
+                comment,
+            })).resolves.toBeUndefined();
+
+            expect(fetchMock.called((url, opts) => {
+                return url === worklogCreateUrl &&
+                    opts.body === JSON.stringify({
+                            comment,
+                            timeSpent,
+                            started,
+                        },
+                    );
+            })).toBeTruthy();
         });
     });
 });
