@@ -21,7 +21,7 @@ export default class WorklogShiftService {
             comment,
             issueKey: targetIssueKey,
             started,
-            timeSpentInMinutes,
+            timeSpentInMinutes: timeToShiftInMinutes,
         }).catch(() => {
             throw new Error("Error while creating the new worklog. At least the source worklog has not been changed yet.");
         });

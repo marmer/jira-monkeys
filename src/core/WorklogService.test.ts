@@ -209,7 +209,7 @@ describe("WorklogService", () => {
         });
     });
 
-    describe("createWorklog", () => {
+    describe("createWorklog()", () => {
         it("should resolve successfull with the right status code", async () => {
             const worklogCreateUrl = "/someWorklogUrl";
             fetchMock.post(worklogCreateUrl, {
@@ -394,7 +394,7 @@ describe("WorklogService", () => {
         it("should resolve successfull with the right status code", async () => {
             const worklogUpdateUrl = "/someWorklogUrl";
             fetchMock.put(worklogUpdateUrl, {
-                status: 204,
+                status: 200,
             });
 
             const worklog = {...worklogBase};

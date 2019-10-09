@@ -44,16 +44,19 @@ describe("WorklogShiftService", () => {
         });
 
         it("should create a worklog at the target issue with the given time to shift", async () => {
+            const timeToShiftInMinutes = 2;
+
             JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
                 if (jiraString !== "validJiraString") {
                     fail("unexpected input: " + jiraString);
                 }
 
-                return 5;
+                return timeToShiftInMinutes;
             });
 
             WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
             WorklogService.deleteWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.updateWorklog = jest.fn().mockResolvedValue(undefined);
 
             await WorklogShiftService.shiftWorklog({
                 ...worklogBase,
@@ -61,7 +64,7 @@ describe("WorklogShiftService", () => {
             }, "validJiraString", "targetIssueKey-123");
 
             expect(WorklogService.createWorklog).toBeCalledWith({
-                timeSpentInMinutes: 5,
+                timeSpentInMinutes: timeToShiftInMinutes,
                 started: worklogBase.started,
                 issueKey: "targetIssueKey-123",
                 comment: worklogBase.comment,
