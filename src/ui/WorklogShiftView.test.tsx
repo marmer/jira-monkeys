@@ -121,7 +121,7 @@ describe("WorklogShiftView", () => {
         await reactTest.waitForElement(() => reactTest.getByText(errorView, "An unexpected error has occured while shifting the worklog. Please check the worklogs of this issue and the target issue. The Site is getting reloaded when you close this message. Error: el barto was here"));
 
         userEvent.click(underTest.getByTestId("errorViewCloseButton"));
-        reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
+        await reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
     });
 
     it("should not be possible to shift anything when not target is set", async () => {
@@ -156,7 +156,25 @@ describe("WorklogShiftView", () => {
         expect(shiftButton).toBeDisabled();
     });
 
-    // TODO: marmer 08.10.2019 default values
+    it("should set the time spent value of the related worklogs as default value for the time to shift", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        const jiraString = "someJiraString";
+        JiraTimeService.minutesToJiraFormat = jest.fn().mockImplementation(timeSpent => {
+            if (timeSpent !== sourceWorklog.timeSpentInMinutes) {
+                fail("Unexpected Input: " + timeSpent);
+            }
+            return jiraString;
+        });
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "someTargetIssueKey-123");
+
+        expect(underTest.getByTestId("ShiftInput" + worklogBase.id)).toHaveValue(jiraString);
+    });
+
     // TODO: marmer 07.10.2019 Handling of missing worklog parts (author, Comment, Start, ...)
     // TODO: marmer 07.10.2019 Keep destination issue in session storage in case the user wants to shift more than one worklog
     // TODO: marmer 07.10.2019 Shifting should only be possible if the target issue exists
