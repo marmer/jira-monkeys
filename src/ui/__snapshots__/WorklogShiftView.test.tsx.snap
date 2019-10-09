@@ -144,9 +144,11 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="estimationShiftContainer"
+        class="monkeyFlexContainer"
       >
-        <table>
+        <table
+          class="monkeyTable"
+        >
           <thead>
             <tr>
               <th
@@ -180,7 +182,6 @@ Object {
             <tr>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <p>
                   2019-10-01 01:02:03
@@ -188,7 +189,6 @@ Object {
               </td>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <p>
                   first step
@@ -196,7 +196,6 @@ Object {
               </td>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <p>
                   1m
@@ -204,7 +203,6 @@ Object {
               </td>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <input
                   data-testid="ShiftInput1111"
@@ -215,7 +213,6 @@ Object {
               </td>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <button
                   data-testid="ShiftButton1111"
@@ -229,7 +226,6 @@ Object {
             <tr>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <p>
                   2020-01-10 01:03:04
@@ -237,7 +233,6 @@ Object {
               </td>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <p>
                   second step
@@ -245,7 +240,6 @@ Object {
               </td>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <p>
                   2m
@@ -253,7 +247,6 @@ Object {
               </td>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <input
                   data-testid="ShiftInput2222"
@@ -264,7 +257,6 @@ Object {
               </td>
               <td
                 align="center"
-                style="padding-right: 0.5em;"
               >
                 <button
                   data-testid="ShiftButton2222"
@@ -278,9 +270,9 @@ Object {
           </tbody>
         </table>
         <label
-          style="text-align: center; align-self: baseline; display: flex; flex-direction: column;"
+          class="worklogShiftTarget"
         >
-          Target Issue key
+          Target Issue
           <input
             placeholder="ISSUE-1234"
             title="Target Issue"
@@ -292,9 +284,11 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="estimationShiftContainer"
+      class="monkeyFlexContainer"
     >
-      <table>
+      <table
+        class="monkeyTable"
+      >
         <thead>
           <tr>
             <th
@@ -328,7 +322,6 @@ Object {
           <tr>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <p>
                 2019-10-01 01:02:03
@@ -336,7 +329,6 @@ Object {
             </td>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <p>
                 first step
@@ -344,7 +336,6 @@ Object {
             </td>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <p>
                 1m
@@ -352,7 +343,6 @@ Object {
             </td>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <input
                 data-testid="ShiftInput1111"
@@ -363,7 +353,6 @@ Object {
             </td>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <button
                 data-testid="ShiftButton1111"
@@ -377,7 +366,6 @@ Object {
           <tr>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <p>
                 2020-01-10 01:03:04
@@ -385,7 +373,6 @@ Object {
             </td>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <p>
                 second step
@@ -393,7 +380,6 @@ Object {
             </td>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <p>
                 2m
@@ -401,7 +387,6 @@ Object {
             </td>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <input
                 data-testid="ShiftInput2222"
@@ -412,7 +397,6 @@ Object {
             </td>
             <td
               align="center"
-              style="padding-right: 0.5em;"
             >
               <button
                 data-testid="ShiftButton2222"
@@ -426,9 +410,9 @@ Object {
         </tbody>
       </table>
       <label
-        style="text-align: center; align-self: baseline; display: flex; flex-direction: column;"
+        class="worklogShiftTarget"
       >
-        Target Issue key
+        Target Issue
         <input
           placeholder="ISSUE-1234"
           title="Target Issue"

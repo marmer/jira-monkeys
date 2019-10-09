@@ -1,18 +1,3 @@
-.estimationShiftContainer {
-    display: flex;
-}
-
-.estimationShiftCardContainer {
-    margin: 0.5em;
-    display: flex;
-    flex-direction: column;
-}
-
-.estimationShiftContainer label {
-    font-weight: bold;
-    align-self: flex-end;
-}
-
 .shiftButtons {
     display: flex;
     flex-direction: row;

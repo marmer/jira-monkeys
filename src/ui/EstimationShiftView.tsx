@@ -47,16 +47,16 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
     }
 
     public render(): React.ReactElement {
-        return <div className={"estimationShiftContainer"}>
+        return <div className={"monkeyFlexContainer"}>
             {this.hasErrorMessages() &&
             <ModalView onClose={() => this.clearErrors()}>
                 {this.state.errorMessages.map(error => <div key={error}>{error}</div>)}
             </ModalView>}
 
             <EstimationView estimation={this.state.sourceIssueEstimation} readonly={true}
-                            className="estimationShiftCardContainer"/>
+                            className="monkeyFlexColumn"/>
 
-            <div className="estimationShiftCardContainer">
+            <div className="monkeyFlexColumn">
                 <label>
                     Issue key <input type="text"
                                      placeholder="ISSUE-123"
@@ -80,7 +80,7 @@ export default class EstimationShiftView extends Component<{}, EstimationShiftVi
             </div>
 
             {this.state.targetIssueEstimation &&
-            <EstimationView className="estimationShiftCardContainer" estimation={this.state.targetIssueEstimation}
+            <EstimationView className="monkeyFlexColumn" estimation={this.state.targetIssueEstimation}
                             readonly={true}/>}
         </div>;
     }
