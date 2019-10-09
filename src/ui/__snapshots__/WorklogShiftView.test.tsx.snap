@@ -172,7 +172,7 @@ Object {
               <th
                 align="center"
               >
-                Move
+                Shift/Split
               </th>
             </tr>
           </thead>
@@ -280,7 +280,7 @@ Object {
         <label
           style="text-align: center; align-self: baseline; display: flex; flex-direction: column;"
         >
-          Target
+          Target Issue key
           <input
             placeholder="ISSUE-1234"
             title="Target Issue"
@@ -320,7 +320,7 @@ Object {
             <th
               align="center"
             >
-              Move
+              Shift/Split
             </th>
           </tr>
         </thead>
@@ -428,7 +428,7 @@ Object {
       <label
         style="text-align: center; align-self: baseline; display: flex; flex-direction: column;"
       >
-        Target
+        Target Issue key
         <input
           placeholder="ISSUE-1234"
           title="Target Issue"
