@@ -22,6 +22,7 @@ describe("WorklogShiftView", () => {
 
     beforeEach(() => {
         JiraTimeService.isValidJiraFormat = jest.fn().mockReturnValue(true);
+        sessionStorage.clear();
     });
 
     const worklogBase: Worklog = {
@@ -175,8 +176,24 @@ describe("WorklogShiftView", () => {
         expect(underTest.getByTestId("ShiftInput" + worklogBase.id)).toHaveValue(jiraString);
     });
 
+    it("should keep the target issue key when the site reloads", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
+        WindowService.reloadPage = jest.fn();
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "TARGET-123");
+        underTest.unmount();
+
+        const underTestAfterReload = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInputAfterReload = await reactTest.waitForElement(() => underTestAfterReload.getByTitle("Target Issue"));
+        expect(targetIssueInputAfterReload).toHaveValue("TARGET-123");
+    });
+
     // TODO: marmer 07.10.2019 Handling of missing worklog parts (author, Comment, Start, ...)
-    // TODO: marmer 07.10.2019 Keep destination issue in session storage in case the user wants to shift more than one worklog
     // TODO: marmer 07.10.2019 Shifting should only be possible if the target issue exists
     // TODO: marmer 07.10.2019 show some target issue details
     // TODO: marmer 07.10.2019 handle errors while loading the target issue
