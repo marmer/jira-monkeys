@@ -114,6 +114,7 @@ describe("WorklogShiftService", () => {
 
             expect(WorklogService.updateWorklog).toBeCalledWith({...worklogToShift, timeSpentInMinutes: 2});
         });
+
         it("should not update anything when no time has to be shifted", async () => {
             JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
                 if (jiraString !== "validJiraString") {
@@ -123,9 +124,9 @@ describe("WorklogShiftService", () => {
                 return 0;
             });
 
-            WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
-            WorklogService.updateWorklog = jest.fn().mockResolvedValue(undefined);
-            WorklogService.deleteWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.createWorklog = jest.fn();
+            WorklogService.updateWorklog = jest.fn();
+            WorklogService.deleteWorklog = jest.fn();
 
             const worklogToShift = {
                 ...worklogBase,
@@ -138,9 +139,65 @@ describe("WorklogShiftService", () => {
             expect(WorklogService.deleteWorklog).not.toBeCalled();
         });
 
-        // TODO: marmer 08.10.2019 error on editing the source worklog
-        // TODO: marmer 08.10.2019 error on deleting the source worklog
-        // TODO: marmer 08.10.2019 error on creating the target worklog (throw error and no change should be performed on source worklog)
-    });
+        it("should reject with an appropriate error message without touching the source worklog when an error occures while creating the new worklog", async () => {
+            JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
+                if (jiraString !== "validJiraString") {
+                    fail("unexpected input: " + jiraString);
+                }
 
+                return 5;
+            });
+
+            WorklogService.createWorklog = jest.fn().mockRejectedValue(new Error("do'h"));
+            WorklogService.updateWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.deleteWorklog = jest.fn().mockResolvedValue(undefined);
+
+            const worklogToShift = {
+                ...worklogBase,
+                timeSpentInMinutes: 5,
+            };
+            expect(WorklogShiftService.shiftWorklog(worklogToShift, "validJiraString", "targetIssueKey-123")).rejects.toStrictEqual(new Error("Error while creating the new worklog. At least the source worklog has not been changed yet."));
+
+            expect(WorklogService.updateWorklog).not.toBeCalled();
+            expect(WorklogService.deleteWorklog).not.toBeCalled();
+        });
+
+        it("should reject with an appropriate error message when the updating the source worklog is not successful", async () => {
+            JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
+                if (jiraString !== "validJiraString") {
+                    fail("unexpected input: " + jiraString);
+                }
+
+                return 2;
+            });
+
+            WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.updateWorklog = jest.fn().mockRejectedValue(new Error("eat my shorts!"));
+
+            const worklogToShift = {
+                ...worklogBase,
+                timeSpentInMinutes: 5,
+            };
+            expect(WorklogShiftService.shiftWorklog(worklogToShift, "validJiraString", "targetIssueKey-123")).rejects.toStrictEqual(new Error("Error while updating the worklog to change (source)."));
+        });
+
+        it("should reject with an appropriate error message when the updating the source worklog is not successful", async () => {
+            JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
+                if (jiraString !== "validJiraString") {
+                    fail("unexpected input: " + jiraString);
+                }
+
+                return 5;
+            });
+
+            WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.deleteWorklog = jest.fn().mockRejectedValue(new Error("eat my underwear!"));
+
+            const worklogToShift = {
+                ...worklogBase,
+                timeSpentInMinutes: 5,
+            };
+            expect(WorklogShiftService.shiftWorklog(worklogToShift, "validJiraString", "targetIssueKey-123")).rejects.toStrictEqual(new Error("Error while updating the worklog to change (source)."));
+        });
+    });
 });
