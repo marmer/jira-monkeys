@@ -114,7 +114,7 @@ describe("WorklogShiftService", () => {
 
             expect(WorklogService.updateWorklog).toBeCalledWith({...worklogToShift, timeSpentInMinutes: 2});
         });
-        it("should not update anything when it no time has to be changed", async () => {
+        it("should not update anything when no time has to be shifted", async () => {
             JiraTimeService.jiraFormatToMinutes = jest.fn().mockImplementation((jiraString) => {
                 if (jiraString !== "validJiraString") {
                     fail("unexpected input: " + jiraString);
@@ -125,6 +125,7 @@ describe("WorklogShiftService", () => {
 
             WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
             WorklogService.updateWorklog = jest.fn().mockResolvedValue(undefined);
+            WorklogService.deleteWorklog = jest.fn().mockResolvedValue(undefined);
 
             const worklogToShift = {
                 ...worklogBase,
