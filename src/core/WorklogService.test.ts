@@ -246,6 +246,7 @@ describe("WorklogService", () => {
 
             expect(fetchMock.called((url, opts) => {
                 return url === worklogCreateUrl &&
+                    (opts.headers as any)["content-type"] === "application/json" &&
                     opts.body === JSON.stringify({
                             comment,
                             timeSpent,
@@ -417,6 +418,7 @@ describe("WorklogService", () => {
 
             expect(fetchMock.called((url, opts) => {
                 return url === worklogUpdateUrl &&
+                    (opts.headers as any)["content-type"] === "application/json" &&
                     opts.body === JSON.stringify({
                         comment: worklog.comment,
                         timeSpent,

@@ -34,6 +34,9 @@ export default class WorklogService {
 
         const response = await fetch(IssueSiteInfos.getWorklogUrlForIssueKey(issueKey), {
             method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
             body: JSON.stringify({
                 comment,
                 timeSpent,
@@ -62,6 +65,9 @@ export default class WorklogService {
     public static async updateWorklog(worklog: Worklog): Promise<void> {
         const response = await fetch(IssueSiteInfos.getWorklogModifyUrlByWorklog(worklog), {
             method: "PUT",
+            headers: {
+                "content-type": "application/json",
+            },
             body: JSON.stringify({
                 comment: worklog.comment,
                 timeSpent: JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes),
