@@ -1,4 +1,5 @@
 import WindowService from "./WindowService";
+import {Worklog} from "./WorklogService";
 
 export default class IssueSiteInfos {
     public static getCurrentIssueKey(): string {
@@ -12,7 +13,15 @@ export default class IssueSiteInfos {
     }
 
     public static getWorklogUrlForIssueKey(issueKey: string) {
+        return IssueSiteInfos.getWorklogUrlForIssueId(issueKey);
+    }
+
+    public static getWorklogUrlForIssueId(issueKey: string) {
         return WindowService.getWindowLocationOrigin() + "/rest/api/2/issue/" + issueKey + "/worklog";
+    }
+
+    public static getWorklogModifyUrlByWorklog(worklog: Worklog) {
+        return this.getWorklogUrlForIssueId(worklog.issueId) + "/" + worklog.id;
     }
 
     public static getIssueUrlForIssueKey(issueKey: string): string {
