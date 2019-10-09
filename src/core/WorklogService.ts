@@ -49,8 +49,14 @@ export default class WorklogService {
     }
 
     public static async deleteWorklog(worklog: Worklog): Promise<void> {
-        // TODO: marmer 08.10.2019 implement
-        throw new Error("Not implemented yet");
+        const response = await fetch(IssueSiteInfos.getWorklogModifyUrlByWorklog(worklog), {method: "DELETE"})
+            .catch(() => {
+                throw new Error("Communication error: Worklog creation failed");
+            });
+
+        if (response.status !== 204) {
+            throw new Error("Unexpected status code. Deletion of worklog probably not sucecssful");
+        }
     }
 
     public static async updateWorklog(worklog: Worklog): Promise<void> {

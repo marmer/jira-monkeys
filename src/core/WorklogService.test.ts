@@ -237,7 +237,7 @@ describe("WorklogService", () => {
                 return worklogCreateUrl;
             });
 
-            expect(WorklogService.createWorklog({
+            await expect(WorklogService.createWorklog({
                 issueKey,
                 timeSpentInMinutes,
                 started,
@@ -282,7 +282,7 @@ describe("WorklogService", () => {
                 return worklogCreateUrl;
             });
 
-            expect(WorklogService.createWorklog({
+            await expect(WorklogService.createWorklog({
                 issueKey,
                 timeSpentInMinutes,
                 started,
@@ -318,13 +318,74 @@ describe("WorklogService", () => {
                 return worklogCreateUrl;
             });
 
-            expect(WorklogService.createWorklog({
+            await expect(WorklogService.createWorklog({
                 issueKey,
                 timeSpentInMinutes,
                 started,
                 comment,
             })).rejects.toStrictEqual(new Error("Communication error: Worklog creation failed"));
 
+        });
+    });
+
+    describe("deleteWorklog", () => {
+        it("should resolve successfull with the right status code", async () => {
+            const worklogDeleteUrl = "/someWorklogUrl";
+            fetchMock.delete(worklogDeleteUrl, {
+                status: 204,
+            });
+
+            const worklog = {...worklogBase};
+
+            IssueSiteInfos.getWorklogModifyUrlByWorklog = jest.fn().mockImplementation(wl => {
+                if (wl !== worklog) {
+                    fail("Request for wrong worklog");
+                }
+                return worklogDeleteUrl;
+            });
+
+            expect(WorklogService.deleteWorklog(worklog)).resolves.toBeUndefined();
+
+            expect(fetchMock.called((url, opts) => {
+                return url === worklogDeleteUrl;
+            })).toBeTruthy();
+        });
+
+        it("should reject at a bad status code", async () => {
+            const worklogDeleteUrl = "/someWorklogUrl";
+            fetchMock.delete(worklogDeleteUrl, {
+                status: 418,
+            });
+
+            const worklog = {...worklogBase};
+
+            IssueSiteInfos.getWorklogModifyUrlByWorklog = jest.fn().mockImplementation(wl => {
+                if (wl !== worklog) {
+                    fail("Request for wrong worklog");
+                }
+                return worklogDeleteUrl;
+            });
+
+            await expect(WorklogService.deleteWorklog(worklog)).rejects.toStrictEqual(new Error("Unexpected status code. Deletion of worklog probably not sucecssful"));
+        });
+
+        it("should reject at unsuccessful fetch with an appropriate errormessage", async () => {
+            const worklogDeleteUrl = "/someWorklogUrl";
+            fetchMock.delete(worklogDeleteUrl, {
+                status: 418,
+                throws: new Error("dong dong dong"),
+            });
+
+            const worklog = {...worklogBase};
+
+            IssueSiteInfos.getWorklogModifyUrlByWorklog = jest.fn().mockImplementation(wl => {
+                if (wl !== worklog) {
+                    fail("Request for wrong worklog");
+                }
+                return worklogDeleteUrl;
+            });
+
+            await expect(WorklogService.deleteWorklog(worklog)).rejects.toStrictEqual(new Error("Communication error: Worklog creation failed"));
         });
     });
 });

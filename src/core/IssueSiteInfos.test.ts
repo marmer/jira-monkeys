@@ -1,7 +1,20 @@
 import IssueSiteInfos from "./IssueSiteInfos";
 import WindowService from "./WindowService";
+import {Worklog} from "./WorklogService";
 
 describe("IssueSiteInfos", () => {
+    const worklogBase: Worklog = {
+        issueId: "42",
+        author: {
+            name: "real.me",
+            displayName: "Me",
+        },
+        timeSpentInMinutes: 1337,
+        started: "2000-01-01T00:00:00.000+0000",
+        id: "43",
+        comment: "did something",
+    };
+
     describe("getCurrentIssueKey()", () => {
         it("should extract an existing issue key", () => {
             WindowService.getWindowLocationPathname = jest.fn().mockReturnValue("/browse/MyIssueKey-1234");
@@ -38,6 +51,26 @@ describe("IssueSiteInfos", () => {
             WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("http://some.domain");
 
             expect(IssueSiteInfos.getWorklogUrlForIssueKey("issue-key")).toEqual("http://some.domain/rest/api/2/issue/issue-key/worklog");
+        });
+    });
+
+    describe("getWorklogUrlForIssueId()", () => {
+        it("should serve the current worklog URL for an issue id", async () => {
+            WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("http://some.domain");
+
+            expect(IssueSiteInfos.getWorklogUrlForIssueKey("issueId")).toEqual("http://some.domain/rest/api/2/issue/issueId/worklog");
+        });
+    });
+
+    describe("getWorklogModifyUrlByWorklog()", () => {
+        it("should serve the current worklog URL for an issue id", async () => {
+            WindowService.getWindowLocationOrigin = jest.fn().mockReturnValue("http://some.domain");
+
+            expect(IssueSiteInfos.getWorklogModifyUrlByWorklog({
+                ...worklogBase,
+                id: "456",
+                issueId: "123",
+            })).toEqual("http://some.domain/rest/api/2/issue/123/worklog/456");
         });
     });
 
