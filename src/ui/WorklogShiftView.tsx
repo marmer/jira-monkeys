@@ -37,8 +37,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                 const timesToShift = worklogs.length === 0 ?
                     {} :
                     worklogs.map(w => ({
-                    [w.id]: JiraTimeService.minutesToJiraFormat(w.timeSpentInMinutes),
-                })).reduce((previousValue, currentValue) => {
+                        [w.id]: JiraTimeService.minutesToJiraFormat(w.timeSpentInMinutes),
+                    })).reduce((previousValue, currentValue) => {
                     return {...previousValue, ...currentValue};
                 });
 
@@ -56,7 +56,6 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
         return <>
             {/*// TODO: marmer 30.09.2019 This is just a mockup with inline styles*/}
             {/*// TODO: marmer 30.09.2019 Don't use the layout of a different View in this way*/}
-
 
             {this.state.shiftError &&
             <ModalView onClose={() => WindowService.reloadPage()}>
