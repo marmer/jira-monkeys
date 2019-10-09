@@ -125,9 +125,13 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             <td align="center" style={{paddingRight: "0.5em"}}>
                 <button data-testid={"ShiftButton" + worklog.id} title="move"
                         onClick={() => this.shiftTimeFor(worklog)}
-                        disabled={!this.isJiraStringIsSet()}>{">"}</button>
+                        disabled={!this.isShiftAllowedForWorklog(worklog)}>{">"}</button>
             </td>
         </tr>;
+    }
+
+    private isShiftAllowedForWorklog(worklog: Worklog) {
+        return this.isJiraStringIsSet() && JiraTimeService.isValidJiraFormat(this.state.timesToShift[worklog.id]);
     }
 
     private isJiraStringIsSet() {
