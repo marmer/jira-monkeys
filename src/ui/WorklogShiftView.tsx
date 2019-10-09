@@ -56,7 +56,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
         return <>
             {/*// TODO: marmer 30.09.2019 This is just a mockup with inline styles*/}
             {/*// TODO: marmer 30.09.2019 Don't use the layout of a different View in this way*/}
-            This is just work in Progress
+
 
             {this.state.shiftError &&
             <ModalView onClose={() => WindowService.reloadPage()}>

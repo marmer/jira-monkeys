@@ -5,14 +5,12 @@ Object {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      This is just work in Progress
       <p>
         No work logged here for you yet
       </p>
     </div>
   </body>,
   "container": <div>
-    This is just work in Progress
     <p>
       No work logged here for you yet
     </p>
@@ -76,14 +74,12 @@ Object {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      This is just work in Progress
       <p>
         Loading...
       </p>
     </div>
   </body>,
   "container": <div>
-    This is just work in Progress
     <p>
       Loading...
     </p>
@@ -147,7 +143,6 @@ Object {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      This is just work in Progress
       <div
         class="estimationShiftContainer"
       >
@@ -296,7 +291,6 @@ Object {
     </div>
   </body>,
   "container": <div>
-    This is just work in Progress
     <div
       class="estimationShiftContainer"
     >
@@ -502,7 +496,6 @@ Object {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      This is just work in Progress
       <p>
         Error while loading worklogs for issue: 
         dafuq
@@ -510,7 +503,6 @@ Object {
     </div>
   </body>,
   "container": <div>
-    This is just work in Progress
     <p>
       Error while loading worklogs for issue: 
       dafuq
