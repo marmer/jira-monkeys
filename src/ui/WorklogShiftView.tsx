@@ -26,11 +26,20 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
         };
     }
 
+    public setState<K extends keyof WorklogShiftViewState>(state: ((prevState: Readonly<WorklogShiftViewState>, props: Readonly<{}>) => (Pick<WorklogShiftViewState, K> | WorklogShiftViewState | null)) | Pick<WorklogShiftViewState, K> | WorklogShiftViewState | null, callback?: () => void): void {
+        super.setState(state, () => {
+            sessionStorage.setItem(WorklogShiftView.name + "targetIssueKey", this.state.targetIssueKey);
+        });
+    }
+
     public componentDidMount(): void {
+        const targetIssueKey = sessionStorage.getItem(WorklogShiftView.name + "targetIssueKey");
+
         this.setState({
             worklogs: null,
             loadingError: null,
             timesToShift: {},
+            targetIssueKey: targetIssueKey ? targetIssueKey : "",
         });
         WorklogService.getWorklogsForCurrentIssueAndUser()
             .then(worklogs => {
