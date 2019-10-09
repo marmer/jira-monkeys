@@ -372,7 +372,7 @@ describe("WorklogService", () => {
         it("should reject at unsuccessful fetch with an appropriate errormessage", async () => {
             const worklogDeleteUrl = "/someWorklogUrl";
             fetchMock.delete(worklogDeleteUrl, {
-                status: 418,
+                status: 204,
                 throws: new Error("dong dong dong"),
             });
 
@@ -385,7 +385,71 @@ describe("WorklogService", () => {
                 return worklogDeleteUrl;
             });
 
-            await expect(WorklogService.deleteWorklog(worklog)).rejects.toStrictEqual(new Error("Communication error: Worklog creation failed"));
+            await expect(WorklogService.deleteWorklog(worklog)).rejects.toStrictEqual(new Error("Communication error: Worklog deletion failed"));
+        });
+    });
+
+    describe("updateWorklog()", () => {
+        it("should resolve successfull with the right status code", async () => {
+            const worklogUpdateUrl = "/someWorklogUrl";
+            fetchMock.put(worklogUpdateUrl, {
+                status: 204,
+            });
+
+            const worklog = {...worklogBase};
+            const timeSpent = "timeSpentJiraString";
+
+            IssueSiteInfos.getWorklogModifyUrlByWorklog = jest.fn().mockImplementation(wl => {
+                if (wl !== worklog) {
+                    fail("Request for wrong worklog");
+                }
+                return worklogUpdateUrl;
+            });
+
+            JiraTimeService.minutesToJiraFormat = jest.fn().mockImplementation(tsm => {
+                if (tsm !== worklog.timeSpentInMinutes) {
+                    fail("unexpected input " + tsm);
+                }
+                return timeSpent;
+            });
+
+            expect(WorklogService.updateWorklog(worklog)).resolves.toBeUndefined();
+
+            expect(fetchMock.called((url, opts) => {
+                return url === worklogUpdateUrl &&
+                    opts.body === JSON.stringify({
+                        comment: worklog.comment,
+                        timeSpent,
+                        started: worklog.started,
+                    });
+            })).toBeTruthy();
+        });
+
+        it("should reject at a bad status code", async () => {
+            const worklogUpdateUrl = "/someWorklogUrl";
+            fetchMock.put(worklogUpdateUrl, {
+                status: 418,
+            });
+
+            const worklog = {...worklogBase};
+
+            IssueSiteInfos.getWorklogModifyUrlByWorklog = jest.fn().mockReturnValue(worklogUpdateUrl);
+
+            await expect(WorklogService.updateWorklog(worklog)).rejects.toStrictEqual(new Error("Unexpected status code. Updating of worklog probably not sucecssful"));
+        });
+
+        it("should reject at unsuccessful fetch with an appropriate errormessage", async () => {
+            const worklogUpdateUrl = "/someWorklogUrl";
+            fetchMock.put(worklogUpdateUrl, {
+                status: 204,
+                throws: new Error("tic tric trac"),
+            });
+
+            const worklog = {...worklogBase};
+
+            IssueSiteInfos.getWorklogModifyUrlByWorklog = jest.fn().mockReturnValue(worklogUpdateUrl);
+
+            await expect(WorklogService.updateWorklog(worklog)).rejects.toStrictEqual(new Error("Communication error: Worklog updating failed"));
         });
     });
 });

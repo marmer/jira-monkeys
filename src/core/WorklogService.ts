@@ -51,7 +51,7 @@ export default class WorklogService {
     public static async deleteWorklog(worklog: Worklog): Promise<void> {
         const response = await fetch(IssueSiteInfos.getWorklogModifyUrlByWorklog(worklog), {method: "DELETE"})
             .catch(() => {
-                throw new Error("Communication error: Worklog creation failed");
+                throw new Error("Communication error: Worklog deletion failed");
             });
 
         if (response.status !== 204) {
@@ -60,8 +60,19 @@ export default class WorklogService {
     }
 
     public static async updateWorklog(worklog: Worklog): Promise<void> {
-        // TODO: marmer 08.10.2019 implement
-        throw new Error("Not implemented yet");
+        const response = await fetch(IssueSiteInfos.getWorklogModifyUrlByWorklog(worklog), {
+            method: "PUT",
+            body: JSON.stringify({
+                comment: worklog.comment,
+                timeSpent: JiraTimeService.minutesToJiraFormat(worklog.timeSpentInMinutes),
+                started: worklog.started,
+            }),
+        }).catch(() => {
+            throw new Error("Communication error: Worklog updating failed");
+        });
+        if (response.status !== 204) {
+            throw new Error("Unexpected status code. Updating of worklog probably not sucecssful");
+        }
     }
     public static async getSummedWorklogsByUser(): Promise<WorklogSumByUser[]> {
         const issueKey = IssueSiteInfos.getCurrentIssueKey();
