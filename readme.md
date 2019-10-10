@@ -11,7 +11,7 @@
 Jira Monkeys
 ============
 
-Jira Monkeys is a tool to provide some additional Functionality to jira which may help in your daily work, regardless whether you are a worker drone or the queen of your hive (workplace).
+Jira Monkeys is a tool to provide some additional functionality for and in jira which may be helpful in your daily work, regardless of whether you are a worker drone or the queen in your hive.
 
 Of course it would be possible to create (or maybe buy) some jira Plugins with the same ability, but this project is used es a playground for me.
 
