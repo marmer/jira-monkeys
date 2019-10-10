@@ -26,13 +26,29 @@ Usage
 -----
 If you've installed the Plugin already open up any of your issues. You should see an inconspicuous checkbox without any text on the top left corner of the menu bar. If you click it, you will see all the currently implemented features.
 
+![Open Monkeys](docs/open_monkeys.gif)
+
 Features
 --------
-- Summing up worklogs of an issue per user
-- Moving worklogs from one issue to another (not implemented yet)
-- Moving time-estimations from one ticket to another (not implemented yet)
-- Fix/Recalculate difference of estimated and remaining time ... a problem which occurs if the worklog summary once was bigger than the estimation (not implemented yet)
-- ... whatever is fun implementing it or helps to do the daily work in an easier way
+### Worklog-summarizer
+Here you'll get a sortable summed up Overview of all the work logged to an issue.
+
+![Open Monkeys](docs/worklog_sum.gif) 
+ 
+### Estimation-shifter
+You can easily parts of an estimation from one issue to another without to calculate the original and remaining estimate for both issues.
+
+![Estimation Shifter](docs/estimation_shift.gif)
+
+### Worklog-shifter
+This feature allows you to either shift a part or a whole worklog to another issue or to split a worklog within an issue into multiple parts, depending on whether you use the same or a different issue key for shifting.
+
+![Worklog Shift](docs/worklog_shift.gif) 
+
+### Estimation-fixer
+Jira is sometimes not able to adjust the remaining time when a worklog is edited, deleted or moved. With only one click at "Fix estimation" (if hav chosen the Estimatino-fixer in the menu before) this is getting fixed. Here is an example before and after a fix when bookings for 6 hours and 45 minutes have been removed.
+
+![Estimation Fix](docs/estimation_fix.gif) 
 
 UI
 --
