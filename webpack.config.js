@@ -16,6 +16,7 @@ webpackUserScript.options.headers.authorversion = packageConfiguration.author.na
 webpackUserScript.options.headers.version = devMode ? `[version]-build.[buildNo]` : `[version]`
 webpackUserScript.options.headers.name = packageConfiguration.name;
 webpackUserScript.options.headers.namespace = packageConfiguration.homepage;
+webpackUserScript.options.headers.match = packageConfiguration.tampermonkey.match.baseUrl + "/*";
 
 module.exports = {
     plugins: [
