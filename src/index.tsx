@@ -2,8 +2,6 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import JiraMonkey from "./ui/JiraMonkey";
 
-import * as packageJson from '../package.json';
-
 // tslint:disable-next-line:only-arrow-functions
 (function() {
     // if no body is here yet, it is (currently) ok when the application crashes
@@ -14,10 +12,8 @@ import * as packageJson from '../package.json';
     let lastJiraMonkey: any = null;
     let lastLocation = window.location.href;
 
-
     const tryMount = () => {
-        // TODO: marmer 13.10.2019 maybe better match to "window.location.pathname? ;)
-        if (window.location.href.startsWith(packageJson.tampermonkey.match.baseUrl + "/browse/")) {
+        if (window.location.pathname.startsWith("/browse/")) {
             lastJiraMonkey = <JiraMonkey/>;
             ReactDOM.render(lastJiraMonkey, appContainer);
         }
@@ -25,7 +21,7 @@ import * as packageJson from '../package.json';
 
     tryMount();
 
-    const interval = setInterval(() => {
+    setInterval(() => {
         if (lastLocation !== window.location.href) {
             lastLocation = window.location.href;
             if (lastJiraMonkey) {

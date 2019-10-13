@@ -4,7 +4,7 @@
   "version": null,
   "description": "A little script to help working with jira",
   "author": "MarMer",
-  "match": "https://jiraserver/*",
+  "match": "https://jira.schuetze.ag/*",
   "grant": [
     "none"
   ],

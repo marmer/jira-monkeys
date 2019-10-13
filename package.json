@@ -1,6 +1,6 @@
 {
   "name": "jira-monkeys",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "main": "src/index.tsx",
   "repository": "https://github.com/marmer/Tampermonkeys.git",
   "homepage": "https://github.com/marmer/jira-monkeys",
@@ -55,10 +55,5 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server",
     "build": "cross-env NODE_ENV=production webpack --mode=production",
     "devbuild": "cross-env NODE_ENV=development webpack --mode=development"
-  },
-  "tampermonkey": {
-    "match": {
-      "baseUrl": "https://jira.schuetze.ag"
-    }
   }
 }

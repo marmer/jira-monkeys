@@ -1,7 +1,7 @@
 const path = require('path');
 const WebpackUserScript = require('webpack-userscript');
-const tampermonkeyHeaders = require('./tampermonkey-headers')
-const packageConfiguration = require('./package')
+const tampermonkeyHeaders = require('./tampermonkey-headers');
+const packageConfiguration = require('./package');
 
 const devMode = process.env.NODE_ENV === "development";
 
@@ -13,10 +13,9 @@ const webpackUserScript = new WebpackUserScript(
 );
 
 webpackUserScript.options.headers.authorversion = packageConfiguration.author.name;
-webpackUserScript.options.headers.version = devMode ? `[version]-build.[buildNo]` : `[version]`
+webpackUserScript.options.headers.version = devMode ? `[version]-build.[buildNo]` : `[version]`;
 webpackUserScript.options.headers.name = packageConfiguration.name;
 webpackUserScript.options.headers.namespace = packageConfiguration.homepage;
-webpackUserScript.options.headers.match = packageConfiguration.tampermonkey.match.baseUrl + "/*";
 
 module.exports = {
     plugins: [
