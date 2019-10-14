@@ -241,6 +241,4 @@ describe("WorklogShiftView", () => {
 
         expect(summaryField).not.toBeNull();
     });
-
-    // TODO: marmer 07.10.2019 Shifting should only be possible if the target issue exists
 });
