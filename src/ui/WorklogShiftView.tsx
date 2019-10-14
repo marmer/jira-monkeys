@@ -6,6 +6,7 @@ import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import ModalView from "./ModalView";
 import "./WorklogShiftView.css"
+import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
 
 interface WorklogShiftViewState {
     worklogs?: Worklog[] | null;
@@ -15,9 +16,12 @@ interface WorklogShiftViewState {
         [worklogId: string]: string;
     };
     shiftError?: Error;
+    estimation?: Estimation | null;
 }
 
 export default class WorklogShiftView extends Component<{}, WorklogShiftViewState> {
+
+    private timer: any;
 
     constructor(props: Readonly<{}>) {
         super(props);
@@ -49,8 +53,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                     worklogs.map(w => ({
                         [w.id]: JiraTimeService.minutesToJiraFormat(w.timeSpentInMinutes),
                     })).reduce((previousValue, currentValue) => {
-                    return {...previousValue, ...currentValue};
-                });
+                        return {...previousValue, ...currentValue};
+                    });
 
                 return this.setState({
                     worklogs,
@@ -98,13 +102,35 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                     }
                     </tbody>
                 </table>
-                <label className="worklogShiftTarget">
-                    Target Issue
-                    <input placeholder="ISSUE-1234" title="Target Issue" value={this.state.targetIssueKey}
-                           onChange={e => this.setState({targetIssueKey: e.target.value})}/>
-                </label>
+                <div>
+                    <label className="worklogShiftTarget">
+                        Target Issue
+                        <input placeholder="ISSUE-1234" title="Target Issue" value={this.state.targetIssueKey}
+                               onChange={e => this.setState({targetIssueKey: e.target.value})}/>
+                    </label>
+                    <p>
+                        {this.state.estimation && this.state.estimation.issueSummary}
+                        {this.state.targetIssueKey && !this.state.estimation &&
+                        <span data-testid="targetLoadErrorMarker"/>}
+                    </p>
+                </div>
             </div>}
         </>;
+    }
+
+    componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<WorklogShiftViewState>, snapshot?: any): void {
+        if (prevState.targetIssueKey !== this.state.targetIssueKey) {
+            clearTimeout(this.timer);
+            this.setState({estimation: null});
+
+            EstimationCrudService.getEstimationsForIssueKey(this.state.targetIssueKey)
+                .then(estimation => this.setState({
+                    estimation
+                }))
+                .catch(() => {
+                    //do nothing
+                });
+        }
     }
 
     private updateTimeToShift(newValue: string, worklog: Worklog) {
@@ -112,6 +138,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             timesToShift: {...this.state.timesToShift, [worklog.id]: newValue},
         });
     }
+
     private toRow(worklog: Worklog): ReactNode {
         return <tr key={worklog.id}>
             <td align="center">
