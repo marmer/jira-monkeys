@@ -269,16 +269,21 @@ Object {
             </tr>
           </tbody>
         </table>
-        <label
-          class="worklogShiftTarget"
-        >
-          Target Issue
-          <input
-            placeholder="ISSUE-1234"
-            title="Target Issue"
-            value=""
-          />
-        </label>
+        <div>
+          <label
+            class="worklogShiftTarget"
+          >
+            Target Issue
+            <input
+              placeholder="ISSUE-1234"
+              title="Target Issue"
+              value=""
+            />
+          </label>
+          <p>
+            
+          </p>
+        </div>
       </div>
     </div>
   </body>,
@@ -409,16 +414,21 @@ Object {
           </tr>
         </tbody>
       </table>
-      <label
-        class="worklogShiftTarget"
-      >
-        Target Issue
-        <input
-          placeholder="ISSUE-1234"
-          title="Target Issue"
-          value=""
-        />
-      </label>
+      <div>
+        <label
+          class="worklogShiftTarget"
+        >
+          Target Issue
+          <input
+            placeholder="ISSUE-1234"
+            title="Target Issue"
+            value=""
+          />
+        </label>
+        <p>
+          
+        </p>
+      </div>
     </div>
   </div>,
   "debug": [Function],
