@@ -244,5 +244,6 @@ describe("WorklogShiftView", () => {
 
     // TODO: marmer 17.10.2019 Clone
     // TODO: marmer 17.10.2019 current ticket as default ticket on mount(when nothing is stored in session storage)
+    // TODO: marmer 17.10.2019 Prevent invalid inputs for the copy start time
 
 });
