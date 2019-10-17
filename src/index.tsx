@@ -2,10 +2,36 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import JiraMonkey from "./ui/JiraMonkey";
 
+/**
+ * dirty hack to force the browser to resize the elements of jira correctly
+ * @param appContainer
+ */
+const registerRedrawHookAt = (appContainer: HTMLElement) => {
+    const redrawSite = () => {
+        const evt = document.createEvent("UIEvents") as any;
+        evt.initUIEvent("resize", true, false, window, 0);
+        window.dispatchEvent(evt);
+    };
+
+    const mutationObserver = new MutationObserver(redrawSite);
+
+    mutationObserver.observe(appContainer, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+        attributes: true,
+        attributeOldValue: true,
+        characterDataOldValue: true,
+    });
+};
+
 // tslint:disable-next-line:only-arrow-functions
 (function() {
     // if no body is here yet, it is (currently) ok when the application crashes
-    const body = document.querySelectorAll("body")[0];
+    const content = document.getElementById("content");
+    const body = content ? content : document.querySelectorAll("body")[0];
+
+    // const body = document.querySelectorAll("body")[0];
     const appContainer = document.createElement("nav");
     body.prepend(appContainer);
 
@@ -19,14 +45,9 @@ import JiraMonkey from "./ui/JiraMonkey";
         }
     };
 
-    const redrawSite = () => {
-        // dirty hack to force the browser to handle resizings correctly
-        const evt = document.createEvent("UIEvents") as any;
-        evt.initUIEvent("resize", true, false, window, 0);
-        window.dispatchEvent(evt);
-    };
-
     tryMount();
+
+    registerRedrawHookAt(appContainer);
 
     setInterval(() => {
         if (lastLocation !== window.location.href) {
@@ -38,6 +59,5 @@ import JiraMonkey from "./ui/JiraMonkey";
             tryMount();
         }
 
-        redrawSite();
     }, 100);
 })();
