@@ -241,4 +241,8 @@ describe("WorklogShiftView", () => {
 
         expect(summaryField).not.toBeNull();
     });
+
+    // TODO: marmer 17.10.2019 Clone
+    // TODO: marmer 17.10.2019 current ticket as default ticket on mount(when nothing is stored in session storage)
+
 });
