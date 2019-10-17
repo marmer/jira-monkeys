@@ -169,12 +169,12 @@ Object {
               <th
                 align="center"
               >
-                Time to move
+                Shift/Split time
               </th>
               <th
                 align="center"
               >
-                Shift/Split
+                Clone to Start (Work in Progress)
               </th>
             </tr>
           </thead>
@@ -210,14 +210,26 @@ Object {
                   type="text"
                   value="1m"
                 />
-              </td>
-              <td
-                align="center"
-              >
                 <button
                   data-testid="ShiftButton1111"
                   disabled=""
                   title="move"
+                >
+                  &gt;
+                </button>
+              </td>
+              <td
+                align="center"
+              >
+                <input
+                  placeholder="2002-10-01 10:01:11"
+                  type="text"
+                  value="2019-10-01 01:02:03"
+                />
+                <button
+                  data-testid="CloneButton1111"
+                  disabled=""
+                  title="clone"
                 >
                   &gt;
                 </button>
@@ -254,14 +266,26 @@ Object {
                   type="text"
                   value="2m"
                 />
-              </td>
-              <td
-                align="center"
-              >
                 <button
                   data-testid="ShiftButton2222"
                   disabled=""
                   title="move"
+                >
+                  &gt;
+                </button>
+              </td>
+              <td
+                align="center"
+              >
+                <input
+                  placeholder="2002-10-01 10:01:11"
+                  type="text"
+                  value="2020-01-10 01:03:04"
+                />
+                <button
+                  data-testid="CloneButton2222"
+                  disabled=""
+                  title="clone"
                 >
                   &gt;
                 </button>
@@ -314,12 +338,12 @@ Object {
             <th
               align="center"
             >
-              Time to move
+              Shift/Split time
             </th>
             <th
               align="center"
             >
-              Shift/Split
+              Clone to Start (Work in Progress)
             </th>
           </tr>
         </thead>
@@ -355,14 +379,26 @@ Object {
                 type="text"
                 value="1m"
               />
-            </td>
-            <td
-              align="center"
-            >
               <button
                 data-testid="ShiftButton1111"
                 disabled=""
                 title="move"
+              >
+                &gt;
+              </button>
+            </td>
+            <td
+              align="center"
+            >
+              <input
+                placeholder="2002-10-01 10:01:11"
+                type="text"
+                value="2019-10-01 01:02:03"
+              />
+              <button
+                data-testid="CloneButton1111"
+                disabled=""
+                title="clone"
               >
                 &gt;
               </button>
@@ -399,14 +435,26 @@ Object {
                 type="text"
                 value="2m"
               />
-            </td>
-            <td
-              align="center"
-            >
               <button
                 data-testid="ShiftButton2222"
                 disabled=""
                 title="move"
+              >
+                &gt;
+              </button>
+            </td>
+            <td
+              align="center"
+            >
+              <input
+                placeholder="2002-10-01 10:01:11"
+                type="text"
+                value="2020-01-10 01:03:04"
+              />
+              <button
+                data-testid="CloneButton2222"
+                disabled=""
+                title="clone"
               >
                 &gt;
               </button>

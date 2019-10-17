@@ -92,8 +92,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         <th align="center">Start</th>
                         <th align="center">Comment</th>
                         <th align="center">Time Spent</th>
-                        <th align="center">Time to move</th>
-                        <th align="center">Shift/Split</th>
+                        <th align="center">Shift/Split time</th>
+                        <th align="center">Clone to Start (Work in Progress)</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -153,10 +153,14 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                        value={this.state.timesToShift[worklog.id]}
                        data-testid={"ShiftInput" + worklog.id}
                        onChange={e => this.updateTimeToShift(e.target.value, worklog)}/>
-            </td>
-            <td align="center">
                 <button data-testid={"ShiftButton" + worklog.id} title="move"
                         onClick={() => this.shiftTimeFor(worklog)}
+                        disabled={!this.isShiftAllowedForWorklog(worklog)}>{">"}</button>
+            </td>
+            <td align="center">
+                <input type="text" placeholder="2002-10-01 10:01:11"
+                       value={moment(worklog.started).format("YYYY-MM-DD HH:mm:ss")}/>
+                <button data-testid={"CloneButton" + worklog.id} title="clone"
                         disabled={!this.isShiftAllowedForWorklog(worklog)}>{">"}</button>
             </td>
         </tr>;
