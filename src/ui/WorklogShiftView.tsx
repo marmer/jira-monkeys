@@ -93,7 +93,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         <th align="center">Comment</th>
                         <th align="center">Time Spent</th>
                         <th align="center">Shift/Split time</th>
-                        {/*<th align="center">Clone to Start (Work in Progress)</th>*/}
+                        <th align="center">Clone to Start (Work in Progress)</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -118,17 +118,17 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
         </>;
     }
 
-    componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<WorklogShiftViewState>, snapshot?: any): void {
+    public componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<WorklogShiftViewState>, snapshot?: any): void {
         if (prevState.targetIssueKey !== this.state.targetIssueKey) {
             clearTimeout(this.timer);
             this.setState({estimation: null});
 
             EstimationCrudService.getEstimationsForIssueKey(this.state.targetIssueKey)
                 .then(estimation => this.setState({
-                    estimation
+                    estimation,
                 }))
                 .catch(() => {
-                    //do nothing
+                    // do nothing
                 });
         }
     }
@@ -157,12 +157,12 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         onClick={() => this.shiftTimeFor(worklog)}
                         disabled={!this.isShiftAllowedForWorklog(worklog)}>{">"}</button>
             </td>
-            {/*<td align="center">*/}
-            {/*    <input type="text" placeholder="2002-10-01 10:01:11"*/}
-            {/*           value={moment(worklog.started).format("YYYY-MM-DD HH:mm:ss")}/>*/}
-            {/*    <button data-testid={"CloneButton" + worklog.id} title="clone"*/}
-            {/*            disabled={!this.isShiftAllowedForWorklog(worklog)}>{"+"}</button>*/}
-            {/*</td>*/}
+            <td align="center">
+                <input type="text" placeholder="2002-10-01 10:01:11"
+                       value={moment(worklog.started).format("YYYY-MM-DD HH:mm:ss")}/>
+                <button data-testid={"CloneButton" + worklog.id} title="clone"
+                        disabled={!this.isShiftAllowedForWorklog(worklog)}>{"+"}</button>
+            </td>
         </tr>;
     }
 
