@@ -231,7 +231,7 @@ Object {
                   disabled=""
                   title="clone"
                 >
-                  &gt;
+                  +
                 </button>
               </td>
             </tr>
@@ -287,7 +287,7 @@ Object {
                   disabled=""
                   title="clone"
                 >
-                  &gt;
+                  +
                 </button>
               </td>
             </tr>
@@ -400,7 +400,7 @@ Object {
                 disabled=""
                 title="clone"
               >
-                &gt;
+                +
               </button>
             </td>
           </tr>
@@ -456,7 +456,7 @@ Object {
                 disabled=""
                 title="clone"
               >
-                &gt;
+                +
               </button>
             </td>
           </tr>

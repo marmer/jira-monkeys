@@ -28,7 +28,7 @@ const registerRedrawHookAt = (appContainer: HTMLElement) => {
 // tslint:disable-next-line:only-arrow-functions
 (function() {
     // if no body is here yet, it is (currently) ok when the application crashes
-    const content = document.getElementById("content");
+    const content = document.querySelector("#page > #content[role=main]");
     const body = content ? content : document.querySelectorAll("body")[0];
 
     // const body = document.querySelectorAll("body")[0];

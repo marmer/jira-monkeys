@@ -1,13 +1,13 @@
 import * as reactTest from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import moment = require("moment-timezone");
 import React, {FunctionComponent} from "react";
+import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
 import JiraTimeService from "../core/JiraTimeService";
 import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import WorklogShiftView from "./WorklogShiftView";
-import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
-import moment = require("moment-timezone");
 
 moment.tz.setDefault("Europe/Berlin");
 
@@ -199,7 +199,7 @@ describe("WorklogShiftView", () => {
     it("should show the issue summary of the target issue if it can be loaded", async () => {
         const estimation: Estimation = {
             issueSummary: "fancy summary",
-            issueKey: "TARGET-123"
+            issueKey: "TARGET-123",
         };
 
         const sourceWorklog = {...worklogBase};
@@ -222,7 +222,7 @@ describe("WorklogShiftView", () => {
     it("should handle errors by not showing anything", async () => {
         const estimation: Estimation = {
             issueSummary: "fancy summary",
-            issueKey: "TARGET-123"
+            issueKey: "TARGET-123",
         };
 
         const sourceWorklog = {...worklogBase};
