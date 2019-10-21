@@ -26,7 +26,7 @@ Usage
 -----
 If you've installed the plugin already open up any of your issues. You should see an inconspicuous checkbox without any text on the top left corner of the menu bar. If you click it, you will have access to all the features. .
 
-![Open Monkeys](docs/open_monkeys.gif)
+![Open Monkeys](docs/open_monkeys2.gif)
 
 Features
 --------
