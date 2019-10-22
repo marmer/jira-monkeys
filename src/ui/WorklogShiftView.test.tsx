@@ -1,6 +1,5 @@
 import * as reactTest from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import moment = require("moment-timezone");
 import React, {FunctionComponent} from "react";
 import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
 import JiraTimeService from "../core/JiraTimeService";
@@ -8,6 +7,8 @@ import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import WorklogShiftView from "./WorklogShiftView";
+import IssueSiteInfos from "../core/IssueSiteInfos";
+import moment = require("moment-timezone");
 
 moment.tz.setDefault("Europe/Berlin");
 
@@ -196,6 +197,20 @@ describe("WorklogShiftView", () => {
         expect(targetIssueInputAfterReload).toHaveValue("TARGET-123");
     });
 
+    it("should set the target issue key to the current issue when the site loads initially", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
+        WindowService.reloadPage = jest.fn();
+        const currentIssueKey = "CURRENTISSUE-123";
+        IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentIssueKey);
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        expect(targetIssueInput).toHaveValue(currentIssueKey);
+    });
+
     it("should show the issue summary of the target issue if it can be loaded", async () => {
         const estimation: Estimation = {
             issueSummary: "fancy summary",
@@ -206,9 +221,7 @@ describe("WorklogShiftView", () => {
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
         WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
-        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(issueKey => {
-            return Promise.resolve(estimation);
-        });
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockResolvedValue(estimation);
 
         const underTest = reactTest.render(<WorklogShiftView/>);
         const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
@@ -220,18 +233,11 @@ describe("WorklogShiftView", () => {
     });
 
     it("should handle errors by not showing anything", async () => {
-        const estimation: Estimation = {
-            issueSummary: "fancy summary",
-            issueKey: "TARGET-123",
-        };
-
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
         WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
-        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(issueKey => {
-            return Promise.reject(new Error("Something went wrong"));
-        });
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockRejectedValue(new Error("Something went wrong"));
 
         const underTest = reactTest.render(<WorklogShiftView/>);
         const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
