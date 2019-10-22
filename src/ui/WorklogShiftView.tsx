@@ -7,6 +7,7 @@ import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import ModalView from "./ModalView";
 import "./WorklogShiftView.css";
+import IssueSiteInfos from "../core/IssueSiteInfos";
 
 interface WorklogShiftViewState {
     worklogs?: Worklog[] | null;
@@ -44,7 +45,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             worklogs: null,
             loadingError: null,
             timesToShift: {},
-            targetIssueKey: targetIssueKey ? targetIssueKey : "",
+            targetIssueKey: targetIssueKey ? targetIssueKey : IssueSiteInfos.getCurrentIssueKey(),
         });
         WorklogService.getWorklogsForCurrentIssueAndUser()
             .then(worklogs => {
