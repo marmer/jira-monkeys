@@ -13,22 +13,29 @@ interface WorklogShiftViewState {
     worklogs?: Worklog[] | null;
     loadingError?: Error | null;
     targetIssueKey: string;
-    timesToShift: {
+    timesSpentToShift: {
+        [worklogId: string]: string;
+    };
+    startTimeToClone: {
         [worklogId: string]: string;
     };
     shiftError?: Error;
+    cloneError?: Error;
     estimation?: Estimation | null;
 }
 
 export default class WorklogShiftView extends Component<{}, WorklogShiftViewState> {
 
+    private readonly READABLE_DATE_FORMAT = "YYYY-MM-DD HH:mm:ss";
+    private readonly ISO_DATE_FORMAT = "YYYY-MM-DDTHH:mm:ss.SSSZZ";
     private timer: any;
 
     constructor(props: Readonly<{}>) {
         super(props);
         this.state = {
             targetIssueKey: "",
-            timesToShift: {},
+            timesSpentToShift: {},
+            startTimeToClone: {},
         };
     }
 
@@ -41,15 +48,17 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
     public componentDidMount(): void {
         const targetIssueKey = sessionStorage.getItem(WorklogShiftView.name + "targetIssueKey");
 
+
         this.setState({
             worklogs: null,
             loadingError: null,
-            timesToShift: {},
+            timesSpentToShift: {},
+            startTimeToClone: {},
             targetIssueKey: targetIssueKey ? targetIssueKey : IssueSiteInfos.getCurrentIssueKey(),
         });
         WorklogService.getWorklogsForCurrentIssueAndUser()
             .then(worklogs => {
-                const timesToShift = worklogs.length === 0 ?
+                const timesSpentToShift = worklogs.length === 0 ?
                     {} :
                     worklogs.map(w => ({
                         [w.id]: JiraTimeService.minutesToJiraFormat(w.timeSpentInMinutes),
@@ -57,9 +66,18 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         return {...previousValue, ...currentValue};
                     });
 
+                const startTimeToClone = worklogs.length === 0 ?
+                    {} :
+                    worklogs.map(w => ({
+                        [w.id]: moment(w.started).format(this.READABLE_DATE_FORMAT),
+                    })).reduce((previousValue, currentValue) => {
+                        return {...previousValue, ...currentValue};
+                    });
+
                 return this.setState({
                     worklogs,
-                    timesToShift,
+                    timesSpentToShift,
+                    startTimeToClone,
                 });
             })
             .catch(loadingError => this.setState({
@@ -72,8 +90,14 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             {this.state.shiftError &&
             <ModalView onClose={() => WindowService.reloadPage()}>
                 An unexpected error has occured while shifting the worklog. Please check the worklogs of this issue and
-                the target issue. The Site is getting reloaded when you close this message.
+                the target issue. The site is getting reloaded when you close this message.
                 Error: {this.state.shiftError.message}
+            </ModalView>}
+            {this.state.cloneError &&
+            <ModalView onClose={() => WindowService.reloadPage()}>
+                An unexpected error has occured while cloning the worklog. Please check the worklogs of this issue. The
+                Site is getting reloaded when you close this message.
+                Error: {this.state.cloneError.message}
             </ModalView>}
 
             {this.state.loadingError &&
@@ -136,14 +160,20 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
 
     private updateTimeToShift(newValue: string, worklog: Worklog) {
         this.setState({
-            timesToShift: {...this.state.timesToShift, [worklog.id]: newValue},
+            timesSpentToShift: {...this.state.timesSpentToShift, [worklog.id]: newValue},
+        });
+    }
+
+    private updateStartTimeToClone(newValue: string, worklog: Worklog) {
+        this.setState({
+            startTimeToClone: {...this.state.startTimeToClone, [worklog.id]: newValue},
         });
     }
 
     private toRow(worklog: Worklog): ReactNode {
         return <tr key={worklog.id}>
             <td align="center">
-                <p>{moment(worklog.started).format("YYYY-MM-DD HH:mm:ss")}</p></td>
+                <p>{moment(worklog.started).format(this.READABLE_DATE_FORMAT)}</p></td>
             <td align="center">
                 <p>{worklog.comment}</p></td>
             <td align="center">
@@ -151,7 +181,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             </td>
             <td align="center">
                 <input type="text" placeholder="5h 9m"
-                       value={this.state.timesToShift[worklog.id]}
+                       value={this.state.timesSpentToShift[worklog.id]}
                        data-testid={"ShiftInput" + worklog.id}
                        onChange={e => this.updateTimeToShift(e.target.value, worklog)}/>
                 <button data-testid={"ShiftButton" + worklog.id} title="move"
@@ -160,15 +190,18 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
             </td>
             <td align="center">
                 <input type="text" placeholder="2002-10-01 10:01:11"
-                       value={moment(worklog.started).format("YYYY-MM-DD HH:mm:ss")}/>
+                       data-testid={"CloneInput" + worklog.id}
+                       value={this.state.startTimeToClone[worklog.id]}
+                       onChange={e => this.updateStartTimeToClone(e.target.value, worklog)}/>
                 <button data-testid={"CloneButton" + worklog.id} title="clone"
-                        disabled={!this.isShiftAllowedForWorklog(worklog)}>{"+"}</button>
+                        disabled={!this.isShiftAllowedForWorklog(worklog)}
+                        onClick={() => this.cloneTimeFor(worklog)}>{"+"}</button>
             </td>
         </tr>;
     }
 
     private isShiftAllowedForWorklog(worklog: Worklog) {
-        return this.isJiraStringIsSet() && JiraTimeService.isValidJiraFormat(this.state.timesToShift[worklog.id]);
+        return this.isJiraStringIsSet() && JiraTimeService.isValidJiraFormat(this.state.timesSpentToShift[worklog.id]);
     }
 
     private isJiraStringIsSet() {
@@ -176,10 +209,25 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
     }
 
     private shiftTimeFor(worklog: Worklog) {
-        WorklogShiftService.shiftWorklog(worklog, this.state.timesToShift[worklog.id], this.state.targetIssueKey)
+        WorklogShiftService.shiftWorklog(worklog, this.state.timesSpentToShift[worklog.id], this.state.targetIssueKey)
             .then(() => {
                 return WindowService.reloadPage();
             })
             .catch(shiftError => this.setState({shiftError}));
+    }
+
+    private cloneTimeFor(worklog: Worklog) {
+        const newWorklog = {
+            timeSpentInMinutes: worklog.timeSpentInMinutes,
+            started: moment(this.state.startTimeToClone[worklog.id]).format(this.ISO_DATE_FORMAT),
+            comment: worklog.comment,
+            issueKey: this.state.targetIssueKey,
+        };
+
+        WorklogService.createWorklog(newWorklog)
+            .then(() => {
+                return WindowService.reloadPage();
+            })
+            .catch(cloneError => this.setState({cloneError}));
     }
 }

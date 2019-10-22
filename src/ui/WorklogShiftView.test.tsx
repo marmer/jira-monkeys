@@ -108,6 +108,50 @@ describe("WorklogShiftView", () => {
         expect(WindowService.reloadPage).toBeCalled();
     });
 
+    it("should reload the current site after some worklog has been cloned", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
+        WindowService.reloadPage = jest.fn();
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "TARGET-123");
+        userEvent.type(underTest.getByTestId("CloneInput" + worklogBase.id), "2022-10-01 10:01:00");
+        const shiftButton = underTest.getByTestId("CloneButton" + worklogBase.id);
+        userEvent.click(shiftButton);
+
+        await reactTest.wait(() => expect(WorklogService.createWorklog).toBeCalledWith({
+            timeSpentInMinutes: sourceWorklog.timeSpentInMinutes,
+            started: "2022-10-01T10:01:00.000+0200",
+            comment: sourceWorklog.comment,
+            issueKey: "TARGET-123",
+        }));
+        expect(WindowService.reloadPage).toBeCalled();
+    });
+
+    it("should show a blocking error message when cloning is not successful and reload the page when the user closes it", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogService.createWorklog = jest.fn().mockRejectedValue(new Error("el barto was here"));
+        WindowService.reloadPage = jest.fn();
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "TARGET-123");
+        userEvent.type(underTest.getByTestId("CloneInput" + worklogBase.id), "2022-10-01 10:01:00");
+        const shiftButton = underTest.getByTestId("CloneButton" + worklogBase.id);
+        userEvent.click(shiftButton);
+
+        const errorView = await reactTest.waitForElement(() => underTest.getByTestId("errorViewMock"));
+        await reactTest.waitForElement(() => reactTest.getByText(errorView, "An unexpected error has occured while cloning the worklog. Please check the worklogs of this issue. The Site is getting reloaded when you close this message. Error: el barto was here"));
+
+        userEvent.click(underTest.getByTestId("errorViewCloseButton"));
+        await reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
+    });
+
     it("should show a blocking error message when shifting is not successful and reload the page when the user closes it", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
@@ -123,7 +167,7 @@ describe("WorklogShiftView", () => {
         userEvent.click(shiftButton);
 
         const errorView = await reactTest.waitForElement(() => underTest.getByTestId("errorViewMock"));
-        await reactTest.waitForElement(() => reactTest.getByText(errorView, "An unexpected error has occured while shifting the worklog. Please check the worklogs of this issue and the target issue. The Site is getting reloaded when you close this message. Error: el barto was here"));
+        await reactTest.waitForElement(() => reactTest.getByText(errorView, "An unexpected error has occured while shifting the worklog. Please check the worklogs of this issue and the target issue. The site is getting reloaded when you close this message. Error: el barto was here"));
 
         userEvent.click(underTest.getByTestId("errorViewCloseButton"));
         await reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
