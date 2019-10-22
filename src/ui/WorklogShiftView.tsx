@@ -194,7 +194,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                        value={this.state.startTimeToClone[worklog.id]}
                        onChange={e => this.updateStartTimeToClone(e.target.value, worklog)}/>
                 <button data-testid={"CloneButton" + worklog.id} title="clone"
-                        disabled={!this.isShiftAllowedForWorklog(worklog)}
+                        disabled={!this.isCloneAllowedForWorklog(worklog)}
                         onClick={() => this.cloneTimeFor(worklog)}>{"+"}</button>
             </td>
         </tr>;
@@ -202,6 +202,10 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
 
     private isShiftAllowedForWorklog(worklog: Worklog) {
         return this.isJiraStringIsSet() && JiraTimeService.isValidJiraFormat(this.state.timesSpentToShift[worklog.id]);
+    }
+
+    private isCloneAllowedForWorklog(worklog: Worklog) {
+        return this.isJiraStringIsSet() && moment(this.state.startTimeToClone[worklog.id]).isValid();
     }
 
     private isJiraStringIsSet() {

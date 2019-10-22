@@ -176,7 +176,6 @@ describe("WorklogShiftView", () => {
     it("should not be possible to shift anything when not target is set", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
-        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
 
         const underTest = reactTest.render(<WorklogShiftView/>);
@@ -188,21 +187,34 @@ describe("WorklogShiftView", () => {
         expect(shiftButton).toBeDisabled();
     });
 
-    it("should not be possible to shift time when the related input does not contain a jira string", async () => {
+    it("should not be possible to shift anything when not target is set", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
-        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
-        const invalidJiraString = "someInvalidJiraString";
-        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(jiraString => jiraString !== invalidJiraString);
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "  ");
+        userEvent.type(underTest.getByTestId("CloneInput" + worklogBase.id), "2002-10-01 10:01:11");
+        const shiftButton = underTest.getByTestId("CloneButton" + worklogBase.id);
+        expect(shiftButton).toBeDisabled();
+    });
+
+    it("should not be possible to clone time when the related input does not contain a valid date string", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WindowService.reloadPage = jest.fn();
+        const invalidDateString = "someInvalidJiraString";
+        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(jiraString => jiraString !== invalidDateString);
 
         const underTest = reactTest.render(<WorklogShiftView/>);
         const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
 
         userEvent.type(targetIssueInput, "someTargetIssueKey-123");
-        userEvent.type(underTest.getByTestId("ShiftInput" + worklogBase.id), invalidJiraString);
-        const shiftButton = underTest.getByTestId("ShiftButton" + worklogBase.id);
-        expect(shiftButton).toBeDisabled();
+        userEvent.type(underTest.getByTestId("CloneInput" + worklogBase.id), invalidDateString);
+        const cloneButton = underTest.getByTestId("CloneButton" + worklogBase.id);
+        expect(cloneButton).toBeDisabled();
     });
 
     it("should set the time spent value of the related worklogs as default value for the time to shift", async () => {
