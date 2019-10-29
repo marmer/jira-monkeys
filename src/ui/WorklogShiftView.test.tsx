@@ -1,6 +1,5 @@
 import * as reactTest from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import moment = require("moment-timezone");
 import React, {FunctionComponent} from "react";
 import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
 import JiraTimeService from "../core/JiraTimeService";
@@ -8,6 +7,8 @@ import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import WorklogShiftView from "./WorklogShiftView";
+import IssueSiteInfos from "../core/IssueSiteInfos";
+import moment = require("moment-timezone");
 
 moment.tz.setDefault("Europe/Berlin");
 
@@ -107,6 +108,50 @@ describe("WorklogShiftView", () => {
         expect(WindowService.reloadPage).toBeCalled();
     });
 
+    it("should reload the current site after some worklog has been cloned", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogService.createWorklog = jest.fn().mockResolvedValue(undefined);
+        WindowService.reloadPage = jest.fn();
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "TARGET-123");
+        userEvent.type(underTest.getByTestId("CloneInput" + worklogBase.id), "2022-10-01 10:01:00");
+        const shiftButton = underTest.getByTestId("CloneButton" + worklogBase.id);
+        userEvent.click(shiftButton);
+
+        await reactTest.wait(() => expect(WorklogService.createWorklog).toBeCalledWith({
+            timeSpentInMinutes: sourceWorklog.timeSpentInMinutes,
+            started: "2022-10-01T10:01:00.000+0200",
+            comment: sourceWorklog.comment,
+            issueKey: "TARGET-123",
+        }));
+        expect(WindowService.reloadPage).toBeCalled();
+    });
+
+    it("should show a blocking error message when cloning is not successful and reload the page when the user closes it", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogService.createWorklog = jest.fn().mockRejectedValue(new Error("el barto was here"));
+        WindowService.reloadPage = jest.fn();
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "TARGET-123");
+        userEvent.type(underTest.getByTestId("CloneInput" + worklogBase.id), "2022-10-01 10:01:00");
+        const shiftButton = underTest.getByTestId("CloneButton" + worklogBase.id);
+        userEvent.click(shiftButton);
+
+        const errorView = await reactTest.waitForElement(() => underTest.getByTestId("errorViewMock"));
+        await reactTest.waitForElement(() => reactTest.getByText(errorView, "An unexpected error has occured while cloning the worklog. Please check the worklogs of this issue. The Site is getting reloaded when you close this message. Error: el barto was here"));
+
+        userEvent.click(underTest.getByTestId("errorViewCloseButton"));
+        await reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
+    });
+
     it("should show a blocking error message when shifting is not successful and reload the page when the user closes it", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
@@ -122,7 +167,7 @@ describe("WorklogShiftView", () => {
         userEvent.click(shiftButton);
 
         const errorView = await reactTest.waitForElement(() => underTest.getByTestId("errorViewMock"));
-        await reactTest.waitForElement(() => reactTest.getByText(errorView, "An unexpected error has occured while shifting the worklog. Please check the worklogs of this issue and the target issue. The Site is getting reloaded when you close this message. Error: el barto was here"));
+        await reactTest.waitForElement(() => reactTest.getByText(errorView, "An unexpected error has occured while shifting the worklog. Please check the worklogs of this issue and the target issue. The site is getting reloaded when you close this message. Error: el barto was here"));
 
         userEvent.click(underTest.getByTestId("errorViewCloseButton"));
         await reactTest.wait(() => expect(WindowService.reloadPage).toBeCalled());
@@ -131,7 +176,6 @@ describe("WorklogShiftView", () => {
     it("should not be possible to shift anything when not target is set", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
-        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
 
         const underTest = reactTest.render(<WorklogShiftView/>);
@@ -143,21 +187,34 @@ describe("WorklogShiftView", () => {
         expect(shiftButton).toBeDisabled();
     });
 
-    it("should not be possible to shift time when the related input does not contain a jira string", async () => {
+    it("should not be possible to shift anything when not target is set", async () => {
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
-        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
-        const invalidJiraString = "someInvalidJiraString";
-        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(jiraString => jiraString !== invalidJiraString);
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        userEvent.type(targetIssueInput, "  ");
+        userEvent.type(underTest.getByTestId("CloneInput" + worklogBase.id), "2002-10-01 10:01:11");
+        const shiftButton = underTest.getByTestId("CloneButton" + worklogBase.id);
+        expect(shiftButton).toBeDisabled();
+    });
+
+    it("should not be possible to clone time when the related input does not contain a valid date string", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WindowService.reloadPage = jest.fn();
+        const invalidDateString = "someInvalidJiraString";
+        JiraTimeService.isValidJiraFormat = jest.fn().mockImplementation(jiraString => jiraString !== invalidDateString);
 
         const underTest = reactTest.render(<WorklogShiftView/>);
         const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
 
         userEvent.type(targetIssueInput, "someTargetIssueKey-123");
-        userEvent.type(underTest.getByTestId("ShiftInput" + worklogBase.id), invalidJiraString);
-        const shiftButton = underTest.getByTestId("ShiftButton" + worklogBase.id);
-        expect(shiftButton).toBeDisabled();
+        userEvent.type(underTest.getByTestId("CloneInput" + worklogBase.id), invalidDateString);
+        const cloneButton = underTest.getByTestId("CloneButton" + worklogBase.id);
+        expect(cloneButton).toBeDisabled();
     });
 
     it("should set the time spent value of the related worklogs as default value for the time to shift", async () => {
@@ -196,6 +253,20 @@ describe("WorklogShiftView", () => {
         expect(targetIssueInputAfterReload).toHaveValue("TARGET-123");
     });
 
+    it("should set the target issue key to the current issue when the site loads initially", async () => {
+        const sourceWorklog = {...worklogBase};
+        WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
+        WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
+        WindowService.reloadPage = jest.fn();
+        const currentIssueKey = "CURRENTISSUE-123";
+        IssueSiteInfos.getCurrentIssueKey = jest.fn().mockReturnValue(currentIssueKey);
+
+        const underTest = reactTest.render(<WorklogShiftView/>);
+        const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
+
+        expect(targetIssueInput).toHaveValue(currentIssueKey);
+    });
+
     it("should show the issue summary of the target issue if it can be loaded", async () => {
         const estimation: Estimation = {
             issueSummary: "fancy summary",
@@ -206,9 +277,7 @@ describe("WorklogShiftView", () => {
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
         WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
-        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(issueKey => {
-            return Promise.resolve(estimation);
-        });
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockResolvedValue(estimation);
 
         const underTest = reactTest.render(<WorklogShiftView/>);
         const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
@@ -220,18 +289,11 @@ describe("WorklogShiftView", () => {
     });
 
     it("should handle errors by not showing anything", async () => {
-        const estimation: Estimation = {
-            issueSummary: "fancy summary",
-            issueKey: "TARGET-123",
-        };
-
         const sourceWorklog = {...worklogBase};
         WorklogService.getWorklogsForCurrentIssueAndUser = jest.fn().mockResolvedValue([sourceWorklog] as Worklog[]);
         WorklogShiftService.shiftWorklog = jest.fn().mockResolvedValue(undefined);
         WindowService.reloadPage = jest.fn();
-        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockImplementation(issueKey => {
-            return Promise.reject(new Error("Something went wrong"));
-        });
+        EstimationCrudService.getEstimationsForIssueKey = jest.fn().mockRejectedValue(new Error("Something went wrong"));
 
         const underTest = reactTest.render(<WorklogShiftView/>);
         const targetIssueInput = await reactTest.waitForElement(() => underTest.getByTitle("Target Issue"));
