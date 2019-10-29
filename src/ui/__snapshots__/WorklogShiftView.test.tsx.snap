@@ -169,12 +169,12 @@ Object {
               <th
                 align="center"
               >
-                Shift/Split time
+                Shift/Split (duration)
               </th>
               <th
                 align="center"
               >
-                Clone to Start (Work in Progress)
+                Clone to (start time)
               </th>
             </tr>
           </thead>
@@ -340,12 +340,12 @@ Object {
             <th
               align="center"
             >
-              Shift/Split time
+              Shift/Split (duration)
             </th>
             <th
               align="center"
             >
-              Clone to Start (Work in Progress)
+              Clone to (start time)
             </th>
           </tr>
         </thead>

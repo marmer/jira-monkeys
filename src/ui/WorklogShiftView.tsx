@@ -1,13 +1,13 @@
 import moment = require("moment");
 import React, {Component, ReactNode} from "react";
 import EstimationCrudService, {Estimation} from "../core/EstimationCrudService";
+import IssueSiteInfos from "../core/IssueSiteInfos";
 import JiraTimeService from "../core/JiraTimeService";
 import WindowService from "../core/WindowService";
 import WorklogService, {Worklog} from "../core/WorklogService";
 import WorklogShiftService from "../core/WorklogShiftService";
 import ModalView from "./ModalView";
 import "./WorklogShiftView.css";
-import IssueSiteInfos from "../core/IssueSiteInfos";
 
 interface WorklogShiftViewState {
     worklogs?: Worklog[] | null;
@@ -117,8 +117,8 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         <th align="center">Start</th>
                         <th align="center">Comment</th>
                         <th align="center">Time Spent</th>
-                        <th align="center">Shift/Split time</th>
-                        <th align="center">Clone to Start</th>
+                        <th align="center">Shift/Split (duration)</th>
+                        <th align="center">Clone to (start time)</th>
                     </tr>
                     </thead>
                     <tbody>
