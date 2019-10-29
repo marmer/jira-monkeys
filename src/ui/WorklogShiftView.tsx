@@ -93,7 +93,7 @@ export default class WorklogShiftView extends Component<{}, WorklogShiftViewStat
                         <th align="center">Comment</th>
                         <th align="center">Time Spent</th>
                         <th align="center">Shift/Split time</th>
-                        <th align="center">Clone to Start (Work in Progress)</th>
+                        <th align="center">Clone to Start</th>
                     </tr>
                     </thead>
                     <tbody>
