@@ -7,7 +7,7 @@
 
 #JiraMonkeyContainer {
     position: relative;
-    left: 10px;
+    margin-left: 10px;
 }
 
 #JiraMonkeyContainer > main {
