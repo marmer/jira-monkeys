@@ -4,7 +4,7 @@
 // @author MarMer
 // @description A little script to help working with jira
 // @homepage https://github.com/marmer/jira-monkeys
-// @match https://jira.schuetze.ag/*
+// @match https://jira.de.nortal.com/*
 // @namespace https://github.com/marmer/jira-monkeys
 // @grant none
 // @updateURL https://github.com/marmer/jira-monkeys/raw/master/dist/jira-monkeys.user.js
