@@ -38,12 +38,12 @@ const registerRedrawHookAt = (appContainer: HTMLElement) => {
     let lastJiraMonkey: any = null;
     let lastLocation = window.location.href;
 
-    const tryMount = () => {
-        if (window.location.pathname.startsWith("/browse/")) {
-            lastJiraMonkey = <JiraMonkey/>;
-            ReactDOM.render(lastJiraMonkey, appContainer);
-        }
-    };
+  const tryMount = () => {
+    if (window.location.pathname.indexOf("/browse/") >= 0) {
+      lastJiraMonkey = <JiraMonkey/>;
+      ReactDOM.render(lastJiraMonkey, appContainer);
+    }
+  };
 
     tryMount();
 
